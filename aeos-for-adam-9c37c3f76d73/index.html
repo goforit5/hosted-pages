@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>What I'm running — for Adam</title>
+<style>
+  :root{
+    --bg:#000;--bg-1:#0a0a0c;--ink-0:#fff;--ink-1:#e8e8ec;--ink-2:#a1a1aa;--ink-3:#6b6b75;
+    --line:rgba(255,255,255,.08);--line-2:rgba(255,255,255,.14);
+    --accent:#5b8cff;--accent-2:#9b7bff;--accent-3:#46d6c2;--good:#46d68a;--warn:#ffb547;
+    --grad:linear-gradient(135deg,#5b8cff,#9b7bff 50%,#46d6c2);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink-1);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter",system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  body{scroll-snap-type:y mandatory;overflow-y:scroll;height:100vh;scroll-behavior:smooth}
+  body::-webkit-scrollbar{width:0}
+  .slide{scroll-snap-align:start;min-height:100vh;padding:7vh 8vw 6vh;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+  .slide::before{content:"";position:absolute;inset:0;background:radial-gradient(1100px 700px at 92% -10%,rgba(91,140,255,.07),transparent 60%),radial-gradient(900px 700px at -10% 110%,rgba(70,214,194,.05),transparent 60%);pointer-events:none}
+  .num{position:absolute;top:3vh;left:8vw;font-size:11px;letter-spacing:.18em;color:var(--ink-3);text-transform:uppercase;font-weight:600}
+  .brand{position:absolute;top:3vh;right:8vw;font-size:11px;letter-spacing:.18em;color:var(--ink-3);text-transform:uppercase;font-weight:600}
+  .eyebrow{font-size:12px;letter-spacing:.22em;color:var(--ink-2);text-transform:uppercase;font-weight:700;margin-bottom:18px;display:inline-flex;align-items:center;gap:10px}
+  .eyebrow::before{content:"";width:24px;height:1px;background:var(--ink-2)}
+  h1{font-size:clamp(46px,6.6vw,96px);line-height:.98;letter-spacing:-.03em;font-weight:700;color:var(--ink-0);margin-bottom:20px}
+  h1 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  h2{font-size:clamp(32px,4.2vw,58px);line-height:1.04;letter-spacing:-.024em;font-weight:700;color:var(--ink-0);margin-bottom:18px;max-width:1100px}
+  h3{font-size:clamp(18px,1.7vw,24px);line-height:1.25;letter-spacing:-.01em;font-weight:600;color:var(--ink-0);margin-bottom:6px}
+  .lede{font-size:clamp(17px,1.5vw,21px);line-height:1.55;color:var(--ink-2);max-width:820px;font-weight:400}
+  .cap{font-size:12px;letter-spacing:.06em;color:var(--ink-3);text-transform:uppercase;font-weight:600}
+  .grid{display:grid;gap:18px}
+  .grid-3{grid-template-columns:repeat(3,1fr)}
+  .grid-2{grid-template-columns:repeat(2,1fr)}
+  .grid-4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:880px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
+  .card{background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.005));border:1px solid var(--line);border-radius:16px;padding:22px}
+  .card p{color:var(--ink-2);font-size:14.5px;line-height:1.6;margin-top:4px}
+  .ico{width:30px;height:30px;border-radius:8px;background:var(--grad);display:inline-flex;align-items:center;justify-content:center;font-size:14px;color:#000;font-weight:800;margin-bottom:10px}
+  .stat{font-size:clamp(38px,4.6vw,64px);font-weight:800;letter-spacing:-.04em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;margin-bottom:6px}
+  ul.bul{list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:14px}
+  ul.bul li{display:flex;gap:14px;color:var(--ink-1);font-size:16px;line-height:1.55}
+  ul.bul li::before{content:"";flex:0 0 6px;width:6px;height:6px;margin-top:9px;border-radius:50%;background:var(--accent)}
+  .tbl{width:100%;border-collapse:separate;border-spacing:0;margin-top:22px;font-size:14.5px}
+  .tbl th,.tbl td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+  .tbl th{color:var(--ink-3);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700}
+  .tbl td:first-child{color:var(--ink-0);font-weight:600;width:26%}
+  .tbl td:nth-child(2){color:var(--ink-1);width:30%}
+  .tbl td:last-child{color:var(--ink-2)}
+  .tag{display:inline-block;font-size:11px;color:var(--ink-2);background:rgba(255,255,255,.04);border:1px solid var(--line);padding:3px 8px;border-radius:6px;margin:0 6px 6px 0;letter-spacing:.02em;font-weight:600}
+  .row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .terminal{background:#0c0d10;border:1px solid var(--line-2);border-radius:14px;padding:20px;font-family:"SF Mono","JetBrains Mono",ui-monospace,monospace;font-size:13px;line-height:1.7;color:var(--ink-1);max-width:960px;overflow-x:auto;box-shadow:0 30px 80px -30px rgba(0,0,0,.8)}
+  .terminal .dim{color:var(--ink-3)}
+  .terminal .ok{color:var(--good)}
+  .terminal .acc{color:var(--accent)}
+  .terminal .warn{color:var(--warn)}
+  .terminal .head{display:flex;gap:6px;margin-bottom:14px}
+  .terminal .head span{width:11px;height:11px;border-radius:50%;background:#3a3a40}
+  .terminal .head span:first-child{background:#ff5f56}
+  .terminal .head span:nth-child(2){background:#ffbd2e}
+  .terminal .head span:nth-child(3){background:#27c93f}
+  .flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:14px;align-items:stretch;margin-top:16px}
+  @media(max-width:880px){.flow{grid-template-columns:1fr}.flow .arr{transform:rotate(90deg);padding:6px 0}}
+  .flow .step{padding:18px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.005))}
+  .flow .arr{display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:20px}
+  .nav-hint{position:fixed;right:20px;bottom:20px;display:flex;flex-direction:column;gap:7px;z-index:10}
+  .nav-hint .dot{width:6px;height:6px;border-radius:50%;background:var(--ink-3);opacity:.5}
+  .sig{margin-top:36px;display:flex;align-items:center;gap:18px;color:var(--ink-2);font-size:14px}
+  .sig::before{content:"";width:42px;height:1px;background:var(--ink-2)}
+  .kbd{font-family:"SF Mono","JetBrains Mono",ui-monospace,monospace;font-size:12.5px;padding:2px 7px;border-radius:5px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--ink-1)}
+</style>
+</head>
+<body>
+
+<!-- 01 Cover -->
+<section class="slide">
+  <span class="num">01 / 07</span>
+  <span class="brand">Andrew · for Adam</span>
+  <span class="eyebrow">Following up · 2026-04-30</span>
+  <h1>What I'm <span class="grad">actually running.</span></h1>
+  <p class="lede">Quick walkthrough of the agentic setup I mentioned at the club. Not a pitch — just so we can compare notes when you show me yours. Tech stack, how it's wired, what it does for me on a normal Tuesday.</p>
+  <div class="sig">Andrew · andrew@taskvisory.com</div>
+</section>
+
+<!-- 02 The shape -->
+<section class="slide">
+  <span class="num">02 / 07</span>
+  <span class="brand">The shape of it</span>
+  <span class="eyebrow">One paragraph version</span>
+  <h2>Claude Code is the harness. Postgres + pgvector is the brain. Skills route intent. Agents do the work. MCP servers are the hands.</h2>
+  <p class="lede" style="margin-top:14px">Everything I do — email, calendar, finance, research, code, project management — runs through one persistent system. Same memory, same audit trail, same agent fleet. I talk to it in English; it picks the right specialist and the right tool. The state of my life lives in a typed knowledge graph that grows every session.</p>
+  <div class="row" style="margin-top:36px">
+    <span class="tag">Claude Code (CLI + iOS)</span>
+    <span class="tag">Anthropic SDK</span>
+    <span class="tag">Supabase / Postgres</span>
+    <span class="tag">pgvector</span>
+    <span class="tag">Edge Functions (Deno)</span>
+    <span class="tag">MCP servers</span>
+    <span class="tag">Microsoft Graph</span>
+    <span class="tag">Gmail API</span>
+    <span class="tag">Plaid</span>
+    <span class="tag">Jira REST</span>
+    <span class="tag">RLS + Vault</span>
+  </div>
+</section>
+
+<!-- 03 Brain -->
+<section class="slide">
+  <span class="num">03 / 07</span>
+  <span class="brand">The brain</span>
+  <span class="eyebrow">Where everything lives</span>
+  <h2>One table. Typed nodes. Typed edges. Every entity is searchable.</h2>
+  <p class="lede" style="margin-top:14px">A person, a task, a bill, an email, a research claim, a decision — all the same primitive: a row in <span class="kbd">brain_node</span> with a <span class="kbd">node_type</span> column and a JSONB metadata blob. Relationships are <span class="kbd">brain_edge</span> rows with a typed <span class="kbd">edge_type</span>. Every node is embedded with OpenAI text-embedding-3, so semantic search crosses CRM, finance, research, and todos in one query.</p>
+
+  <div class="grid grid-4" style="margin-top:36px">
+    <div><div class="stat">16K+</div><div class="cap">embedded nodes</div></div>
+    <div><div class="stat">17</div><div class="cap">node types</div></div>
+    <div><div class="stat">9</div><div class="cap">edge types</div></div>
+    <div><div class="stat">100%</div><div class="cap">search coverage</div></div>
+  </div>
+
+  <div class="row" style="margin-top:32px">
+    <span class="tag">person</span><span class="tag">organization</span><span class="tag">interaction_event</span>
+    <span class="tag">task</span><span class="tag">vendor</span><span class="tag">bill</span>
+    <span class="tag">research_claim</span><span class="tag">research_source</span>
+    <span class="tag">decision</span><span class="tag">pattern</span><span class="tag">playbook</span>
+    <span class="tag">financial_transaction</span><span class="tag">wiki_index</span><span class="tag">activity_log</span>
+  </div>
+</section>
+
+<!-- 04 Skills + agents -->
+<section class="slide">
+  <span class="num">04 / 07</span>
+  <span class="brand">Skills + agents</span>
+  <span class="eyebrow">How routing works</span>
+  <h2>Skills trigger semantically. Agents do the actual work.</h2>
+  <p class="lede" style="margin-top:12px">I don't memorize commands. I ask in English. The right skill activates, loads its reference library into context, and either answers directly or spawns specialist agents. Nine skills cover everything; thirty-four agents handle specific operations (read-only, write, sync, audit).</p>
+
+  <table class="tbl">
+    <thead><tr><th>Skill</th><th>Triggers on</th><th>What it owns</th></tr></thead>
+    <tbody>
+      <tr><td>brain-knowledge</td><td>"what do we know about…", URLs, context packs</td><td>Search, ingest, lint, MARP slides</td></tr>
+      <tr><td>email-intelligence</td><td>"check email", "draft reply", Gmail mentions</td><td>Gmail sync + AI signal classifier (Decision / Relationship / Intelligence / Noise)</td></tr>
+      <tr><td>microsoft-365</td><td>"calendar today", "outlook", "schedule a meeting"</td><td>Outlook + Calendar + OneDrive via Microsoft Graph</td></tr>
+      <tr><td>task-management</td><td>"WIP", "what's blocked", "add a task"</td><td>Task graph, priority triage, velocity</td></tr>
+      <tr><td>household-finance</td><td>"what do I owe", bill PDFs, vendor names</td><td>Bill ingestion, vendor profiles, payment tracking</td></tr>
+      <tr><td>research-pipeline</td><td>"research this", "verify this claim", autopilot</td><td>Exa / Tavily / Firecrawl ingestion + claim verification</td></tr>
+      <tr><td>project-management</td><td>"jira", "sprint", "DORA metrics"</td><td>Jira tickets, sprint health, dev session planning</td></tr>
+      <tr><td>audit-trail</td><td>"how much did that cost", "what errors"</td><td>Cost analysis, action chain reconstruction</td></tr>
+      <tr><td>document-vault</td><td>scanned PDFs, physical mail</td><td>Vision-based ingestion of physical documents</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 05 Architecture -->
+<section class="slide">
+  <span class="num">05 / 07</span>
+  <span class="brand">Architecture</span>
+  <span class="eyebrow">Data flow</span>
+  <h2>Three loops: ingest, query, act.</h2>
+
+  <div class="flow" style="margin-top:24px">
+    <div class="step">
+      <div class="cap">Ingest</div>
+      <h3 style="margin-top:6px">Capture</h3>
+      <p style="color:var(--ink-2);font-size:14px;line-height:1.55;margin-top:6px">Email sync (Gmail + Outlook), Plaid txn sync, scanned mail via vision, URL ingestion, conversation learnings, Jira webhooks. Each source becomes typed brain nodes with provenance.</p>
+    </div>
+    <div class="arr">→</div>
+    <div class="step">
+      <div class="cap">Store</div>
+      <h3 style="margin-top:6px">Embed + link</h3>
+      <p style="color:var(--ink-2);font-size:14px;line-height:1.55;margin-top:6px">pgvector embeddings on every node. Edges proposed automatically (depends_on, relates_to, contradicts, supports, belongs_to, follow_up). Confidential flag for sensitive content.</p>
+    </div>
+    <div class="arr">→</div>
+    <div class="step">
+      <div class="cap">Act</div>
+      <h3 style="margin-top:6px">Specialist agents</h3>
+      <p style="color:var(--ink-2);font-size:14px;line-height:1.55;margin-top:6px">Skill routes intent → agent picks tools → confirms before consequences (sending email, creating tickets, modifying shared state) → writes audit row.</p>
+    </div>
+  </div>
+
+  <div class="grid grid-3" style="margin-top:30px">
+    <div class="card">
+      <span class="ico">M</span>
+      <h3>MCP servers</h3>
+      <p>Five custom servers expose brain, audit, core (tenant), email-sync, and research-sources to Claude. JWT-gated, service-role-backed.</p>
+    </div>
+    <div class="card">
+      <span class="ico">F</span>
+      <h3>Edge Functions</h3>
+      <p>Deno-runtime workers on Supabase: signal classifier, Plaid sync, MS Graph proxy with device-code auth + token refresh, document vault.</p>
+    </div>
+    <div class="card">
+      <span class="ico">S</span>
+      <h3>Security model</h3>
+      <p>Anon key has zero read access. All Edge Functions use service_role. Tokens in Vault. Confidential nodes flagged. All repos private.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 06 Morning -->
+<section class="slide">
+  <span class="num">06 / 07</span>
+  <span class="brand">Concrete example</span>
+  <span class="eyebrow">A normal Tuesday</span>
+  <h2>I type "gm" — seven parallel queries fire — one synthesized briefing comes back.</h2>
+  <div class="terminal" style="margin-top:28px">
+    <div class="head"><span></span><span></span><span></span></div>
+    <div><span class="dim">$</span> <span class="acc">gm</span></div>
+    <div class="dim">→ executing morning briefing protocol…</div>
+    <div class="dim">  ├─ querying calendar (Microsoft Graph)</div>
+    <div class="dim">  ├─ classifying personal email (Gmail signal pipeline)</div>
+    <div class="dim">  ├─ pulling unread work email (Outlook)</div>
+    <div class="dim">  ├─ scanning task graph (P0 / P1 / overdue / blocked)</div>
+    <div class="dim">  ├─ checking research pipeline (pending claims)</div>
+    <div class="dim">  ├─ checking financial account staleness (Plaid)</div>
+    <div class="dim">  └─ pulling email follow-ups due today</div>
+    <div style="margin-top:10px"><span class="ok">✓</span> 7 queries · ~1.8s · synthesized</div>
+    <div style="margin-top:14px;color:var(--ink-0);font-weight:600">Good Morning, Andrew — Wed, Apr 30</div>
+    <div class="dim" style="margin-top:6px">▸ Calendar: 3 meetings · deep-work block 2–5pm</div>
+    <div class="dim">▸ Do these first: <span class="warn">contract redline reply</span> · ship vault UI fix · review pending research claims</div>
+    <div class="dim">▸ Work email: 4 unread · 1 needs response</div>
+    <div class="dim">▸ Personal email: 12 today · 9 noise filtered · 3 require attention</div>
+    <div class="dim">▸ Tasks: 14 active · 2 overdue · 1 blocked on vendor</div>
+    <div class="dim">▸ Plaid: all institutions current (last sync 41m ago)</div>
+  </div>
+  <p class="lede" style="margin-top:24px;font-size:16px">Same harness handles "what do we know about Adam Zuckerman", "draft a reply to the SDG&E disconnect notice", "what's blocking the iOS build", "ingest this PDF". Different skills, same memory.</p>
+</section>
+
+<!-- 07 What it isn't -->
+<section class="slide">
+  <span class="num">07 / 07</span>
+  <span class="brand">Honest limits</span>
+  <span class="eyebrow">What it isn't yet</span>
+  <h2>Where I'm strong, where I'm still building.</h2>
+
+  <div class="grid grid-2" style="margin-top:30px">
+    <div class="card">
+      <div class="cap" style="color:var(--good)">Working well</div>
+      <ul class="bul">
+        <li>Knowledge graph + semantic recall — 16K nodes, no hallucination on prior decisions</li>
+        <li>Email triage on personal Gmail — signal classification beats inbox-zero discipline</li>
+        <li>Bill ingestion + vendor profile inference from scanned PDFs</li>
+        <li>Cross-domain queries (a person → their tasks → their email → their bills, one query)</li>
+        <li>Audit trail — every agent action logged with cost, latency, tool I/O</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="cap" style="color:var(--warn)">Still building</div>
+      <ul class="bul">
+        <li>Voice in / voice out — currently text-only via Claude Code</li>
+        <li>Autonomous overnight cycles for research monitors</li>
+        <li>Multi-tenant — designed for it but I'm sole user today</li>
+        <li>iOS app surface — Brain Explorer is mobile-friendly but not native</li>
+        <li>Evaluation — agent-level eval harness is sparse vs production-grade</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="lede" style="margin-top:30px">Curious what your stack looks like under SCOPE Cascade — particularly the underwriting routing layer and how you handle agent-tool authorization. Looking forward to the meeting.</p>
+  <div class="sig">Andrew · andrew@taskvisory.com</div>
+</section>
+
+<div class="nav-hint" aria-hidden="true">
+  <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+  <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const dots = Array.from(document.querySelectorAll('.nav-hint .dot'));
+  let current = 0;
+  const setCurrent = i => {
+    current = Math.max(0, Math.min(slides.length-1, i));
+    slides[current].scrollIntoView({behavior:'smooth'});
+    dots.forEach((d,j)=>d.style.opacity = j===current ? '1' : '.35');
+  };
+  document.addEventListener('keydown', e => {
+    if(['ArrowDown','PageDown',' '].includes(e.key)) {e.preventDefault(); setCurrent(current+1);}
+    if(['ArrowUp','PageUp'].includes(e.key)) {e.preventDefault(); setCurrent(current-1);}
+    if(e.key==='Home') setCurrent(0);
+    if(e.key==='End') setCurrent(slides.length-1);
+  });
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if(en.isIntersecting){
+        const i = slides.indexOf(en.target);
+        if(i>-1){current=i;dots.forEach((d,j)=>d.style.opacity=j===i?'1':'.35');}
+      }
+    });
+  },{threshold:.55});
+  slides.forEach(s=>io.observe(s));
+  dots.forEach((d,i)=>d.addEventListener('click',()=>setCurrent(i)));
+  dots[0].style.opacity = '1';
+</script>
+</body>
+</html>
