@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<title>Aedis — Agentic OS for Healthcare</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  /* Aedis tokens — oklch */
+  --bg: oklch(15% 0.005 270);
+  --bg-2: oklch(18% 0.008 270);
+  --surface: oklch(22% 0.01 270);
+  --surface-2: oklch(26% 0.012 270);
+  --line: oklch(32% 0.012 270 / 0.6);
+  --line-soft: oklch(32% 0.012 270 / 0.3);
+  --ink-1: oklch(98% 0.005 270);
+  --ink-2: oklch(82% 0.01 270);
+  --ink-3: oklch(62% 0.015 270);
+  --ink-4: oklch(48% 0.02 270);
+  --accent: oklch(68% 0.18 258);
+  --accent-soft: oklch(68% 0.18 258 / 0.14);
+  --accent-deep: oklch(56% 0.22 258);
+  --green: oklch(70% 0.16 152);
+  --amber: oklch(76% 0.16 76);
+  --red: oklch(66% 0.21 27);
+  --violet: oklch(68% 0.19 296);
+  --domain-clinical: oklch(70% 0.16 152);
+  --domain-finance: oklch(72% 0.16 76);
+  --domain-workforce: oklch(70% 0.18 296);
+  --domain-quality: oklch(70% 0.18 200);
+  --domain-ops: oklch(68% 0.16 30);
+  --domain-legal: oklch(70% 0.18 330);
+  --domain-strategic: oklch(72% 0.18 220);
+  --domain-admit: oklch(70% 0.16 110);
+}
+
+html { scroll-behavior: smooth; scroll-snap-type: y mandatory; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--ink-1);
+  line-height: 1.45;
+  font-feature-settings: 'cv11', 'ss01';
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+p, li, h1, h2, h3, h4 { text-wrap: balance; }
+
+section {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: max(env(safe-area-inset-top, 24px), 32px) 22px max(env(safe-area-inset-bottom, 24px), 80px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  position: relative;
+}
+
+.eyebrow {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.eyebrow::before {
+  content: '';
+  width: 18px; height: 1px;
+  background: var(--accent);
+  display: inline-block;
+}
+
+h1 {
+  font-size: clamp(2.2rem, 9vw, 3.4rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+  margin-bottom: 16px;
+}
+
+h2 {
+  font-size: clamp(1.7rem, 6.5vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  margin-bottom: 18px;
+}
+
+h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  line-height: 1.3;
+  margin-bottom: 6px;
+  color: var(--ink-1);
+}
+
+.subtitle {
+  font-size: clamp(1.05rem, 4.2vw, 1.18rem);
+  color: var(--ink-2);
+  font-weight: 400;
+  line-height: 1.45;
+  margin-bottom: 24px;
+}
+
+.body {
+  font-size: 0.97rem;
+  color: var(--ink-2);
+  line-height: 1.55;
+}
+
+.dim { color: var(--ink-3); }
+.mono { font-family: ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace; font-size: 0.86em; letter-spacing: -0.01em; }
+
+/* ─── Slide 1 — Cover ─── */
+.cover {
+  background:
+    radial-gradient(circle at 30% 20%, oklch(56% 0.22 258 / 0.18), transparent 50%),
+    radial-gradient(circle at 70% 80%, oklch(68% 0.18 296 / 0.10), transparent 55%),
+    var(--bg);
+}
+.cover-mark {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 32px;
+}
+.cover-mark .dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: inline-block;
+  box-shadow: 0 0 14px var(--accent);
+}
+.cover-meta {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  font-size: 0.78rem;
+}
+.cover-meta .lab {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-4);
+  font-weight: 600;
+  font-size: 0.62rem;
+  margin-bottom: 4px;
+}
+.cover-meta .val { color: var(--ink-2); font-weight: 500; }
+
+/* ─── Cards ─── */
+.stack { display: flex; flex-direction: column; gap: 10px; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 14px 12px;
+  position: relative;
+}
+.card .card-num {
+  position: absolute;
+  top: 10px; right: 12px;
+  font-size: 0.66rem;
+  color: var(--ink-4);
+  font-family: ui-monospace, monospace;
+  font-weight: 600;
+}
+.card.accent { border-color: var(--accent-soft); background: linear-gradient(180deg, var(--accent-soft), transparent), var(--surface); }
+
+.row { display: flex; align-items: flex-start; gap: 12px; }
+.bullet {
+  flex: 0 0 6px;
+  width: 6px; height: 6px;
+  border-radius: 2px;
+  background: var(--accent);
+  margin-top: 8px;
+}
+
+.kv {
+  display: grid;
+  grid-template-columns: minmax(110px, 36%) 1fr;
+  gap: 10px 14px;
+  margin-top: 12px;
+}
+.kv dt {
+  font-size: 0.74rem;
+  color: var(--ink-3);
+  font-weight: 500;
+  letter-spacing: 0.005em;
+}
+.kv dd { font-size: 0.92rem; color: var(--ink-1); font-weight: 500; }
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid var(--accent-soft);
+}
+.pill.muted { background: var(--surface-2); color: var(--ink-2); border-color: var(--line); }
+
+/* ─── Domain grid ─── */
+.dom-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 14px;
+}
+.dom {
+  padding: 12px 10px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  position: relative;
+}
+.dom .name { font-size: 0.84rem; font-weight: 600; color: var(--ink-1); margin-bottom: 2px; }
+.dom .count { font-size: 0.68rem; color: var(--ink-3); letter-spacing: 0.01em; }
+.dom::before {
+  content: '';
+  position: absolute;
+  top: 12px; right: 10px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.dom.clinical::before { background: var(--domain-clinical); }
+.dom.finance::before { background: var(--domain-finance); }
+.dom.workforce::before { background: var(--domain-workforce); }
+.dom.admit::before { background: var(--domain-admit); }
+.dom.quality::before { background: var(--domain-quality); }
+.dom.ops::before { background: var(--domain-ops); }
+.dom.legal::before { background: var(--domain-legal); }
+.dom.strategic::before { background: var(--domain-strategic); }
+
+/* ─── Tech stack list ─── */
+.tech {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+}
+.tech-row {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: 0.86rem;
+}
+.tech-row:last-child { border-bottom: 0; }
+.tech-row .lab { color: var(--ink-3); font-weight: 600; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; padding-top: 2px; }
+.tech-row .val { color: var(--ink-1); font-family: ui-monospace, 'SF Mono', monospace; font-size: 0.84rem; line-height: 1.4; }
+.tech-row .val em { font-style: normal; color: var(--ink-3); }
+
+/* ─── Loop diagram ─── */
+.loop {
+  margin: 14px 0 8px;
+  padding: 14px 12px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.loop-step {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+.loop-step:last-child { border-bottom: 0; }
+.loop-step .step-n {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.74rem;
+  font-weight: 700;
+  font-family: ui-monospace, monospace;
+}
+.loop-step .step-body { font-size: 0.86rem; color: var(--ink-2); line-height: 1.45; }
+.loop-step .step-body strong { color: var(--ink-1); font-weight: 600; }
+
+/* ─── Governance bar ─── */
+.gov {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+  margin: 14px 0 8px;
+}
+.gov-cell {
+  padding: 8px 4px 6px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  text-align: center;
+  font-size: 0.6rem;
+  color: var(--ink-2);
+  line-height: 1.15;
+}
+.gov-cell .lvl { font-family: ui-monospace, monospace; font-weight: 700; color: var(--ink-1); display: block; margin-bottom: 2px; font-size: 0.82rem; }
+
+/* ─── Big numbers ─── */
+.metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 14px 0;
+}
+.metric {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 12px;
+}
+.metric .num {
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--ink-1);
+  line-height: 1;
+}
+.metric .lab {
+  font-size: 0.7rem;
+  color: var(--ink-3);
+  margin-top: 6px;
+  letter-spacing: 0.01em;
+  line-height: 1.3;
+}
+
+/* ─── Code-style block ─── */
+.snippet {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 12px;
+  font-family: ui-monospace, 'SF Mono', monospace;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin-top: 12px;
+  overflow-x: auto;
+}
+.snippet .k { color: var(--accent); }
+.snippet .s { color: var(--green); }
+.snippet .c { color: var(--ink-4); }
+
+/* ─── Bridge / CTA ─── */
+.bridge {
+  margin-top: 14px;
+  padding: 14px 14px;
+  background: linear-gradient(135deg, var(--accent-soft), transparent);
+  border: 1px solid var(--accent-soft);
+  border-radius: 14px;
+}
+.bridge h3 { color: var(--accent); margin-bottom: 8px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em; }
+.bridge p { font-size: 0.95rem; color: var(--ink-1); line-height: 1.5; }
+
+.contact {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.contact a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--ink-1);
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+  min-height: 48px;
+}
+.contact a:active { background: var(--surface-2); }
+.contact a .lab { color: var(--ink-3); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; min-width: 56px; }
+
+/* ─── Progress dots ─── */
+.dots {
+  position: fixed;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 50;
+  pointer-events: none;
+}
+.dots .d {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--ink-4);
+  opacity: 0.5;
+  transition: opacity 200ms, background 200ms, transform 200ms;
+}
+.dots .d.active { background: var(--accent); opacity: 1; transform: scale(1.4); }
+
+/* ─── Slide num ─── */
+.slide-n {
+  position: absolute;
+  top: max(env(safe-area-inset-top, 18px), 22px);
+  left: 22px;
+  font-size: 0.66rem;
+  font-family: ui-monospace, monospace;
+  color: var(--ink-4);
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+/* ─── Hint ─── */
+.hint {
+  position: absolute;
+  bottom: max(env(safe-area-inset-bottom, 16px), 20px);
+  left: 0; right: 0;
+  text-align: center;
+  font-size: 0.66rem;
+  color: var(--ink-4);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  animation: bob 2.4s ease-in-out infinite;
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50% { transform: translateY(-3px); opacity: 1; }
+}
+
+/* ─── Tablet+ ─── */
+@media (min-width: 720px) {
+  section { padding: 60px 72px; }
+  .container { max-width: 640px; margin: 0 auto; width: 100%; }
+  h1 { font-size: 4rem; }
+  h2 { font-size: 2.6rem; }
+  .dom-grid { grid-template-columns: repeat(4, 1fr); }
+  .metrics { grid-template-columns: repeat(4, 1fr); }
+  .cover-meta { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+
+<!-- Progress dots -->
+<nav class="dots" aria-hidden="true">
+  <span class="d active"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span>
+  <span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span>
+</nav>
+
+<!-- ─── 01 · Cover ─── -->
+<section class="cover" id="s1">
+  <div class="container">
+    <div class="cover-mark"><span class="dot"></span><span>Aedis</span></div>
+    <div class="eyebrow">Built for Adam · May 2026</div>
+    <h1>The Agentic OS for&nbsp;Healthcare.</h1>
+    <p class="subtitle">A production platform where 48 AI agents run a $4B health-system the way humans never could — with a complete audit trail, HITL governance, and an architecture that swaps cleanly into <em>any</em> regulated vertical.</p>
+    <div class="cover-meta">
+      <div><div class="lab">From</div><div class="val">Andrew · Taskvisory</div></div>
+      <div><div class="lab">Reading time</div><div class="val">~6 min · 10 slides</div></div>
+      <div><div class="lab">For</div><div class="val">Adam · RapidFire VC</div></div>
+    </div>
+  </div>
+  <div class="hint">Scroll ↓</div>
+</section>
+
+<!-- ─── 02 · Thesis ─── -->
+<section id="s2">
+  <div class="slide-n">02 / 10</div>
+  <div class="container">
+    <div class="eyebrow">Thesis</div>
+    <h2>Healthcare SaaS is just a database with a UI bolted on.</h2>
+    <p class="subtitle">PointClickCare. Workday. Microsoft 365. Each is a database + an API + a UI. Operators pay millions per year — for the UI. Agents don't need it.</p>
+    <div class="stack">
+      <div class="card"><div class="row"><span class="bullet"></span><div><h3>Skip the application layer</h3><p class="body dim">Agents call the API directly. The UI shrinks to a decision queue, not an app to learn.</p></div></div></div>
+      <div class="card"><div class="row"><span class="bullet"></span><div><h3>Compress 12 tabs into one decision</h3><p class="body dim">Self-contained briefings: every dollar, room number, citation, recommendation in one card. <span class="mono">&lt;10s</span> human action.</p></div></div></div>
+      <div class="card"><div class="row"><span class="bullet"></span><div><h3>Agents under HITL governance</h3><p class="body dim">Read-only by default. Mutations gated by role + confidence + immutable audit chain. Kill switch global.</p></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 03 · The Framework ─── -->
+<section id="s3">
+  <div class="slide-n">03 / 10</div>
+  <div class="container">
+    <div class="eyebrow">Framework</div>
+    <h2>8 domains × 6 agents = a running organization.</h2>
+    <p class="body">Every operational surface of the business has its own agent cohort. Each agent has a defined scope, governance level, and confidence threshold. An <strong>Enterprise Orchestrator</strong> resolves inter-agent conflicts when domains disagree.</p>
+    <div class="dom-grid">
+      <div class="dom clinical"><div class="name">Clinical</div><div class="count">6 agents · PCC</div></div>
+      <div class="dom finance"><div class="name">Finance</div><div class="count">6 agents · GL/AR/AP</div></div>
+      <div class="dom workforce"><div class="name">Workforce</div><div class="count">6 agents · Workday</div></div>
+      <div class="dom admit"><div class="name">Admissions</div><div class="count">6 agents · Census</div></div>
+      <div class="dom quality"><div class="name">Quality</div><div class="count">6 agents · CMS/OIG</div></div>
+      <div class="dom ops"><div class="name">Operations</div><div class="count">6 agents · Facility</div></div>
+      <div class="dom legal"><div class="name">Legal</div><div class="count">6 agents · Compliance</div></div>
+      <div class="dom strategic"><div class="name">Strategic</div><div class="count">6 agents · M&amp;A</div></div>
+    </div>
+    <div class="metrics">
+      <div class="metric"><div class="num">48</div><div class="lab">Agents in production</div></div>
+      <div class="metric"><div class="num">61</div><div class="lab">Page configs · 5 roles</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 04 · Methodology ─── -->
+<section id="s4">
+  <div class="slide-n">04 / 10</div>
+  <div class="container">
+    <div class="eyebrow">Methodology</div>
+    <h2>First-principles design rules — non-negotiable.</h2>
+    <div class="stack">
+      <div class="card">
+        <h3>Self-contained decisions</h3>
+        <p class="body dim">Every DecisionCard ships with all the data: resident name, room, dollar amount, source system, evidence, agent recommendation, confidence, three-step "if-approved" plan. The human never opens another app.</p>
+      </div>
+      <div class="card">
+        <h3>Definitive recommendations</h3>
+        <p class="body dim">Not <em>"consider reviewing"</em> — <em>"Approve this. Here is exactly what will happen, in this order, by these times."</em> The agent commits.</p>
+      </div>
+      <div class="card">
+        <h3>Quantified impact, every time</h3>
+        <p class="body dim">Dollars saved, days reduced, risk probability, regulatory citation. If it can't be quantified, the decision doesn't ship.</p>
+      </div>
+      <div class="card">
+        <h3>Confidence is conviction</h3>
+        <p class="body dim"><span class="mono">≥95%</span> → auto-approve. <span class="mono">80–94%</span> → human single-tap. <span class="mono">&lt;80%</span> → escalation with two-sided agent debate. Confidence is a routing dimension, not a label.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 05 · Agent Loop ─── -->
+<section id="s5">
+  <div class="slide-n">05 / 10</div>
+  <div class="container">
+    <div class="eyebrow">Architecture</div>
+    <h2>One universal agent loop. Six governance levels.</h2>
+    <p class="body">Every agent — clinical, financial, M&amp;A — runs the same loop. Behavior differs only by tools, prompts, and the governance level the operator assigns it.</p>
+    <div class="loop">
+      <div class="loop-step"><div class="step-n">1</div><div class="step-body"><strong>Observe.</strong> MCP connectors stream events from PCC, Workday, M365, CMS/OIG/SAM into a typed graph.</div></div>
+      <div class="loop-step"><div class="step-n">2</div><div class="step-body"><strong>Reason.</strong> Anthropic Managed Agents session — pinned agent version, SSE event stream, <span class="mono">after_id</span> cursor.</div></div>
+      <div class="loop-step"><div class="step-n">3</div><div class="step-body"><strong>Propose.</strong> Decision draft with evidence table, citations, confidence score, and a 3-step rollback plan.</div></div>
+      <div class="loop-step"><div class="step-n">4</div><div class="step-body"><strong>Gate.</strong> Governance level + confidence threshold decides: auto-approve, HITL, or escalate.</div></div>
+      <div class="loop-step"><div class="step-n">5</div><div class="step-body"><strong>Act.</strong> Tool call via vault-and-proxy — agent never touches raw credentials.</div></div>
+      <div class="loop-step"><div class="step-n">6</div><div class="step-body"><strong>Audit.</strong> Hash-chained, monotonically-ordered append-only log. Replayable from any point.</div></div>
+    </div>
+    <div class="gov" aria-label="Governance levels">
+      <div class="gov-cell"><span class="lvl">L0</span>Read</div>
+      <div class="gov-cell"><span class="lvl">L1</span>Suggest</div>
+      <div class="gov-cell"><span class="lvl">L2</span>HITL</div>
+      <div class="gov-cell"><span class="lvl">L3</span>Confidence</div>
+      <div class="gov-cell"><span class="lvl">L4</span>Bounded</div>
+      <div class="gov-cell"><span class="lvl">L5</span>Auto</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 06 · Backend stack ─── -->
+<section id="s6">
+  <div class="slide-n">06 / 10</div>
+  <div class="container">
+    <div class="eyebrow">Tech Stack · Backend</div>
+    <h2>Anthropic Managed Agents. MCP. Postgres + graph.</h2>
+    <div class="tech">
+      <div class="tech-row"><div class="lab">Agents</div><div class="val">@anthropic-ai/sdk · sdk.beta.sessions / agents <em>// pinned versions, SSE stream</em></div></div>
+      <div class="tech-row"><div class="lab">Connectors</div><div class="val">MCP · PCC · Workday · M365 Graph · CMS · OIG · SAM</div></div>
+      <div class="tech-row"><div class="lab">HITL</div><div class="val">user.tool_confirmation event · per-tool gating</div></div>
+      <div class="tech-row"><div class="lab">State</div><div class="val">PostgreSQL + graph DB · typed entity model</div></div>
+      <div class="tech-row"><div class="lab">Events</div><div class="val">cascade engine · replay-safe · idempotent</div></div>
+      <div class="tech-row"><div class="lab">Runtime</div><div class="val">AWS · BAA / SOC&nbsp;2 / HITRUST · in-VPC for PHI</div></div>
+      <div class="tech-row"><div class="lab">Lang</div><div class="val">TypeScript strict · zero <span class="k">any</span> at boundaries</div></div>
+    </div>
+    <div class="snippet"><span class="c">// HITL gate — every state-changing tool call</span><br>
+const session = <span class="k">await</span> sdk.beta.sessions.create({<br>
+&nbsp;&nbsp;agent: { id, type: <span class="s">'agent'</span>, version: 7 },<br>
+&nbsp;&nbsp;mcp_servers: [pcc, workday, m365],<br>
+});<br>
+<span class="k">for await</span> (<span class="k">const</span> ev <span class="k">of</span> sdk.beta.sessions.events.stream(...)) {<br>
+&nbsp;&nbsp;<span class="k">if</span> (ev.type === <span class="s">'tool.confirmation_required'</span>)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">await</span> queue.surface(ev); <span class="c">// → HITL queue</span><br>
+}</div>
+  </div>
+</section>
+
+<!-- ─── 07 · Frontend stack ─── -->
+<section id="s7">
+  <div class="slide-n">07 / 10</div>
+  <div class="container">
+    <div class="eyebrow">Tech Stack · Frontend</div>
+    <h2>React 19. Vite. oklch tokens. WCAG AA. 642ms build.</h2>
+    <div class="tech">
+      <div class="tech-row"><div class="lab">Render</div><div class="val">React 19 · HashRouter · React.lazy + Suspense</div></div>
+      <div class="tech-row"><div class="lab">Build</div><div class="val">Vite 7 · 79 modules · 642ms · zero warnings</div></div>
+      <div class="tech-row"><div class="lab">Style</div><div class="val">CSS custom properties · oklch · no Tailwind</div></div>
+      <div class="tech-row"><div class="lab">Layout</div><div class="val">3-col Shell — CommandRail / MidColumn / RightPane</div></div>
+      <div class="tech-row"><div class="lab">A11y</div><div class="val">ARIA tablist · focus traps · skip-nav · prefers-reduced-motion</div></div>
+      <div class="tech-row"><div class="lab">Speed</div><div class="val">⌘K palette · J/K · Enter/E/D · &lt;10s decision</div></div>
+      <div class="tech-row"><div class="lab">Resilience</div><div class="val">ErrorBoundary · 404 catch-all · ScrollRestore · Toast ctx</div></div>
+    </div>
+    <div class="metrics">
+      <div class="metric"><div class="num">642<span style="font-size:1rem;color:var(--ink-3)">ms</span></div><div class="lab">Cold build</div></div>
+      <div class="metric"><div class="num">0</div><div class="lab">Lint &amp; type warnings</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 08 · Security ─── -->
+<section id="s8">
+  <div class="slide-n">08 / 10</div>
+  <div class="container">
+    <div class="eyebrow">Security · Built to the Anthropic bar</div>
+    <h2>Vault. JWKS. Hash chain. PHI never leaves the tenant VPC.</h2>
+    <div class="stack">
+      <div class="card">
+        <h3>Vault-and-proxy credentials</h3>
+        <p class="body dim">Agents never see raw credentials. MCP proxy injects per request from AWS Secrets Manager. 90-day automated rotation, dual-key cutover, &lt;15-min emergency revocation.</p>
+      </div>
+      <div class="card">
+        <h3>JWKS · RS256 · Azure Entra ID</h3>
+        <p class="body dim">6h key cache, auto-rotate on verify failure. JWT_SECRET fallback for service-to-service only — alg-routed, not co-mingled. RBAC on every state-changing endpoint.</p>
+      </div>
+      <div class="card">
+        <h3>Immutable audit chain</h3>
+        <p class="body dim">Append-only log. Monotonic sequence numbers under concurrent writes. SHA-256 hash chain — tamper-evident. Replay-safe from any point. Ships to compliance unchanged.</p>
+      </div>
+      <div class="card">
+        <h3>PHI tokenization at the boundary</h3>
+        <p class="body dim">Session-scoped UUID prefix on every de-id token — no cross-session collision. AWS Bedrock target deployment for in-VPC PHI processing under BAA / SOC&nbsp;2 / HITRUST.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 09 · Deployment story ─── -->
+<section id="s9">
+  <div class="slide-n">09 / 10</div>
+  <div class="container">
+    <div class="eyebrow">In Flight</div>
+    <h2>First deployment: a $4B, 330-facility health system.</h2>
+    <p class="body">Ensign Group operates 330+ skilled nursing facilities and 47+ senior living communities across 17 states under a uniquely decentralized model — every facility is a P&amp;L. <em>No</em> incumbent gives them enterprise-wide visibility. That is the wedge.</p>
+    <div class="kv">
+      <dt>Deploy window</dt><dd>30 days · BAA + AWS account + Bedrock VPC</dd>
+      <dt>Surface</dt><dd>PCC + Workday + M365 + CMS/OIG · MCP-first</dd>
+      <dt>Phase 1</dt><dd>Read-only mirror · audit chain live</dd>
+      <dt>Phase 2</dt><dd>HITL on finance + admissions · clinical voice</dd>
+      <dt>Phase 3</dt><dd>Bounded autonomy · enterprise orchestrator on</dd>
+      <dt>Scale</dt><dd>1 → 330 facilities · same agent versions, per-tenant policy</dd>
+    </div>
+    <p class="body dim" style="margin-top:14px;font-size:0.82rem">Status: pre-credential handoff. Engineering surface complete. Compliance &amp; legal infra (BAA, MSA, DE C-Corp, SOC&nbsp;2 Type 1) in flight.</p>
+  </div>
+</section>
+
+<!-- ─── 10 · CTA ─── -->
+<section id="s10">
+  <div class="slide-n">10 / 10</div>
+  <div class="container">
+    <div class="eyebrow">Why this matters for SCOPE Cascade</div>
+    <h2>The same architecture runs underwriting.</h2>
+    <p class="body">Healthcare and capital-deployment underwriting are the same problem in different clothes: messy regulated data, multi-party routing, behavioral signal, defensible audit. The Aedis primitives map cleanly.</p>
+    <div class="bridge">
+      <h3>The mapping</h3>
+      <p>Multi-bank waterfall → MCP connector cohort. 72 underwriting data points → typed graph nodes. 92% funding rate → confidence-routed decision queue. Regulator defense → hash-chained audit log. <strong>You already have the verticals. This is the substrate underneath them.</strong></p>
+    </div>
+    <div class="contact">
+      <a href="mailto:andrew@taskvisory.com?subject=Aedis%20%2F%20SCOPE%20Cascade%20—%20Tue%20or%20Wed">
+        <span class="lab">Email</span><span>andrew@taskvisory.com</span>
+      </a>
+      <a href="https://goforit5.github.io/Aedis/">
+        <span class="lab">Live</span><span>goforit5.github.io/Aedis</span>
+      </a>
+      <a href="https://www.linkedin.com/in/andrewkrueger/">
+        <span class="lab">LinkedIn</span><span>/in/andrewkrueger</span>
+      </a>
+    </div>
+    <p class="body dim" style="margin-top:18px;text-align:center;font-size:0.74rem;letter-spacing:0.04em">Confidential · prepared for Adam Zuckerman · 2026-05-05</p>
+  </div>
+</section>
+
+<script>
+// Active dot tracking via IntersectionObserver
+const sections = document.querySelectorAll('section');
+const dots = document.querySelectorAll('.dots .d');
+if ('IntersectionObserver' in window) {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const i = Array.from(sections).indexOf(e.target);
+        dots.forEach((d, j) => d.classList.toggle('active', i === j));
+      }
+    });
+  }, { threshold: 0.5 });
+  sections.forEach(s => io.observe(s));
+}
+</script>
+
+</body>
+</html>
