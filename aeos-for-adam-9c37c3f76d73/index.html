@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="noindex, nofollow" />
-<title>AEOS · for Adam Zuckerman</title>
+<title>Aedis · for Adam Zuckerman</title>
 <style>
   :root {
     --bg: #0a0a0b;
@@ -212,13 +212,13 @@
 
   <header class="nav">
     <div class="nav-inner">
-      <div class="brand"><span class="dot"></span> AEOS <span style="color:var(--dim)">·</span> <b>for Adam</b></div>
+      <div class="brand"><span class="dot"></span> Aedis <span style="color:var(--dim)">·</span> <b>for Adam</b></div>
       <nav class="nav-links">
         <a href="#hello">01 Hello</a>
         <a href="#scope">02 SCOPE</a>
         <a href="#pattern">03 Pattern</a>
-        <a href="#aeos">04 AEOS</a>
-        <a href="#substrate">05 Substrate</a>
+        <a href="#aedis-intro">04 Aedis</a>
+        <a href="#substrate">05 How it works</a>
         <a href="#aedis">06 Aedis Live</a>
         <a href="#translation">07 Translation</a>
         <a href="#build">08 Build</a>
@@ -236,7 +236,7 @@
       <p class="lede">A short walk through what I heard, what I'm building, and the one place I think our worlds collide. Recorded over this page — scroll along, or come back later and re-read at your pace.</p>
       <div class="you-me">
         <span class="pill"><span class="ico"></span> You · Capital deployment engine</span>
-        <span class="pill"><span class="ico"></span> Me · Agentic Enterprise Operating System</span>
+        <span class="pill"><span class="ico"></span> Me · Aedis · skilled-nursing operating system</span>
       </div>
     </div>
   </section>
@@ -263,7 +263,7 @@
         <div class="card"><div class="stat">220<span class="unit">+</span></div><p>Institutional relationships</p></div>
         <div class="card"><div class="stat">72</div><p>Behavioral indicators per deployment</p></div>
       </div>
-      <p class="lede" style="margin-top:32px">My read: <span class="em">SCOPE Cascade is a regulated, high-stakes, multi-stage agentic decision system.</span> Which — and this is the whole reason I'm making this video — is exactly what I build.</p>
+      <p class="lede" style="margin-top:32px">My read: <span class="em">SCOPE Cascade is a regulated, high-stakes, multi-stage agentic decision system.</span> A lot of that shape overlaps with what I've been building for skilled-nursing operations — which is mostly why I made this video.</p>
     </div>
   </section>
 
@@ -293,21 +293,22 @@
         </g>
         <path d="M 1020 88 C 1080 30, 600 -20, 80 88" fill="none" stroke="#34d399" stroke-width="1" stroke-dasharray="3 4" opacity="0.5"/>
       </svg>
-      <p class="lede" style="margin-top:18px">In your world the action is a capital deployment. In mine it's a clinical decision. <span class="em">Architecture is identical.</span></p>
+      <p class="lede" style="margin-top:18px">In your world the action is a capital deployment. In mine it's a clinical decision. <span class="em">The loop has the same shape</span> — the bodies it operates on are completely different.</p>
     </div>
   </section>
 
-  <!-- 04 AEOS -->
-  <section id="aeos">
+  <!-- 04 AEDIS INTRO -->
+  <section id="aedis-intro">
     <div class="fade">
       <div class="marker"><span class="num">04</span> My world</div>
-      <h2>AEOS · <span class="accent">Agentic Enterprise Operating System</span></h2>
-      <p class="lede">A runtime for fleets of specialized agents working under a unified memory, schema, and audit layer. Multi-tenant. Regulated-domain ready. Self-improving.</p>
+      <h2>Aedis · <span class="accent">skilled-nursing operating system</span></h2>
+      <p class="lede">An operator app for skilled-nursing facilities — clinicians and operations staff live inside it, working alongside a fleet of specialized agents. Agents surface tasks, propose actions, flag risk. Humans approve or override. Everything's audited.</p>
       <div class="grid cols-3" style="margin-top:32px">
-        <div class="card"><div class="tag">Memory</div><h3>Brain graph</h3><p>16,000+ typed nodes — people, decisions, claims, sources, events — connected by typed edges. Semantic + structured queries. Every claim is citable.</p></div>
-        <div class="card"><div class="tag">Agents</div><h3>Specialized fleets</h3><p>Claude-managed agents with typed inputs, typed outputs, sensitivity classifiers. Compose into pipelines. Route to human gates by risk.</p></div>
+        <div class="card"><div class="tag">Operator surface</div><h3>What clinicians see</h3><p>An app, not a backend. Census, residents, alerts, tasks proposed by agents — all in one operator console. Approve / override / send back in a click. HIPAA-grade isolation between facilities.</p></div>
+        <div class="card"><div class="tag">Agent fleet</div><h3>What runs underneath</h3><p>Care-pathway agent, calibration critic, sensitivity classifier, signal miner — each Claude-managed, typed inputs and outputs, composed into pipelines that route to a human gate by risk.</p></div>
         <div class="card"><div class="tag">Audit</div><h3>Three-layer trail</h3><p>Every mutation, every override, every model proposal logged. Cost-tracked. Replayable. Defensible to a regulator on Monday morning.</p></div>
       </div>
+      <p class="lede" style="margin-top:24px">I'll walk through a few pages live in the video so you can see what this looks like end to end.</p>
     </div>
   </section>
 
@@ -319,13 +320,13 @@
       <div class="grid cols-2" style="margin-top:32px">
         <div class="card">
           <div class="tag">Pillar 1 · Memory</div>
-          <h3>Brain graph + semantic search</h3>
-          <p>Every prior decision, every override, every outcome, persisted as typed nodes with embedded vectors. The system remembers context across sessions, agents, and operators. This is what "30 years of behavioral intelligence" looks like when it's actually structured.</p>
+          <h3>The system remembers</h3>
+          <p>Every prior decision, every override, every outcome captured and queryable. Context persists across sessions, agents, and operators — so a clinician seeing a resident in week 12 has the full history from week 1 with one click. The substrate for "what worked last time" reasoning.</p>
         </div>
         <div class="card">
           <div class="tag">Pillar 2 · Schemas</div>
-          <h3>Typed nodes, typed edges</h3>
-          <p>No free-text dumping ground. Every entity has a node_type, every relationship an edge_type, both versioned and audited. Means a claim can be traced to a source, a decision can be traced to its inputs, a model output can be tied to its evidence.</p>
+          <h3>Typed, versioned, audited</h3>
+          <p>Every entity has a defined type, every relationship has a defined type — both versioned and audited. No free-text dumping ground. A claim traces to a source. A decision traces to its inputs. A model output ties back to the evidence that produced it.</p>
         </div>
         <div class="card">
           <div class="tag">Pillar 3 · Autonomy + HITL</div>
@@ -459,7 +460,7 @@
   </section>
 
   <footer>
-    AEOS · Agentic Enterprise Operating System
+    Aedis · skilled-nursing operating system
     <div class="meta">This page is one Deno edge function on Supabase. Single file. Versioned in git. Audited on view. ⏤ the substrate is the message.</div>
   </footer>
 
