@@ -1,0 +1,1 @@
+function e(e){}function t(e,t){return typeof t==`string`?e===t:!!e.match(t)}function n(e,n){if(!n)return!1;for(let r of n)if(t(e,r))return!0;return!1}export{t as n,e as r,n as t};

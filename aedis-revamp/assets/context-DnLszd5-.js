@@ -1,0 +1,1 @@
+function e(e){return Symbol.for(e)}var t=new class e{constructor(t){let n=this;n._currentContext=t?new Map(t):new Map,n.getValue=e=>n._currentContext.get(e),n.setValue=(t,r)=>{let i=new e(n._currentContext);return i._currentContext.set(t,r),i},n.deleteValue=t=>{let r=new e(n._currentContext);return r._currentContext.delete(t),r}}};export{e as n,t};
