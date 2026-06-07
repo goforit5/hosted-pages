@@ -1,0 +1,1 @@
+import{o as e}from"./trace-api-DF_mBwwU.js";var t;(function(e){e[e.INTERNAL=0]=`INTERNAL`,e[e.SERVER=1]=`SERVER`,e[e.CLIENT=2]=`CLIENT`,e[e.PRODUCER=3]=`PRODUCER`,e[e.CONSUMER=4]=`CONSUMER`})(t||={});var n;(function(e){e[e.UNSET=0]=`UNSET`,e[e.OK=1]=`OK`,e[e.ERROR=2]=`ERROR`})(n||={});var r=e.getInstance();export{n,t as r,r as t};
