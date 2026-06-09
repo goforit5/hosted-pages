@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aedis · Taskvisory · 06.09.26</title>
+<style>
+:root {
+    --bg-light: #FAFAFA;
+    --bg-mid: #F2F2EE;
+    --bg-dark: #0E1B1F;
+    --bg-darker: #0A1418;
+    --accent: #0F4C5C;
+    --accent-soft: rgba(15, 76, 92, 0.08);
+    --accent-line: rgba(15, 76, 92, 0.22);
+    --ink: #0F1419;
+    --ink-soft: #3D4A4F;
+    --ink-mute: #6B7780;
+    --paper: #FFFFFF;
+    --on-dark: #F3F1EC;
+    --on-dark-mute: #9CA9AE;
+    --rule: rgba(15, 20, 25, 0.10);
+    --rule-dark: rgba(243, 241, 236, 0.14);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+    height: 100%;
+    width: 100%;
+    background: var(--bg-light);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-feature-settings: "ss01", "ss02", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
+}
+
+p, h1, h2, h3, h4, li { text-wrap: balance; }
+
+.deck {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6vh 7vw;
+    background: var(--bg-light);
+    color: var(--ink);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 600ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.slide.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.slide.dark   { background: var(--bg-dark); color: var(--on-dark); }
+.slide.accent { background: var(--accent); color: var(--on-dark); }
+
+.frame {
+    width: 100%;
+    max-width: 1300px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ---------- Common atoms ---------- */
+
+.eyebrow {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 3vh;
+}
+.slide.dark .eyebrow,
+.slide.accent .eyebrow {
+    color: var(--on-dark-mute);
+}
+
+h1 {
+    font-size: clamp(3.2rem, 5.6vw, 5.2rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.04;
+    max-width: 22ch;
+}
+
+h2 {
+    font-size: clamp(2.6rem, 4.4vw, 4.2rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.08;
+    max-width: 22ch;
+}
+
+.subhead {
+    font-size: clamp(1.35rem, 1.9vw, 1.75rem);
+    font-weight: 400;
+    color: var(--ink-soft);
+    line-height: 1.45;
+    max-width: 38ch;
+    margin-top: 3vh;
+}
+.slide.dark .subhead,
+.slide.accent .subhead { color: var(--on-dark-mute); }
+
+.footer-mark {
+    position: absolute;
+    bottom: 4vh;
+    left: 7vw;
+    right: 7vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    font-weight: 500;
+}
+.slide.dark .footer-mark,
+.slide.accent .footer-mark { color: var(--on-dark-mute); }
+.footer-mark .right { font-variant-numeric: tabular-nums; }
+
+.brand-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-right: 10px;
+    transform: translateY(-2px);
+}
+.slide.dark .brand-dot,
+.slide.accent .brand-dot { background: var(--on-dark); }
+
+/* ---------- Slide 1: Hero ---------- */
+
+.s1 .stat-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.4vw;
+    padding-bottom: 5vh;
+    margin-bottom: 5vh;
+    border-bottom: 1px solid var(--rule-dark);
+}
+.s1 .stat-row .stat-num {
+    font-size: clamp(2.6rem, 3.8vw, 3.6rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--on-dark);
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 0.6vh;
+    line-height: 1;
+}
+.s1 .stat-row .stat-label {
+    font-size: 0.95rem;
+    color: var(--on-dark-mute);
+    letter-spacing: 0.02em;
+    line-height: 1.35;
+}
+
+.s1 h1 {
+    color: var(--on-dark);
+    max-width: 24ch;
+}
+
+.s1 h1 .accent {
+    color: #6FB3C2;
+}
+
+.s1 .subhead {
+    color: var(--on-dark-mute);
+    max-width: 42ch;
+}
+
+/* ---------- Slide 2: Eight systems ---------- */
+
+.s2 .systems {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.6vw;
+    margin-top: 4vh;
+}
+.s2 .system {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 2.2vh 1.6vw;
+    min-height: 14vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.s2 .system .sys-tag {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+.s2 .system .sys-name {
+    font-size: clamp(1.05rem, 1.35vw, 1.3rem);
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+}
+.s2 .system .sys-note {
+    font-size: 0.88rem;
+    color: var(--ink-mute);
+    line-height: 1.4;
+}
+
+.s2 .punchline {
+    margin-top: 4.5vh;
+    padding-top: 3vh;
+    border-top: 1px solid var(--rule);
+    font-size: clamp(1.2rem, 1.7vw, 1.55rem);
+    font-weight: 500;
+    color: var(--ink-soft);
+    max-width: 56ch;
+    line-height: 1.45;
+}
+.s2 .punchline em {
+    font-style: normal;
+    color: var(--ink);
+    font-weight: 700;
+}
+
+/* ---------- Slide 3: Aedis in one frame ---------- */
+
+.s3 h2 { color: var(--on-dark); margin-bottom: 5vh; max-width: 18ch; }
+.s3 h2 .lit { color: #6FB3C2; }
+
+.s3 .metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2vw 3vw;
+    border-top: 1px solid var(--rule-dark);
+    border-bottom: 1px solid var(--rule-dark);
+    padding: 4vh 0;
+}
+.s3 .metric .num {
+    font-size: clamp(3.2rem, 5vw, 4.6rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    color: var(--on-dark);
+    margin-bottom: 1vh;
+}
+.s3 .metric .label {
+    font-size: 0.95rem;
+    color: var(--on-dark-mute);
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+}
+.s3 .cue {
+    margin-top: 5vh;
+    font-size: 1.05rem;
+    color: var(--on-dark-mute);
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.s3 .cue .arrow {
+    width: 32px;
+    height: 1px;
+    background: var(--on-dark-mute);
+    display: inline-block;
+}
+
+/* ---------- Slide 3b: Bridge (agent = employee) ---------- */
+
+.s3b h2 {
+    color: var(--ink);
+    margin-bottom: 5vh;
+    max-width: 26ch;
+}
+.s3b h2 .accent { color: var(--accent); }
+.s3b .bridge {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+}
+.s3b .bridge-head {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
+    padding: 2vh 0;
+    border-bottom: 1px solid var(--rule);
+}
+.s3b .bh-cell {
+    padding: 0 2vw;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+}
+.s3b .bh-cell.right { color: var(--accent); }
+
+.s3b .bridge-row {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
+    padding: 1.6vh 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: center;
+}
+.s3b .bridge-row:last-child { border-bottom: none; }
+.s3b .bc {
+    padding: 0 2vw;
+    font-size: clamp(1rem, 1.25vw, 1.2rem);
+    line-height: 1.4;
+}
+.s3b .bc.left { color: var(--ink-soft); }
+.s3b .bc.right { color: var(--ink); font-weight: 600; letter-spacing: -0.005em; }
+.s3b .bc.right .mute { color: var(--ink-mute); font-weight: 400; }
+.s3b .closer {
+    margin-top: 4vh;
+    font-size: clamp(1.1rem, 1.55vw, 1.4rem);
+    font-weight: 500;
+    color: var(--ink-soft);
+    max-width: 60ch;
+    line-height: 1.5;
+}
+.s3b .closer strong { color: var(--ink); font-weight: 700; }
+
+/* ---------- Slide 4: Demo ---------- */
+
+.s4 { padding: 0; }
+.s4 .frame {
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    max-width: none;
+}
+.s4 .demo-word {
+    font-size: clamp(10rem, 22vw, 22rem);
+    font-weight: 800;
+    letter-spacing: -0.06em;
+    line-height: 0.9;
+    color: var(--on-dark);
+}
+.s4 .demo-word .dot { color: rgba(243, 241, 236, 0.35); }
+
+.s4 .demo-path {
+    margin-top: 4vh;
+    font-size: 0.95rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(243, 241, 236, 0.55);
+    font-weight: 500;
+}
+
+/* ---------- Slide 5: Engineering ---------- */
+
+.s5 h2 {
+    color: var(--ink);
+    margin-bottom: 5vh;
+    max-width: 26ch;
+}
+
+.s5 .pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2vw;
+}
+.s5 .pillar {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    padding: 3.5vh 2vw;
+    display: flex;
+    flex-direction: column;
+    gap: 1.8vh;
+    position: relative;
+}
+.s5 .pillar::before {
+    content: "";
+    position: absolute;
+    top: 3.5vh;
+    left: 2vw;
+    width: 36px;
+    height: 2px;
+    background: var(--accent);
+}
+.s5 .pillar h3 {
+    font-size: clamp(1.3rem, 1.7vw, 1.55rem);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    padding-top: 2.6vh;
+}
+.s5 .pillar p {
+    font-size: clamp(1rem, 1.15vw, 1.1rem);
+    color: var(--ink-soft);
+    line-height: 1.55;
+}
+.s5 .pillar .tag {
+    margin-top: auto;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+}
+.s5 .closer {
+    margin-top: 5vh;
+    padding-top: 3vh;
+    border-top: 1px solid var(--rule);
+    font-size: clamp(1.2rem, 1.7vw, 1.55rem);
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+}
+.s5 .closer .mute { color: var(--ink-mute); font-weight: 500; }
+
+/* ---------- Slide 6: Arc ---------- */
+
+.s6 h2 {
+    color: var(--ink);
+    margin-bottom: 6vh;
+    max-width: 28ch;
+}
+
+.s6 .arc {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.4vw;
+}
+.s6 .step {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--accent);
+    border-radius: 12px;
+    padding: 3vh 1.4vw 3vh 1.4vw;
+    display: flex;
+    flex-direction: column;
+    gap: 1.4vh;
+    position: relative;
+}
+.s6 .step .era {
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+}
+.s6 .step .org {
+    font-size: clamp(1.25rem, 1.6vw, 1.45rem);
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.015em;
+}
+.s6 .step .role {
+    font-size: 1.0rem;
+    color: var(--ink-soft);
+    line-height: 1.45;
+}
+.s6 .step .scope {
+    font-size: 0.85rem;
+    color: var(--ink-mute);
+    line-height: 1.45;
+    margin-top: auto;
+}
+
+.s6 .arc-rail {
+    height: 1px;
+    background: var(--rule);
+    margin-top: -1.5vh;
+    margin-bottom: 0;
+    display: none;
+}
+
+/* ---------- Slide 7: Three changes ---------- */
+
+.s7 h2 {
+    color: var(--on-dark);
+    margin-bottom: 6vh;
+    max-width: 22ch;
+}
+
+.s7 .changes {
+    display: flex;
+    flex-direction: column;
+    gap: 3.4vh;
+}
+.s7 .change {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 2vw;
+    align-items: baseline;
+    padding-bottom: 3.4vh;
+    border-bottom: 1px solid var(--rule-dark);
+}
+.s7 .change:last-of-type { border-bottom: none; }
+.s7 .change .idx {
+    font-size: clamp(1.6rem, 2.2vw, 2.1rem);
+    font-weight: 600;
+    color: #6FB3C2;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+}
+.s7 .change p {
+    font-size: clamp(1.45rem, 2.1vw, 2.05rem);
+    font-weight: 500;
+    line-height: 1.25;
+    color: var(--on-dark);
+    letter-spacing: -0.015em;
+    max-width: 32ch;
+}
+.s7 .change p .mute { color: var(--on-dark-mute); font-weight: 400; }
+.s7 .seal {
+    margin-top: 5vh;
+    font-size: clamp(1.05rem, 1.35vw, 1.25rem);
+    color: var(--on-dark-mute);
+    letter-spacing: 0.02em;
+    max-width: 48ch;
+    line-height: 1.5;
+}
+.s7 .seal strong { color: var(--on-dark); font-weight: 600; }
+
+/* ---------- Slide 8: Close ---------- */
+
+.s8 h2 {
+    color: var(--ink);
+    margin-bottom: 6vh;
+    max-width: 26ch;
+}
+.s8 h2 .accent { color: var(--accent); }
+
+.s8 .terms {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2vw;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 5vh 0;
+}
+.s8 .term {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4vh;
+}
+.s8 .term .n {
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+}
+.s8 .term p {
+    font-size: clamp(1.15rem, 1.55vw, 1.45rem);
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+}
+.s8 .signoff {
+    margin-top: 5vh;
+    font-size: clamp(1.35rem, 1.85vw, 1.7rem);
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.015em;
+    max-width: 38ch;
+    line-height: 1.35;
+}
+.s8 .contact {
+    margin-top: 4vh;
+    display: flex;
+    align-items: center;
+    gap: 1.4vw;
+    font-size: 0.95rem;
+    color: var(--ink-mute);
+    letter-spacing: 0.04em;
+    font-weight: 500;
+}
+.s8 .contact .sep { color: var(--rule); }
+.s8 .contact .name { color: var(--ink); font-weight: 600; }
+
+/* ---------- Nav ---------- */
+
+.nav {
+    position: fixed;
+    bottom: 1.6vh;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 50;
+    background: rgba(15, 20, 25, 0.04);
+    padding: 8px 12px;
+    border-radius: 999px;
+    backdrop-filter: blur(8px);
+}
+.nav .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(15, 20, 25, 0.22);
+    cursor: pointer;
+    transition: background 220ms ease, transform 220ms ease;
+    border: none;
+    padding: 0;
+}
+.nav .dot.active {
+    background: var(--accent);
+    transform: scale(1.25);
+}
+.nav .dot:hover { background: var(--accent); opacity: 0.7; }
+
+/* When current slide is dark, recolor the nav pill */
+.deck[data-mode="dark"] .nav,
+.deck[data-mode="accent"] .nav {
+    background: rgba(243, 241, 236, 0.08);
+}
+.deck[data-mode="dark"] .nav .dot,
+.deck[data-mode="accent"] .nav .dot {
+    background: rgba(243, 241, 236, 0.28);
+}
+.deck[data-mode="dark"] .nav .dot.active,
+.deck[data-mode="accent"] .nav .dot.active {
+    background: #6FB3C2;
+}
+
+.hint {
+    position: fixed;
+    bottom: 1.6vh;
+    right: 2vw;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    font-weight: 500;
+    z-index: 50;
+    opacity: 0.65;
+}
+.deck[data-mode="dark"] .hint,
+.deck[data-mode="accent"] .hint { color: var(--on-dark-mute); }
+
+/* ---------- Print ---------- */
+@media print {
+    @page { size: letter landscape; margin: 0; }
+    * { overflow: visible !important; }
+    html, body { width: 100%; height: 100%; background: white; overflow: visible !important; }
+
+    .deck { overflow: visible !important; height: auto !important; }
+    .nav, .hint { display: none !important; }
+
+    .slide {
+        position: relative;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        width: 100%;
+        height: 100vh;
+        min-height: 100vh;
+        max-height: 100vh;
+        margin: 0;
+        padding: 4rem 3rem;
+        box-sizing: border-box;
+        page-break-after: always;
+        break-after: page;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+    .slide:last-of-type { page-break-after: auto; break-after: auto; }
+
+    .slide.dark { background: #0E1B1F !important; color: #F3F1EC !important; }
+    .slide.accent { background: #0F4C5C !important; color: #F3F1EC !important; }
+
+    .slide.dark * { color: inherit; }
+    .slide.dark h1, .slide.dark h2, .slide.dark .demo-word { color: #F3F1EC !important; }
+    .slide.dark .subhead, .slide.dark .stat-label, .slide.dark .metric .label,
+    .slide.dark .change p .mute, .slide.dark .seal { color: #9CA9AE !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck" data-mode="dark">
+
+    <!-- 1 · COLD OPEN -->
+    <section class="slide s1 dark active" data-mode="dark" data-section="1">
+        <div class="frame">
+            <div class="stat-row">
+                <div>
+                    <div class="stat-num">$200B</div>
+                    <div class="stat-label">U.S. skilled nursing sector</div>
+                </div>
+                <div>
+                    <div class="stat-num">8</div>
+                    <div class="stat-label">Disconnected systems per facility</div>
+                </div>
+                <div>
+                    <div class="stat-num">330+</div>
+                    <div class="stat-label">Facilities under one top-tier operator</div>
+                </div>
+            </div>
+            <p class="eyebrow">A thesis</p>
+            <h1>Skilled nursing is the largest under-automated operating business in U.S. healthcare.</h1>
+            <p class="subhead">The incumbent vendors are not going to fix it. Operators with AI agents will.</p>
+        </div>
+        <div class="footer-mark">
+            <span><span class="brand-dot"></span>Taskvisory · Aedis</span>
+            <span class="right">01 / 09</span>
+        </div>
+    </section>
+
+    <!-- 2 · WHAT AN SNF RUNS ON -->
+    <section class="slide s2" data-mode="light" data-section="2">
+        <div class="frame">
+            <p class="eyebrow">The operating reality</p>
+            <h2>Eight disconnected systems. Humans in the middle.</h2>
+            <div class="systems">
+                <div class="system">
+                    <div class="sys-tag">Clinical</div>
+                    <div>
+                        <div class="sys-name">PointClickCare</div>
+                        <div class="sys-note">EHR, MDS, charting</div>
+                    </div>
+                </div>
+                <div class="system">
+                    <div class="sys-tag">HR &amp; Finance</div>
+                    <div>
+                        <div class="sys-name">Workday</div>
+                        <div class="sys-note">Payroll, GL, AP</div>
+                    </div>
+                </div>
+                <div class="system">
+                    <div class="sys-tag">Comms</div>
+                    <div>
+                        <div class="sys-name">Microsoft 365</div>
+                        <div class="sys-note">Mail, calendar, files</div>
+                    </div>
+                </div>
+                <div class="system">
+                    <div class="sys-tag">Regulatory</div>
+                    <div>
+                        <div class="sys-name">CMS · OIG · SAM</div>
+                        <div class="sys-note">Star ratings, exclusions, sanctions</div>
+                    </div>
+                </div>
+                <div class="system">
+                    <div class="sys-tag">Revenue</div>
+                    <div>
+                        <div class="sys-name">Billing &amp; AR</div>
+                        <div class="sys-note">Claims, denials, cash app</div>
+                    </div>
+                </div>
+                <div class="system">
+                    <div class="sys-tag">Workforce</div>
+                    <div>
+                        <div class="sys-name">Scheduling</div>
+                        <div class="sys-note">Shifts, agency, credentials</div>
+                    </div>
+                </div>
+                <div class="system">
+                    <div class="sys-tag">Reimbursement</div>
+                    <div>
+                        <div class="sys-name">MDS &amp; PDPM</div>
+                        <div class="sys-note">Acuity capture, rate optimization</div>
+                    </div>
+                </div>
+                <div class="system">
+                    <div class="sys-tag">Top of funnel</div>
+                    <div>
+                        <div class="sys-name">Admissions</div>
+                        <div class="sys-note">Referrals, intake, payer mix</div>
+                    </div>
+                </div>
+            </div>
+            <p class="punchline">The work that creates value is the synthesis between these. <em>Today, that work is humans clicking.</em></p>
+        </div>
+        <div class="footer-mark">
+            <span><span class="brand-dot"></span>Taskvisory · Aedis</span>
+            <span class="right">02 / 09</span>
+        </div>
+    </section>
+
+    <!-- 3 · AEDIS IN ONE FRAME -->
+    <section class="slide s3 dark" data-mode="dark" data-section="3">
+        <div class="frame">
+            <p class="eyebrow">The product</p>
+            <h2>Aedis. <span class="lit">One decision queue</span> across everything.</h2>
+            <div class="metrics">
+                <div class="metric">
+                    <div class="num">48</div>
+                    <div class="label">Autonomous agents</div>
+                </div>
+                <div class="metric">
+                    <div class="num">8</div>
+                    <div class="label">Business domains</div>
+                </div>
+                <div class="metric">
+                    <div class="num">1</div>
+                    <div class="label">Unified decision queue</div>
+                </div>
+                <div class="metric">
+                    <div class="num">24</div>
+                    <div class="label">Active decisions right now</div>
+                </div>
+                <div class="metric">
+                    <div class="num">&lt;10s</div>
+                    <div class="label">Median approval per card</div>
+                </div>
+                <div class="metric">
+                    <div class="num">100%</div>
+                    <div class="label">Audited, replayable, governed</div>
+                </div>
+            </div>
+            <p class="cue"><span class="arrow"></span>Let me show you.</p>
+        </div>
+        <div class="footer-mark">
+            <span><span class="brand-dot"></span>Taskvisory · Aedis</span>
+            <span class="right">03 / 09</span>
+        </div>
+    </section>
+
+    <!-- 3b · BRIDGE: AGENT = EMPLOYEE -->
+    <section class="slide s3b" data-mode="light" data-section="3b">
+        <div class="frame">
+            <p class="eyebrow">The bridge</p>
+            <h2>Every agent is an employee you can <span class="accent">read line-by-line.</span></h2>
+            <div class="bridge">
+                <div class="bridge-head">
+                    <div class="bh-cell">What a team has</div>
+                    <div class="bh-cell right">What an Aedis agent has</div>
+                </div>
+                <div class="bridge-row">
+                    <div class="bc left">Job description &amp; SOP</div>
+                    <div class="bc right">YAML role definition <span class="mute">— readable, diff-able, version-controlled</span></div>
+                </div>
+                <div class="bridge-row">
+                    <div class="bc left">System access (PCC, Workday, M365)</div>
+                    <div class="bc right">Tools <span class="mute">— scoped at the API level, not the seat level</span></div>
+                </div>
+                <div class="bridge-row">
+                    <div class="bc left">Tribal knowledge &amp; the shared drive</div>
+                    <div class="bc right">A knowledge graph it queries <span class="mute">before every action</span></div>
+                </div>
+                <div class="bridge-row">
+                    <div class="bc left">Senior vs. junior staff</div>
+                    <div class="bc right">Model tier <span class="mute">— Opus for judgement, Haiku for throughput</span></div>
+                </div>
+                <div class="bridge-row">
+                    <div class="bc left">Approval matrix</div>
+                    <div class="bc right">Decision queue with human-in-the-loop <span class="mute">at the dollar &amp; risk levels you set</span></div>
+                </div>
+                <div class="bridge-row">
+                    <div class="bc left">Meeting notes &amp; emails <span style="opacity:0.6">(imperfect)</span></div>
+                    <div class="bc right">Hash-chained audit <span class="mute">— every decision replayable, exactly as it happened</span></div>
+                </div>
+            </div>
+            <p class="closer"><strong>The difference:</strong> agents never sleep, every one of them runs every facility every day, and every decision is logged <em style="font-style:normal;color:var(--accent);font-weight:600">before</em> it executes.</p>
+        </div>
+        <div class="footer-mark">
+            <span><span class="brand-dot"></span>Taskvisory · Aedis</span>
+            <span class="right">04 / 09</span>
+        </div>
+    </section>
+
+    <!-- 5 · DEMO HANDOFF -->
+    <section class="slide s4 accent" data-mode="accent" data-section="5">
+        <div class="frame">
+            <div class="demo-word">Demo<span class="dot">.</span></div>
+            <div class="demo-path">Morning Briefing &nbsp;→&nbsp; Exception Queue &nbsp;→&nbsp; Decision card &nbsp;→&nbsp; Audit Trail &nbsp;→&nbsp; Agent config &nbsp;→&nbsp; Inbox monitor</div>
+        </div>
+    </section>
+
+    <!-- 6 · WHY THIS WON — ENGINEERING -->
+    <section class="slide s5" data-mode="light" data-section="6">
+        <div class="frame">
+            <p class="eyebrow">Why this won</p>
+            <h2>What separates this from a consultancy and a SaaS demo.</h2>
+            <div class="pillars">
+                <div class="pillar">
+                    <h3>Credential isolation</h3>
+                    <p>AWS Secrets Manager &nbsp;→&nbsp; Anthropic Vault &nbsp;→&nbsp; MCP proxy injection at request time. Agents never hold keys. 90-day automated rotation on every critical credential.</p>
+                    <div class="tag">Defense in depth</div>
+                </div>
+                <div class="pillar">
+                    <h3>Immutable audit &amp; governance</h3>
+                    <p>SHA-256 hash chain. Monotonic sequence ordering. A 7-level governance engine: observe-only → CFO and GC sign-off. Per-agent kill-switch in &lt;15 minutes.</p>
+                    <div class="tag">SOX &amp; HIPAA ready</div>
+                </div>
+                <div class="pillar">
+                    <h3>PHI never leaves the VPC</h3>
+                    <p>AWS Bedrock inside the operator&rsquo;s VPC, BAA-covered, zero data retention. RLS on every table. JWKS rotation. JWT-authenticated WebSocket push.</p>
+                    <div class="tag">In-tenant by design</div>
+                </div>
+            </div>
+            <div class="closer">FAANG-grade defaults. <span class="mute">Operator-grade controls.</span></div>
+        </div>
+        <div class="footer-mark">
+            <span><span class="brand-dot"></span>Taskvisory · Aedis</span>
+            <span class="right">06 / 09</span>
+        </div>
+    </section>
+
+    <!-- 7 · WHY ME -->
+    <section class="slide s6" data-mode="light" data-section="7">
+        <div class="frame">
+            <p class="eyebrow">Why me</p>
+            <h2>I built this as the operator I was, not as the vendor I wasn&rsquo;t.</h2>
+            <div class="arc">
+                <div class="step">
+                    <div class="era">Foundation</div>
+                    <div class="org">PwC</div>
+                    <div class="role">Big&nbsp;4 audit. Hedge funds, financial services.</div>
+                    <div class="scope">Controls intuition, public-company rigor.</div>
+                </div>
+                <div class="step">
+                    <div class="era">Industry depth</div>
+                    <div class="org">Moss Adams</div>
+                    <div class="role">National-firm audit across six industries.</div>
+                    <div class="scope">Healthcare, manufacturing, distribution, semis.</div>
+                </div>
+                <div class="step">
+                    <div class="era">In the seat</div>
+                    <div class="org">Aspen</div>
+                    <div class="role">Controller &nbsp;→&nbsp; CFO. Five-facility SNF portfolio.</div>
+                    <div class="scope">Monthly close. ERP. M&amp;A. JV expansion.</div>
+                </div>
+                <div class="step">
+                    <div class="era">Today</div>
+                    <div class="org">Taskvisory · Aedis</div>
+                    <div class="role">Principal AI engineer.</div>
+                    <div class="scope">Operator discipline applied to LLM tooling.</div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-mark">
+            <span><span class="brand-dot"></span>Taskvisory · Aedis</span>
+            <span class="right">07 / 09</span>
+        </div>
+    </section>
+
+    <!-- 8 · WHAT CHANGES -->
+    <section class="slide s7 dark" data-mode="dark" data-section="8">
+        <div class="frame">
+            <p class="eyebrow">What changes</p>
+            <h2>Three changes you can&rsquo;t get from a feature release.</h2>
+            <div class="changes">
+                <div class="change">
+                    <div class="idx">01</div>
+                    <p>Decision latency goes <span class="mute">from days</span> to seconds.</p>
+                </div>
+                <div class="change">
+                    <div class="idx">02</div>
+                    <p>Headcount leverage compounds &mdash; <span class="mute">every agent runs every facility every day.</span></p>
+                </div>
+                <div class="change">
+                    <div class="idx">03</div>
+                    <p>Compliance posture improves, <span class="mute">not degrades &mdash;</span> every action is logged before it executes.</p>
+                </div>
+            </div>
+            <p class="seal"><strong>This is how SNF margins move 200&ndash;400 bps over 24 months</strong> &mdash; not from features, from a different operating model.</p>
+        </div>
+        <div class="footer-mark">
+            <span><span class="brand-dot"></span>Taskvisory · Aedis</span>
+            <span class="right">08 / 09</span>
+        </div>
+    </section>
+
+    <!-- 9 · CLOSE -->
+    <section class="slide s8" data-mode="light" data-section="9">
+        <div class="frame">
+            <p class="eyebrow">The close</p>
+            <h2>The right partner <span class="accent">already believes</span> the same thing.</h2>
+            <div class="terms">
+                <div class="term">
+                    <div class="n">01</div>
+                    <p>AI agents are the operating layer, not a feature.</p>
+                </div>
+                <div class="term">
+                    <div class="n">02</div>
+                    <p>You want a partner who owns delivery, not a vendor who ships features.</p>
+                </div>
+                <div class="term">
+                    <div class="n">03</div>
+                    <p>You&rsquo;re willing to give a sandbox so the work can start fast.</p>
+                </div>
+            </div>
+            <p class="signoff">If that&rsquo;s true, the next conversation is about your data.</p>
+            <div class="contact">
+                <span class="name">Andrew Lark</span>
+                <span class="sep">·</span>
+                <span>Taskvisory</span>
+                <span class="sep">·</span>
+                <span>andrew@taskvisory.com</span>
+            </div>
+        </div>
+        <div class="footer-mark">
+            <span><span class="brand-dot"></span>Taskvisory · Aedis</span>
+            <span class="right">09 / 09</span>
+        </div>
+    </section>
+
+</div>
+
+<div class="nav" id="nav"></div>
+<div class="hint">← →&nbsp; navigate &nbsp;·&nbsp; F&nbsp; fullscreen</div>
+
+<script>
+(function () {
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const deck = document.querySelector('.deck');
+    const navEl = document.getElementById('nav');
+    let current = 0;
+
+    slides.forEach((_, i) => {
+        const b = document.createElement('button');
+        b.className = 'dot' + (i === 0 ? ' active' : '');
+        b.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+        b.addEventListener('click', () => go(i));
+        navEl.appendChild(b);
+    });
+    const dots = Array.from(navEl.querySelectorAll('.dot'));
+
+    function go(n) {
+        if (n < 0 || n >= slides.length || n === current) return;
+        slides[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = n;
+        slides[current].classList.add('active');
+        dots[current].classList.add('active');
+        deck.dataset.mode = slides[current].dataset.mode || 'light';
+    }
+
+    function next() { go(Math.min(current + 1, slides.length - 1)); }
+    function prev() { go(Math.max(current - 1, 0)); }
+
+    document.addEventListener('keydown', (e) => {
+        switch (e.key) {
+            case 'ArrowRight':
+            case 'ArrowDown':
+            case 'PageDown':
+            case ' ':
+                e.preventDefault(); next(); break;
+            case 'ArrowLeft':
+            case 'ArrowUp':
+            case 'PageUp':
+                e.preventDefault(); prev(); break;
+            case 'Home':
+                e.preventDefault(); go(0); break;
+            case 'End':
+                e.preventDefault(); go(slides.length - 1); break;
+            case 'f':
+            case 'F':
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen?.();
+                } else {
+                    document.exitFullscreen?.();
+                }
+                break;
+        }
+    });
+
+    let touchX = null;
+    document.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend', (e) => {
+        if (touchX === null) return;
+        const dx = e.changedTouches[0].clientX - touchX;
+        if (Math.abs(dx) > 50) { dx < 0 ? next() : prev(); }
+        touchX = null;
+    }, { passive: true });
+
+    deck.dataset.mode = slides[0].dataset.mode || 'light';
+})();
+</script>
+
+</body>
+</html>

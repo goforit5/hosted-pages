@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aedis · The operating layer for skilled nursing</title>
+<meta name="description" content="Aedis is an agent-native decision platform for multi-facility skilled-nursing operators. 48 specialized agents across 8 business domains, every action audited, built to run inside your VPC." />
+<meta property="og:title" content="Aedis · The operating layer for skilled nursing" />
+<meta property="og:description" content="An agent-native decision platform that sits above the systems your facilities already run. 48 agents. 8 domains. One unified queue." />
+<meta property="og:type" content="website" />
+<style>
+:root {
+    --bg-light: #FAFAFA;
+    --bg-mid: #F2F2EE;
+    --bg-dark: #0E1B1F;
+    --bg-darker: #0A1418;
+    --accent: #0F4C5C;
+    --accent-light: #6FB3C2;
+    --accent-soft: rgba(15, 76, 92, 0.08);
+    --ink: #0F1419;
+    --ink-soft: #3D4A4F;
+    --ink-mute: #6B7780;
+    --paper: #FFFFFF;
+    --on-dark: #F3F1EC;
+    --on-dark-mute: #9CA9AE;
+    --rule: rgba(15, 20, 25, 0.10);
+    --rule-dark: rgba(243, 241, 236, 0.14);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+    background: var(--bg-light);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-feature-settings: "ss01", "ss02", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.55;
+}
+
+p, h1, h2, h3, h4, li { text-wrap: balance; }
+
+a { color: inherit; text-decoration: none; }
+
+/* ---------- Top Nav ---------- */
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(250, 250, 250, 0.85);
+    backdrop-filter: saturate(160%) blur(14px);
+    -webkit-backdrop-filter: saturate(160%) blur(14px);
+    border-bottom: 1px solid var(--rule);
+}
+.topbar-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+}
+.brand .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent);
+}
+.brand .mute { color: var(--ink-mute); font-weight: 500; }
+.nav-links {
+    display: flex; gap: 28px;
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    font-weight: 500;
+}
+.nav-links a:hover { color: var(--accent); }
+.cta-pill {
+    background: var(--ink);
+    color: var(--paper) !important;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    transition: background 200ms ease;
+}
+.cta-pill:hover { background: var(--accent); }
+
+@media (max-width: 760px) {
+    .nav-links { display: none; }
+    .topbar-inner { padding: 14px 22px; }
+}
+
+/* ---------- Page sections ---------- */
+
+section { padding: 12vh 32px; }
+.wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+}
+
+.eyebrow {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+}
+.dark .eyebrow, .accent-bg .eyebrow { color: var(--accent-light); }
+
+.h1 {
+    font-size: clamp(2.6rem, 5.4vw, 4.6rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    max-width: 18ch;
+}
+.h2 {
+    font-size: clamp(2.1rem, 3.8vw, 3.4rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    max-width: 22ch;
+    margin-bottom: 28px;
+}
+.lede {
+    font-size: clamp(1.15rem, 1.5vw, 1.4rem);
+    color: var(--ink-soft);
+    line-height: 1.55;
+    max-width: 56ch;
+    margin-top: 28px;
+}
+.dark .lede, .accent-bg .lede { color: var(--on-dark-mute); }
+
+/* ---------- Section: Hero ---------- */
+
+.hero {
+    background: var(--bg-dark);
+    color: var(--on-dark);
+    padding-top: 14vh;
+    padding-bottom: 12vh;
+    position: relative;
+    overflow: hidden;
+}
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(60% 60% at 80% 30%, rgba(111, 179, 194, 0.16) 0%, rgba(111, 179, 194, 0) 70%);
+    pointer-events: none;
+}
+.hero .wrap { position: relative; }
+.hero .h1 { color: var(--on-dark); max-width: 16ch; }
+.hero .h1 .accent { color: var(--accent-light); }
+.hero .lede { color: var(--on-dark-mute); }
+.hero-stats {
+    margin-top: 9vh;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    padding-top: 5vh;
+    border-top: 1px solid var(--rule-dark);
+}
+.hero-stats .s-num {
+    font-size: clamp(2.4rem, 4vw, 3.2rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    color: var(--on-dark);
+    line-height: 1;
+    margin-bottom: 12px;
+}
+.hero-stats .s-lbl {
+    font-size: 0.95rem;
+    color: var(--on-dark-mute);
+    line-height: 1.4;
+}
+@media (max-width: 760px) {
+    .hero-stats { grid-template-columns: 1fr; gap: 32px; }
+}
+
+/* ---------- Section: Thesis ---------- */
+
+.thesis { background: var(--bg-light); }
+.thesis .three {
+    margin-top: 6vh;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 36px;
+}
+.thesis .three .card-mini {
+    border-top: 2px solid var(--accent);
+    padding-top: 24px;
+}
+.thesis .three .card-mini h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin-bottom: 14px;
+}
+.thesis .three .card-mini p {
+    font-size: 1.02rem;
+    color: var(--ink-soft);
+    line-height: 1.55;
+}
+@media (max-width: 760px) { .thesis .three { grid-template-columns: 1fr; gap: 28px; } }
+
+/* ---------- Section: Platform fleet ---------- */
+
+.fleet {
+    background: var(--bg-dark);
+    color: var(--on-dark);
+}
+.fleet .h2 { color: var(--on-dark); }
+.fleet .lede { color: var(--on-dark-mute); margin-bottom: 7vh; }
+.fleet-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+.fleet-card {
+    background: rgba(243, 241, 236, 0.04);
+    border: 1px solid var(--rule-dark);
+    border-radius: 14px;
+    padding: 26px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: border-color 200ms ease, background 200ms ease;
+}
+.fleet-card:hover {
+    border-color: var(--accent-light);
+    background: rgba(111, 179, 194, 0.05);
+}
+.fleet-card .domain {
+    font-size: 0.76rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-light);
+    font-weight: 600;
+}
+.fleet-card .title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--on-dark);
+    letter-spacing: -0.01em;
+}
+.fleet-card ul {
+    list-style: none;
+    margin-top: auto;
+}
+.fleet-card li {
+    font-size: 0.9rem;
+    color: var(--on-dark-mute);
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(243, 241, 236, 0.06);
+    line-height: 1.4;
+}
+.fleet-card li:last-child { border-bottom: none; }
+@media (max-width: 1080px) { .fleet-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .fleet-grid { grid-template-columns: 1fr; } }
+
+.fleet .seal {
+    margin-top: 6vh;
+    padding-top: 4vh;
+    border-top: 1px solid var(--rule-dark);
+    font-size: clamp(1rem, 1.3vw, 1.2rem);
+    color: var(--on-dark-mute);
+    max-width: 58ch;
+    line-height: 1.6;
+}
+.fleet .seal strong { color: var(--on-dark); font-weight: 600; }
+
+/* ---------- Section: Bridge ---------- */
+
+.bridge-sec { background: var(--bg-mid); }
+.bridge-tbl {
+    margin-top: 4vh;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+}
+.bridge-tbl .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: center;
+    gap: 20px;
+}
+.bridge-tbl .row:last-child { border-bottom: none; }
+.bridge-tbl .row.head {
+    padding: 16px 0;
+    border-bottom: 2px solid var(--accent);
+}
+.bridge-tbl .row.head .cell {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+}
+.bridge-tbl .row.head .cell.right { color: var(--accent); }
+.bridge-tbl .cell.left {
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    line-height: 1.45;
+}
+.bridge-tbl .cell.right {
+    font-size: 1.1rem;
+    color: var(--ink);
+    font-weight: 600;
+    line-height: 1.45;
+    letter-spacing: -0.005em;
+}
+.bridge-tbl .cell.right .mute { color: var(--ink-mute); font-weight: 400; }
+
+.bridge-sec .closer {
+    margin-top: 5vh;
+    font-size: clamp(1.1rem, 1.4vw, 1.3rem);
+    font-weight: 500;
+    color: var(--ink-soft);
+    max-width: 68ch;
+    line-height: 1.55;
+}
+.bridge-sec .closer strong { color: var(--ink); font-weight: 700; }
+.bridge-sec .closer .accent-w { color: var(--accent); font-weight: 600; }
+
+@media (max-width: 700px) {
+    .bridge-tbl .row { grid-template-columns: 1fr; padding: 18px 0; gap: 8px; }
+    .bridge-tbl .row.head .cell.right { padding-top: 4px; }
+}
+
+/* ---------- Section: Engineering ---------- */
+
+.eng {
+    background: var(--bg-dark);
+    color: var(--on-dark);
+}
+.eng .h2 { color: var(--on-dark); }
+.eng .lede { color: var(--on-dark-mute); margin-bottom: 7vh; }
+.pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+}
+.pillar {
+    background: rgba(243, 241, 236, 0.04);
+    border: 1px solid var(--rule-dark);
+    border-radius: 16px;
+    padding: 34px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.pillar .tag {
+    font-size: 0.74rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-light);
+    font-weight: 600;
+}
+.pillar h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--on-dark);
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+}
+.pillar p {
+    font-size: 1rem;
+    color: var(--on-dark-mute);
+    line-height: 1.6;
+}
+.pillar ul {
+    margin-top: 8px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.pillar li {
+    font-size: 0.88rem;
+    color: var(--on-dark-mute);
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.4;
+}
+.pillar li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 9px;
+    width: 6px; height: 1px;
+    background: var(--accent-light);
+}
+@media (max-width: 1000px) { .pillars { grid-template-columns: 1fr; gap: 22px; } }
+
+/* ---------- Section: Day ---------- */
+
+.day { background: var(--bg-light); }
+.day-flow {
+    margin-top: 6vh;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+}
+.day-step {
+    padding: 32px 24px;
+    border-right: 1px solid var(--rule);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+.day-step:last-child { border-right: none; }
+.day-step .when {
+    font-size: 0.74rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+}
+.day-step h4 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+}
+.day-step p {
+    font-size: 0.98rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+}
+@media (max-width: 900px) {
+    .day-flow { grid-template-columns: 1fr; }
+    .day-step { border-right: none; border-bottom: 1px solid var(--rule); }
+    .day-step:last-child { border-bottom: none; }
+}
+
+/* ---------- Section: Who it's for ---------- */
+
+.fit { background: var(--bg-mid); }
+.fit .wrap {
+    max-width: 880px;
+    text-align: center;
+}
+.fit .h2 {
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+.fit .lede {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 56ch;
+    font-size: clamp(1.15rem, 1.5vw, 1.4rem);
+}
+.fit-check {
+    margin-top: 6vh;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    text-align: left;
+}
+.fit-tile {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 26px 22px;
+}
+.fit-tile .n {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--paper);
+    font-size: 0.78rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+    font-variant-numeric: tabular-nums;
+}
+.fit-tile p {
+    font-size: 1rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+}
+.fit-tile p strong { color: var(--ink); font-weight: 600; }
+@media (max-width: 800px) { .fit-check { grid-template-columns: 1fr; } }
+
+/* ---------- Section: Builder ---------- */
+
+.who { background: var(--bg-light); }
+.arc {
+    margin-top: 6vh;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+.arc-step {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--accent);
+    border-radius: 12px;
+    padding: 26px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.arc-step .era {
+    font-size: 0.74rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+}
+.arc-step .org {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.015em;
+}
+.arc-step .role {
+    font-size: 1rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+}
+.arc-step .scope {
+    font-size: 0.88rem;
+    color: var(--ink-mute);
+    line-height: 1.5;
+    margin-top: auto;
+}
+@media (max-width: 900px) { .arc { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .arc { grid-template-columns: 1fr; } }
+
+.who .signoff {
+    margin-top: 6vh;
+    padding-top: 4vh;
+    border-top: 1px solid var(--rule);
+    font-size: clamp(1.1rem, 1.4vw, 1.3rem);
+    color: var(--ink-soft);
+    max-width: 62ch;
+    line-height: 1.55;
+}
+.who .signoff strong { color: var(--ink); font-weight: 700; }
+
+/* ---------- Section: Book ---------- */
+
+.book {
+    background: var(--accent);
+    color: var(--on-dark);
+}
+.book .wrap {
+    max-width: 900px;
+    text-align: center;
+}
+.book .eyebrow { color: var(--accent-light); }
+.book .h2 {
+    color: var(--on-dark);
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+.book .lede {
+    color: rgba(243, 241, 236, 0.78);
+    max-width: 56ch;
+    margin-left: auto;
+    margin-right: auto;
+}
+.cta-row {
+    margin-top: 5vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+}
+.cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--on-dark);
+    color: var(--bg-dark) !important;
+    padding: 18px 36px;
+    border-radius: 999px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.005em;
+    transition: transform 180ms ease, box-shadow 180ms ease;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+}
+.cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.25);
+}
+.cta-btn .arrow {
+    width: 16px;
+    height: 1px;
+    background: var(--bg-dark);
+    position: relative;
+}
+.cta-btn .arrow::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: -3px;
+    width: 7px;
+    height: 7px;
+    border-top: 1px solid var(--bg-dark);
+    border-right: 1px solid var(--bg-dark);
+    transform: rotate(45deg);
+}
+.cta-note {
+    font-size: 0.9rem;
+    color: rgba(243, 241, 236, 0.7);
+    letter-spacing: 0.04em;
+}
+
+/* ---------- Footer ---------- */
+
+footer {
+    background: var(--bg-darker);
+    color: var(--on-dark-mute);
+    padding: 8vh 32px 6vh;
+    border-top: 1px solid var(--rule-dark);
+}
+.foot-wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-size: 0.88rem;
+    letter-spacing: 0.02em;
+}
+.foot-wrap .brand { color: var(--on-dark); }
+.foot-wrap a:hover { color: var(--on-dark); }
+
+@media (max-width: 600px) {
+    .foot-wrap { justify-content: flex-start; flex-direction: column; align-items: flex-start; gap: 12px; }
+}
+
+</style>
+</head>
+<body>
+
+<header class="topbar">
+    <div class="topbar-inner">
+        <a href="#top" class="brand">
+            <span class="dot"></span>
+            Aedis<span class="mute">&nbsp;· by Taskvisory</span>
+        </a>
+        <nav class="nav-links">
+            <a href="#thesis">Thesis</a>
+            <a href="#platform">Platform</a>
+            <a href="#engineering">Engineering</a>
+            <a href="#fit">Who it's for</a>
+            <a href="#who">Builder</a>
+        </nav>
+        <a href="mailto:andrew@taskvisory.com?subject=Aedis%20demo%20request&body=Hi%20Andrew%20%E2%80%94%20I'd%20like%20to%20see%20the%20Aedis%20demo." class="cta-pill">Book a demo</a>
+    </div>
+</header>
+
+<main id="top">
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="wrap">
+            <p class="eyebrow">Aedis &nbsp;·&nbsp; by Taskvisory</p>
+            <h1 class="h1">The <span class="accent">operating layer</span> for skilled nursing.</h1>
+            <p class="lede">Aedis is an agent-native decision platform. It sits above the systems your facilities already run &mdash; PCC, Workday, Microsoft 365, your billing and scheduling stacks &mdash; and turns the synthesis between them into the work your operators don&rsquo;t have to do.</p>
+            <div class="hero-stats">
+                <div>
+                    <div class="s-num">48</div>
+                    <div class="s-lbl">Autonomous agents, each a defined role</div>
+                </div>
+                <div>
+                    <div class="s-num">8</div>
+                    <div class="s-lbl">Business domains, end to end</div>
+                </div>
+                <div>
+                    <div class="s-num">1</div>
+                    <div class="s-lbl">Unified decision queue across every facility</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- THESIS -->
+    <section class="thesis" id="thesis">
+        <div class="wrap">
+            <p class="eyebrow">The thesis</p>
+            <h2 class="h2">The work that creates value in skilled nursing is the synthesis between systems.</h2>
+            <p class="lede">Today, that work is humans clicking across eight SaaS apps. Tomorrow, it&rsquo;s agents reading every system continuously, ranking what matters, and surfacing a single queue your operators approve in seconds. The change isn&rsquo;t a feature. It&rsquo;s an operating model.</p>
+            <div class="three">
+                <div class="card-mini">
+                    <h3>Decision latency</h3>
+                    <p>What used to take days &mdash; a payer mix anomaly, a survey risk, a referral mismatch &mdash; now surfaces in seconds, with the evidence already attached.</p>
+                </div>
+                <div class="card-mini">
+                    <h3>Headcount leverage</h3>
+                    <p>Every agent runs every facility every day. Add ten facilities, the agents work the same way. Add a hundred. The cost curve stops being linear.</p>
+                </div>
+                <div class="card-mini">
+                    <h3>Compliance posture</h3>
+                    <p>Every action is logged <em>before</em> it executes. The audit trail isn&rsquo;t a feature you turn on &mdash; it&rsquo;s the platform&rsquo;s default. Auditors get more, not less.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PLATFORM -->
+    <section class="fleet" id="platform">
+        <div class="wrap">
+            <p class="eyebrow">The platform</p>
+            <h2 class="h2">48 agents. 8 domains. One queue across all of it.</h2>
+            <p class="lede">Each agent has a single, defined role &mdash; the same way you&rsquo;d hire a billing coordinator or a staffing supervisor. The fleet works the way an operations team does: domains stay accountable, but everything routes to one queue.</p>
+            <div class="fleet-grid">
+                <div class="fleet-card">
+                    <span class="domain">Clinical</span>
+                    <div class="title">Care &amp; quality</div>
+                    <ul>
+                        <li>Infection control monitor</li>
+                        <li>Pharmacy reconciliation</li>
+                        <li>Therapy utilization</li>
+                        <li>MDS coordinator</li>
+                        <li>Wound-care surveillance</li>
+                        <li>Social services intake</li>
+                    </ul>
+                </div>
+                <div class="fleet-card">
+                    <span class="domain">Revenue</span>
+                    <div class="title">Cash &amp; billing</div>
+                    <ul>
+                        <li>Claims watcher</li>
+                        <li>AR aging triage</li>
+                        <li>AP exception handler</li>
+                        <li>PDPM optimizer</li>
+                        <li>Treasury / cash sweep</li>
+                        <li>Payroll variance</li>
+                    </ul>
+                </div>
+                <div class="fleet-card">
+                    <span class="domain">Workforce</span>
+                    <div class="title">Talent &amp; staffing</div>
+                    <ul>
+                        <li>Schedule gap detector</li>
+                        <li>Credential expiry watcher</li>
+                        <li>Agency-spend monitor</li>
+                        <li>Recruiting funnel</li>
+                        <li>Retention signals</li>
+                        <li>Benefits triage</li>
+                    </ul>
+                </div>
+                <div class="fleet-card">
+                    <span class="domain">Admissions</span>
+                    <div class="title">Top of funnel</div>
+                    <ul>
+                        <li>Referral classifier</li>
+                        <li>Payer-mix optimizer</li>
+                        <li>Intake-readiness check</li>
+                        <li>Discharge planner</li>
+                        <li>Hospital partner monitor</li>
+                        <li>Bed-board reconciler</li>
+                    </ul>
+                </div>
+                <div class="fleet-card">
+                    <span class="domain">Quality</span>
+                    <div class="title">Survey &amp; outcomes</div>
+                    <ul>
+                        <li>Star-rating watcher</li>
+                        <li>Survey-risk predictor</li>
+                        <li>F-tag triage</li>
+                        <li>Complaint pattern detector</li>
+                        <li>QAPI evidence builder</li>
+                        <li>Outcomes benchmarking</li>
+                    </ul>
+                </div>
+                <div class="fleet-card">
+                    <span class="domain">Operations</span>
+                    <div class="title">Day-to-day execution</div>
+                    <ul>
+                        <li>Morning briefing composer</li>
+                        <li>Exception ranker</li>
+                        <li>Capex tracker</li>
+                        <li>Vendor-spend monitor</li>
+                        <li>Facility KPI roll-up</li>
+                        <li>Inbox monitor &amp; triage</li>
+                    </ul>
+                </div>
+                <div class="fleet-card">
+                    <span class="domain">Legal</span>
+                    <div class="title">Risk &amp; compliance</div>
+                    <ul>
+                        <li>OIG / SAM exclusion watcher</li>
+                        <li>CMS rule-change monitor</li>
+                        <li>Contract-renewal triage</li>
+                        <li>Incident-report classifier</li>
+                        <li>Litigation pattern watcher</li>
+                        <li>Policy-version reconciler</li>
+                    </ul>
+                </div>
+                <div class="fleet-card">
+                    <span class="domain">Strategic</span>
+                    <div class="title">CEO &amp; board view</div>
+                    <ul>
+                        <li>Executive briefing composer</li>
+                        <li>Portfolio P&amp;L watcher</li>
+                        <li>M&amp;A pipeline monitor</li>
+                        <li>Regional comparison</li>
+                        <li>Capital-allocation modeler</li>
+                        <li>Board-pack assembler</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="seal">Every agent reports into the same queue, ranked by <strong>blast radius</strong> &mdash; what&rsquo;s at stake, who&rsquo;s exposed, how soon it matters. Operators don&rsquo;t triage 48 dashboards. They open one inbox.</p>
+        </div>
+    </section>
+
+    <!-- BRIDGE -->
+    <section class="bridge-sec">
+        <div class="wrap">
+            <p class="eyebrow">The bridge</p>
+            <h2 class="h2">Every agent is an employee you can read line-by-line.</h2>
+            <p class="lede">If you can read a job description, you can read an Aedis agent. Same shape, same accountability &mdash; just diff-able, version-controlled, and supervised by code.</p>
+            <div class="bridge-tbl">
+                <div class="row head">
+                    <div class="cell left">What a team has</div>
+                    <div class="cell right">What an Aedis agent has</div>
+                </div>
+                <div class="row">
+                    <div class="cell left">Job description &amp; SOP</div>
+                    <div class="cell right">YAML role definition <span class="mute">&mdash; readable, diff-able, version-controlled</span></div>
+                </div>
+                <div class="row">
+                    <div class="cell left">System access (PCC, Workday, M365)</div>
+                    <div class="cell right">Tools <span class="mute">&mdash; scoped at the API level, not the seat level</span></div>
+                </div>
+                <div class="row">
+                    <div class="cell left">Tribal knowledge &amp; the shared drive</div>
+                    <div class="cell right">A knowledge graph it queries <span class="mute">before every action</span></div>
+                </div>
+                <div class="row">
+                    <div class="cell left">Senior vs. junior staff</div>
+                    <div class="cell right">Model tier <span class="mute">&mdash; Opus for judgement, Haiku for throughput</span></div>
+                </div>
+                <div class="row">
+                    <div class="cell left">Approval matrix</div>
+                    <div class="cell right">Decision queue with human-in-the-loop <span class="mute">at the dollar &amp; risk levels you set</span></div>
+                </div>
+                <div class="row">
+                    <div class="cell left">Meeting notes &amp; emails (imperfect)</div>
+                    <div class="cell right">Hash-chained audit <span class="mute">&mdash; every decision replayable, exactly as it happened</span></div>
+                </div>
+            </div>
+            <p class="closer"><strong>The difference:</strong> agents never sleep, every one of them runs every facility every day, and every decision is logged <span class="accent-w">before</span> it executes.</p>
+        </div>
+    </section>
+
+    <!-- ENGINEERING -->
+    <section class="eng" id="engineering">
+        <div class="wrap">
+            <p class="eyebrow">Engineering</p>
+            <h2 class="h2">Built like a bank. Not like a SaaS demo.</h2>
+            <p class="lede">PHI doesn&rsquo;t leave your VPC. Agents don&rsquo;t hold credentials. Every action is hash-chained before it executes. These are defaults &mdash; not features you turn on after the audit finds something.</p>
+            <div class="pillars">
+                <div class="pillar">
+                    <span class="tag">Credential isolation</span>
+                    <h3>Agents never hold keys.</h3>
+                    <p>Credentials live in AWS Secrets Manager, flow through Anthropic Vault, and are injected into agent calls through a hardened MCP proxy at request time. Rotation is automated on a 90-day cycle for every critical credential.</p>
+                    <ul>
+                        <li>Zero credentials in agent memory</li>
+                        <li>Per-system, per-action OAuth scopes</li>
+                        <li>Revocation in under 15 minutes, fleet-wide</li>
+                    </ul>
+                </div>
+                <div class="pillar">
+                    <span class="tag">Immutable audit</span>
+                    <h3>Every decision is replayable.</h3>
+                    <p>Each action is hash-chained with SHA-256, ordered by monotonic sequence, and exportable for auditors. A 7-level governance engine routes from observe-only up to CFO and GC sign-off based on the dollar amount, clinical risk, and regulatory sensitivity of the decision.</p>
+                    <ul>
+                        <li>SOX &amp; HIPAA-compatible audit format</li>
+                        <li>Per-agent kill-switch with reason capture</li>
+                        <li>Decision replay with input snapshot</li>
+                    </ul>
+                </div>
+                <div class="pillar">
+                    <span class="tag">In-tenant PHI</span>
+                    <h3>PHI never leaves your VPC.</h3>
+                    <p>The platform runs on AWS Bedrock inside your VPC, covered by your existing BAA, with zero data retention configured at the model layer. Row-level security on every table. JWKS rotation for signing keys. JWT-authenticated WebSocket for the live decision queue.</p>
+                    <ul>
+                        <li>No PHI to external model providers</li>
+                        <li>RLS enforced at the Postgres layer</li>
+                        <li>Anomaly-detected kill-switch per agent</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DAY -->
+    <section class="day">
+        <div class="wrap">
+            <p class="eyebrow">A day on Aedis</p>
+            <h2 class="h2">Four phases. One queue. The operating model your team already wants.</h2>
+            <div class="day-flow">
+                <div class="day-step">
+                    <span class="when">Overnight</span>
+                    <h4>Agents read every system.</h4>
+                    <p>Clinical, finance, workforce, regulatory feeds. By 6&nbsp;a.m. there&rsquo;s a synthesized executive briefing waiting for the CEO, COO, and each Regional VP &mdash; ranked by what changed.</p>
+                </div>
+                <div class="day-step">
+                    <span class="when">6:30 a.m.</span>
+                    <h4>Executives open one queue.</h4>
+                    <p>The morning starts on a single screen. Decisions ranked by blast radius. Each card is self-contained: agent recommendation, full evidence, citations, three forward-looking options.</p>
+                </div>
+                <div class="day-step">
+                    <span class="when">Through the day</span>
+                    <h4>Humans approve. Agents execute. Everything logs.</h4>
+                    <p>Operators tap approve, deny, or modify. Each click is hash-chained with the agent&rsquo;s reasoning. Anomalies route to the queue in seconds &mdash; never missed in a Friday inbox.</p>
+                </div>
+                <div class="day-step">
+                    <span class="when">Continuously</span>
+                    <h4>Posture improves with every cycle.</h4>
+                    <p>The knowledge graph learns from every approved decision. Patterns emerge across facilities. The fleet gets sharper &mdash; without any vendor patch cycle, ever.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FIT -->
+    <section class="fit" id="fit">
+        <div class="wrap">
+            <p class="eyebrow">Who Aedis is for</p>
+            <h2 class="h2">Multi-facility operators ready to treat AI as the operating layer.</h2>
+            <p class="lede">Aedis isn&rsquo;t a productivity feature you bolt on. It&rsquo;s a different operating model. Three things make a partnership work.</p>
+            <div class="fit-check">
+                <div class="fit-tile">
+                    <div class="n">01</div>
+                    <p><strong>You believe AI agents are the operating layer</strong> &mdash; not a feature your incumbents will ship in a release cycle. The thesis is portfolio-wide, not pilot-sized.</p>
+                </div>
+                <div class="fit-tile">
+                    <div class="n">02</div>
+                    <p><strong>You want a partner who owns delivery</strong> &mdash; not a vendor who ships features and exits. The work happens inside your stack, your VPC, your governance.</p>
+                </div>
+                <div class="fit-tile">
+                    <div class="n">03</div>
+                    <p><strong>You&rsquo;re willing to give a sandbox</strong> &mdash; a representative slice of real data &mdash; so the work can start fast and the proof is measurable in weeks, not quarters.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BUILDER -->
+    <section class="who" id="who">
+        <div class="wrap">
+            <p class="eyebrow">Who&rsquo;s building it</p>
+            <h2 class="h2">Built by the operator I was, not the vendor I&rsquo;m not.</h2>
+            <p class="lede">Aedis is built by Andrew Lark &mdash; an audit-trained, CFO-experienced operator who spent his last decade closing books, implementing ERPs, and running M&amp;A inside a multi-facility skilled-nursing portfolio before turning to building this platform.</p>
+            <div class="arc">
+                <div class="arc-step">
+                    <span class="era">Foundation</span>
+                    <span class="org">PwC</span>
+                    <span class="role">Big-4 audit. Hedge funds, financial services.</span>
+                    <span class="scope">Controls intuition. Public-company audit rigor.</span>
+                </div>
+                <div class="arc-step">
+                    <span class="era">Industry depth</span>
+                    <span class="org">Moss Adams</span>
+                    <span class="role">National-firm audit across six industries.</span>
+                    <span class="scope">Healthcare, manufacturing, distribution, semis.</span>
+                </div>
+                <div class="arc-step">
+                    <span class="era">In the seat</span>
+                    <span class="org">Aspen</span>
+                    <span class="role">Controller &rarr; CFO. Five-facility SNF portfolio.</span>
+                    <span class="scope">Monthly close. ERP. M&amp;A. JV expansion.</span>
+                </div>
+                <div class="arc-step">
+                    <span class="era">Today</span>
+                    <span class="org">Taskvisory &middot; Aedis</span>
+                    <span class="role">Principal AI engineer.</span>
+                    <span class="scope">Operator discipline applied to LLM tooling.</span>
+                </div>
+            </div>
+            <p class="signoff">Operator&ndash;built means the platform was designed around <strong>real close cycles, real survey risk, real payer-mix shifts</strong> &mdash; not what a vendor team imagined from a customer-discovery deck.</p>
+        </div>
+    </section>
+
+    <!-- BOOK -->
+    <section class="book" id="book">
+        <div class="wrap">
+            <p class="eyebrow">Book a demo</p>
+            <h2 class="h2">30 minutes. Bring the operating questions.</h2>
+            <p class="lede">Walk through Aedis with the person who built it. The conversation starts with your operating model &mdash; not the product. The product earns its way in.</p>
+            <div class="cta-row">
+                <a href="mailto:andrew@taskvisory.com?subject=Aedis%20demo%20request&body=Hi%20Andrew%20%E2%80%94%20I'd%20like%20to%20see%20the%20Aedis%20demo.%0A%0AA%20bit%20of%20context%20on%20us%3A%0A%0A" class="cta-btn">
+                    Email Andrew
+                    <span class="arrow"></span>
+                </a>
+                <div class="cta-note">andrew@taskvisory.com &nbsp;·&nbsp; Reply within one business day.</div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <div class="foot-wrap">
+        <span class="brand">Aedis &nbsp;·&nbsp; by Taskvisory</span>
+        <span>An agent-native decision platform for skilled-nursing operators.</span>
+        <a href="mailto:andrew@taskvisory.com">andrew@taskvisory.com</a>
+    </div>
+</footer>
+
+</body>
+</html>
