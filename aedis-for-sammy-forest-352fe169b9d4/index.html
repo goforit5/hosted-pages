@@ -1,1153 +1,1088 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aedis — One Operating Layer for Operators &amp; Landlords</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aedis · for Sammy Forest · 2026-06-10</title>
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-    --blue: #2563eb;
-    --blue-dark: #1e40af;
-    --dark: #0a0a0a;
-    --dark-card: #141414;
-    --dark-border: #262626;
-    --text-primary: #ffffff;
-    --text-secondary: #a1a1aa;
-    --text-dim: #71717a;
-    --red: #ef4444;
-    --red-dim: #991b1b;
-    --green: #22c55e;
-    --green-dim: #166534;
-    --amber: #f59e0b;
-    --violet: #8b5cf6;
-    --violet-dim: #4c1d95;
+    --bg-light: #FAFAFA;
+    --bg-mid: #F2F2EE;
+    --bg-dark: #0E1B1F;
+    --bg-darker: #0A1418;
+    --accent: #0F4C5C;
+    --accent-soft: rgba(15, 76, 92, 0.08);
+    --accent-line: rgba(15, 76, 92, 0.22);
+    --ink: #0F1419;
+    --ink-soft: #3D4A4F;
+    --ink-mute: #6B7780;
+    --paper: #FFFFFF;
+    --on-dark: #F3F1EC;
+    --on-dark-mute: #9CA9AE;
+    --rule: rgba(15, 20, 25, 0.10);
+    --rule-dark: rgba(243, 241, 236, 0.14);
 }
 
-html {
-    scroll-behavior: smooth;
-    scroll-snap-type: y mandatory;
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+    height: 100%;
+    width: 100%;
+    background: var(--bg-light);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-feature-settings: "ss01", "ss02", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
 }
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-    background: var(--dark);
-    color: var(--text-primary);
-    line-height: 1.5;
+p, h1, h2, h3, h4, li { text-wrap: balance; }
+
+.deck {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
 }
 
-p, li, h1, h2, h3, h4 { text-wrap: balance; }
+.slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6vh 7vw;
+    background: var(--bg-light);
+    color: var(--ink);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 600ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
 
-section {
-    min-height: 100vh;
-    padding: 72px 60px;
+.slide.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.slide.dark   { background: var(--bg-dark); color: var(--on-dark); }
+.slide.accent { background: var(--accent); color: var(--on-dark); }
+
+.frame {
+    width: 100%;
+    max-width: 1300px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-    position: relative;
 }
 
-.container {
-    max-width: 1000px;
-    margin: 0 auto;
-    width: 100%;
+/* ---------- Common atoms ---------- */
+
+.eyebrow {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 3vh;
+}
+.slide.dark .eyebrow,
+.slide.accent .eyebrow {
+    color: var(--on-dark-mute);
 }
 
-/* ─── Typography ─── */
 h1 {
-    font-size: 4rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    line-height: 1.08;
-    margin-bottom: 20px;
+    font-size: clamp(3.2rem, 5.6vw, 5.2rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.04;
+    max-width: 22ch;
 }
 
 h2 {
-    font-size: 2.6rem;
-    font-weight: 700;
+    font-size: clamp(2.6rem, 4.4vw, 4.2rem);
+    font-weight: 600;
     letter-spacing: -0.02em;
-    line-height: 1.12;
-    margin-bottom: 28px;
+    line-height: 1.08;
+    max-width: 22ch;
 }
 
-h3 {
-    font-size: 1.3rem;
-    font-weight: 600;
-    line-height: 1.3;
-    margin-bottom: 8px;
-}
-
-.section-label {
-    font-size: 0.78rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--blue);
-    font-weight: 600;
-    margin-bottom: 12px;
-}
-
-.subtitle {
-    font-size: 1.35rem;
-    color: var(--text-secondary);
+.subhead {
+    font-size: clamp(1.35rem, 1.9vw, 1.75rem);
     font-weight: 400;
-    max-width: 680px;
+    color: var(--ink-soft);
     line-height: 1.45;
+    max-width: 38ch;
+    margin-top: 3vh;
 }
+.slide.dark .subhead,
+.slide.accent .subhead { color: var(--on-dark-mute); }
 
-.big-number {
-    font-size: 4.5rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    line-height: 1;
-    font-variant-numeric: tabular-nums;
+.footer-mark {
+    position: absolute;
+    bottom: 4vh;
+    left: 7vw;
+    right: 7vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    font-weight: 500;
 }
+.slide.dark .footer-mark,
+.slide.accent .footer-mark { color: var(--on-dark-mute); }
+.footer-mark .right { font-variant-numeric: tabular-nums; }
 
-.dim { color: var(--text-dim); }
-.accent { color: var(--blue); }
-.violet { color: var(--violet); }
-.red { color: var(--red); }
-.green { color: var(--green); }
-.amber { color: var(--amber); }
-.bold { font-weight: 700; color: var(--text-primary); }
-
-/* ─── Cards ─── */
-.card {
-    background: var(--dark-card);
-    border: 1px solid var(--dark-border);
-    border-radius: 12px;
-    padding: 22px;
+.brand-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-right: 10px;
+    transform: translateY(-2px);
 }
+.slide.dark .brand-dot,
+.slide.accent .brand-dot { background: var(--on-dark); }
 
-.card h4 {
-    font-size: 0.92rem;
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: var(--text-primary);
-    line-height: 1.3;
-}
+/* ---------- Slide 1: Hero ---------- */
 
-.card p {
-    font-size: 0.88rem;
-    color: var(--text-secondary);
-    line-height: 1.45;
-}
-
-/* ─── Grids ─── */
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
-.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-
-/* ─── Two-hat split ─── */
-.dual-hat {
+.s1 .stat-row {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.4vw;
+    padding-bottom: 5vh;
+    margin-bottom: 5vh;
+    border-bottom: 1px solid var(--rule-dark);
+}
+.s1 .stat-row .stat-num {
+    font-size: clamp(2.6rem, 3.8vw, 3.6rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--on-dark);
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 0.6vh;
+    line-height: 1;
+}
+.s1 .stat-row .stat-label {
+    font-size: 0.95rem;
+    color: var(--on-dark-mute);
+    letter-spacing: 0.02em;
+    line-height: 1.35;
 }
 
-.hat-col {
-    background: var(--dark-card);
+.s1 h1 {
+    color: var(--on-dark);
+    max-width: 24ch;
+}
+
+.s1 h1 .accent {
+    color: #6FB3C2;
+}
+
+.s1 .subhead {
+    color: var(--on-dark-mute);
+    max-width: 42ch;
+}
+
+/* ---------- Slide 2: Eight systems ---------- */
+
+.s2 .systems {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.6vw;
+    margin-top: 4vh;
+}
+.s2 .system {
+    background: var(--paper);
+    border: 1px solid var(--rule);
     border-radius: 14px;
-    padding: 22px;
-    border: 1px solid var(--dark-border);
+    padding: 2.2vh 1.6vw;
+    min-height: 14vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
-
-.hat-col.operator { border-color: var(--blue); background: linear-gradient(135deg, rgba(37, 99, 235, 0.06) 0%, var(--dark-card) 100%); }
-.hat-col.landlord { border-color: var(--violet); background: linear-gradient(135deg, rgba(139, 92, 246, 0.06) 0%, var(--dark-card) 100%); }
-
-.hat-col h3 {
-    padding-bottom: 12px;
-    margin-bottom: 14px;
-    border-bottom: 1px solid var(--dark-border);
-    font-size: 1.05rem;
+.s2 .system .sys-tag {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
 }
-
-.hat-col.operator h3 { color: var(--blue); }
-.hat-col.landlord h3 { color: var(--violet); }
-
-.hat-col ul { list-style: none; }
-
-.hat-col li {
-    padding: 6px 0;
-    padding-left: 22px;
-    position: relative;
-    color: var(--text-secondary);
+.s2 .system .sys-name {
+    font-size: clamp(1.05rem, 1.35vw, 1.3rem);
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+}
+.s2 .system .sys-note {
     font-size: 0.88rem;
+    color: var(--ink-mute);
     line-height: 1.4;
 }
 
-.hat-col li::before {
-    content: "\2713"; position: absolute; left: 0;
+.s2 .punchline {
+    margin-top: 4.5vh;
+    padding-top: 3vh;
+    border-top: 1px solid var(--rule);
+    font-size: clamp(1.2rem, 1.7vw, 1.55rem);
+    font-weight: 500;
+    color: var(--ink-soft);
+    max-width: 56ch;
+    line-height: 1.45;
+}
+.s2 .punchline em {
+    font-style: normal;
+    color: var(--ink);
     font-weight: 700;
 }
-.hat-col.operator li::before { color: var(--blue); }
-.hat-col.landlord li::before { color: var(--violet); }
 
-/* ─── Comparison ─── */
-.comparison {
+/* ---------- Slide 3: Aedis in one frame ---------- */
+
+.s3 h2 { color: var(--on-dark); margin-bottom: 5vh; max-width: 18ch; }
+.s3 h2 .lit { color: #6FB3C2; }
+
+.s3 .metrics {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2vw 3vw;
+    border-top: 1px solid var(--rule-dark);
+    border-bottom: 1px solid var(--rule-dark);
+    padding: 4vh 0;
 }
-
-.comparison-col {
-    background: var(--dark-card);
-    border-radius: 14px;
-    padding: 24px;
-    border: 1px solid var(--dark-border);
+.s3 .metric .num {
+    font-size: clamp(3.2rem, 5vw, 4.6rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    color: var(--on-dark);
+    margin-bottom: 1vh;
 }
-
-.comparison-col.bad { border-color: var(--red-dim); }
-.comparison-col.good {
-    border-color: var(--blue);
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.06) 0%, var(--dark-card) 100%);
-}
-
-.comparison-col h3 {
-    padding-bottom: 12px;
-    margin-bottom: 14px;
-    border-bottom: 1px solid var(--dark-border);
-}
-
-.comparison-col ul { list-style: none; }
-
-.comparison-col li {
-    padding: 6px 0;
-    padding-left: 22px;
-    position: relative;
-    color: var(--text-secondary);
-    font-size: 0.88rem;
+.s3 .metric .label {
+    font-size: 0.95rem;
+    color: var(--on-dark-mute);
+    letter-spacing: 0.04em;
     line-height: 1.4;
 }
-
-.comparison-col.bad li::before {
-    content: "\2717"; position: absolute; left: 0;
-    color: var(--red); font-weight: 700;
-}
-
-.comparison-col.good li::before {
-    content: "\2713"; position: absolute; left: 0;
-    color: var(--green); font-weight: 700;
-}
-
-/* ─── Source pills ─── */
-.source-pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    justify-content: center;
-}
-
-.pill {
-    display: inline-block;
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    border: 1px solid var(--dark-border);
-    background: var(--dark-card);
-    color: var(--text-secondary);
-}
-
-.pill.active {
-    border-color: var(--blue);
-    color: var(--blue);
-    background: rgba(37, 99, 235, 0.08);
-}
-
-.pill.active-violet {
-    border-color: var(--violet);
-    color: var(--violet);
-    background: rgba(139, 92, 246, 0.08);
-}
-
-/* ─── Flow ─── */
-.flow-horizontal {
+.s3 .cue {
+    margin-top: 5vh;
+    font-size: 1.05rem;
+    color: var(--on-dark-mute);
+    letter-spacing: 0.04em;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 8px;
-    flex-wrap: wrap;
+    gap: 14px;
+}
+.s3 .cue .arrow {
+    width: 32px;
+    height: 1px;
+    background: var(--on-dark-mute);
+    display: inline-block;
 }
 
-.flow-box {
-    background: var(--dark-card);
-    border: 1px solid var(--dark-border);
-    border-radius: 10px;
-    padding: 12px 16px;
+/* ---------- Slide 3b: Bridge (agent = employee) ---------- */
+
+.s3b h2 {
+    color: var(--ink);
+    margin-bottom: 5vh;
+    max-width: 26ch;
+}
+.s3b h2 .accent { color: var(--accent); }
+.s3b .bridge {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+}
+.s3b .bridge-head {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
+    padding: 2vh 0;
+    border-bottom: 1px solid var(--rule);
+}
+.s3b .bh-cell {
+    padding: 0 2vw;
+    font-size: 0.78rem;
     font-weight: 600;
-    font-size: 0.82rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+}
+.s3b .bh-cell.right { color: var(--accent); }
+
+.s3b .bridge-row {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
+    padding: 1.6vh 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: center;
+}
+.s3b .bridge-row:last-child { border-bottom: none; }
+.s3b .bc {
+    padding: 0 2vw;
+    font-size: clamp(1rem, 1.25vw, 1.2rem);
+    line-height: 1.4;
+}
+.s3b .bc.left { color: var(--ink-soft); }
+.s3b .bc.right { color: var(--ink); font-weight: 600; letter-spacing: -0.005em; }
+.s3b .bc.right .mute { color: var(--ink-mute); font-weight: 400; }
+.s3b .closer {
+    margin-top: 4vh;
+    font-size: clamp(1.1rem, 1.55vw, 1.4rem);
+    font-weight: 500;
+    color: var(--ink-soft);
+    max-width: 60ch;
+    line-height: 1.5;
+}
+.s3b .closer strong { color: var(--ink); font-weight: 700; }
+
+/* ---------- Slide 4: Demo ---------- */
+
+.s4 { padding: 0; }
+.s4 .frame {
+    height: 100%;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    line-height: 1.3;
+    max-width: none;
+}
+.s4 .demo-word {
+    font-size: clamp(10rem, 22vw, 22rem);
+    font-weight: 800;
+    letter-spacing: -0.06em;
+    line-height: 0.9;
+    color: var(--on-dark);
+}
+.s4 .demo-word .dot { color: rgba(243, 241, 236, 0.35); }
+
+.s4 .demo-path {
+    margin-top: 4vh;
+    font-size: 0.95rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(243, 241, 236, 0.55);
+    font-weight: 500;
 }
 
-.flow-box.primary {
-    background: var(--blue);
-    border-color: var(--blue);
-    color: white;
+/* ---------- Slide 5: Engineering ---------- */
+
+.s5 h2 {
+    color: var(--ink);
+    margin-bottom: 5vh;
+    max-width: 26ch;
 }
 
-.flow-arrow {
-    font-size: 1rem;
-    color: var(--blue);
+.s5 .pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2vw;
 }
-
-.flow-arrow.violet {
-    color: var(--violet);
-}
-
-/* ─── List Items ─── */
-.list-items {
+.s5 .pillar {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    padding: 3.5vh 2vw;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 1.8vh;
+    position: relative;
+}
+.s5 .pillar::before {
+    content: "";
+    position: absolute;
+    top: 3.5vh;
+    left: 2vw;
+    width: 36px;
+    height: 2px;
+    background: var(--accent);
+}
+.s5 .pillar h3 {
+    font-size: clamp(1.3rem, 1.7vw, 1.55rem);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    padding-top: 2.6vh;
+}
+.s5 .pillar p {
+    font-size: clamp(1rem, 1.15vw, 1.1rem);
+    color: var(--ink-soft);
+    line-height: 1.55;
+}
+.s5 .pillar .tag {
+    margin-top: auto;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+}
+.s5 .closer {
+    margin-top: 5vh;
+    padding-top: 3vh;
+    border-top: 1px solid var(--rule);
+    font-size: clamp(1.2rem, 1.7vw, 1.55rem);
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+}
+.s5 .closer .mute { color: var(--ink-mute); font-weight: 500; }
+
+/* ---------- Slide 6: Arc ---------- */
+
+.s6 h2 {
+    color: var(--ink);
+    margin-bottom: 6vh;
+    max-width: 28ch;
 }
 
-.list-item {
+.s6 .arc {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.4vw;
+}
+.s6 .step {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--accent);
+    border-radius: 12px;
+    padding: 3vh 1.4vw 3vh 1.4vw;
     display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    padding: 14px 16px;
-    background: var(--dark-card);
-    border-radius: 10px;
-    border: 1px solid var(--dark-border);
+    flex-direction: column;
+    gap: 1.4vh;
+    position: relative;
 }
-
-.list-item .icon {
-    width: 28px;
-    height: 28px;
-    background: var(--blue);
-    border-radius: 7px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    font-size: 0.8rem;
+.s6 .step .era {
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
 }
-
-.list-item .icon.violet {
-    background: var(--violet);
+.s6 .step .org {
+    font-size: clamp(1.25rem, 1.6vw, 1.45rem);
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.015em;
 }
-
-.list-item p {
-    font-size: 0.92rem;
-    color: var(--text-secondary);
+.s6 .step .role {
+    font-size: 1.0rem;
+    color: var(--ink-soft);
     line-height: 1.45;
 }
-
-.list-item strong { color: var(--text-primary); }
-
-/* ─── Light section ─── */
-.light-section {
-    background: #f8f9fa;
-    color: #1a1a1a;
+.s6 .step .scope {
+    font-size: 0.85rem;
+    color: var(--ink-mute);
+    line-height: 1.45;
+    margin-top: auto;
 }
 
-.light-section h2 { color: #1a1a1a; }
-.light-section .section-label { color: var(--blue); }
-.light-section .card { background: white; border-color: #e5e7eb; }
-.light-section .card p { color: #6b7280; }
-.light-section .card h4 { color: #1a1a1a; }
-.light-section .subtitle { color: #6b7280; }
+/* ---------- Slide 7: Three changes ---------- */
 
-/* ─── Navigation ─── */
-.nav-dots {
-    position: fixed;
-    right: 24px;
-    top: 50%;
-    transform: translateY(-50%);
+.s7 h2 {
+    color: var(--on-dark);
+    margin-bottom: 6vh;
+    max-width: 22ch;
+}
+
+.s7 .changes {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    z-index: 100;
+    gap: 3.4vh;
 }
+.s7 .change {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 2vw;
+    align-items: baseline;
+    padding-bottom: 3.4vh;
+    border-bottom: 1px solid var(--rule-dark);
+}
+.s7 .change:last-of-type { border-bottom: none; }
+.s7 .change .idx {
+    font-size: clamp(1.6rem, 2.2vw, 2.1rem);
+    font-weight: 600;
+    color: #6FB3C2;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+}
+.s7 .change p {
+    font-size: clamp(1.45rem, 2.1vw, 2.05rem);
+    font-weight: 500;
+    line-height: 1.25;
+    color: var(--on-dark);
+    letter-spacing: -0.015em;
+    max-width: 32ch;
+}
+.s7 .change p .mute { color: var(--on-dark-mute); font-weight: 400; }
+.s7 .seal {
+    margin-top: 5vh;
+    font-size: clamp(1.05rem, 1.35vw, 1.25rem);
+    color: var(--on-dark-mute);
+    letter-spacing: 0.02em;
+    max-width: 48ch;
+    line-height: 1.5;
+}
+.s7 .seal strong { color: var(--on-dark); font-weight: 600; }
 
-.nav-dot {
-    width: 8px;
-    height: 8px;
+/* ---------- Slide 8: Close ---------- */
+
+.s8 h2 {
+    color: var(--ink);
+    margin-bottom: 6vh;
+    max-width: 26ch;
+}
+.s8 h2 .accent { color: var(--accent); }
+
+.s8 .terms {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2vw;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 5vh 0;
+}
+.s8 .term {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4vh;
+}
+.s8 .term .n {
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+}
+.s8 .term p {
+    font-size: clamp(1.15rem, 1.55vw, 1.45rem);
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+}
+.s8 .signoff {
+    margin-top: 5vh;
+    font-size: clamp(1.35rem, 1.85vw, 1.7rem);
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.015em;
+    max-width: 38ch;
+    line-height: 1.35;
+}
+.s8 .contact {
+    margin-top: 4vh;
+    display: flex;
+    align-items: center;
+    gap: 1.4vw;
+    font-size: 0.95rem;
+    color: var(--ink-mute);
+    letter-spacing: 0.04em;
+    font-weight: 500;
+}
+.s8 .contact .sep { color: var(--rule); }
+.s8 .contact .name { color: var(--ink); font-weight: 600; }
+
+/* ---------- Nav ---------- */
+
+.nav {
+    position: fixed;
+    bottom: 1.6vh;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 50;
+    background: rgba(15, 20, 25, 0.04);
+    padding: 8px 12px;
+    border-radius: 999px;
+    backdrop-filter: blur(8px);
+}
+.nav .dot {
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(15, 20, 25, 0.22);
     cursor: pointer;
-    transition: all 0.4s ease;
+    transition: background 220ms ease, transform 220ms ease;
     border: none;
     padding: 0;
 }
+.nav .dot.active {
+    background: var(--accent);
+    transform: scale(1.25);
+}
+.nav .dot:hover { background: var(--accent); opacity: 0.7; }
 
-.nav-dot:hover { background: rgba(37, 99, 235, 0.5); }
-.nav-dot.active { background: var(--blue); transform: scale(1.3); }
+.deck[data-mode="dark"] .nav,
+.deck[data-mode="accent"] .nav {
+    background: rgba(243, 241, 236, 0.08);
+}
+.deck[data-mode="dark"] .nav .dot,
+.deck[data-mode="accent"] .nav .dot {
+    background: rgba(243, 241, 236, 0.28);
+}
+.deck[data-mode="dark"] .nav .dot.active,
+.deck[data-mode="accent"] .nav .dot.active {
+    background: #6FB3C2;
+}
 
-.progress-bar {
+.hint {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: rgba(255, 255, 255, 0.06);
-    z-index: 1000;
+    bottom: 1.6vh;
+    right: 2vw;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    font-weight: 500;
+    z-index: 50;
+    opacity: 0.65;
 }
+.deck[data-mode="dark"] .hint,
+.deck[data-mode="accent"] .hint { color: var(--on-dark-mute); }
 
-.progress-fill {
-    height: 100%;
-    background: var(--blue);
-    width: 0%;
-    transition: width 0.3s ease;
-}
+/* ---------- Print ---------- */
+@media print {
+    @page { size: letter landscape; margin: 0; }
+    * { overflow: visible !important; }
+    html, body { width: 100%; height: 100%; background: white; overflow: visible !important; }
 
-.slide-counter {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    font-size: 0.72rem;
-    color: var(--text-dim);
-    font-variant-numeric: tabular-nums;
-    z-index: 100;
-    letter-spacing: 0.05em;
-}
+    .deck { overflow: visible !important; height: auto !important; }
+    .nav, .hint { display: none !important; }
 
-/* ─── Animations ─── */
-.reveal {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-}
-.reveal.visible { opacity: 1; transform: translateY(0); }
-.stagger-1 { transition-delay: 0.1s; }
-.stagger-2 { transition-delay: 0.2s; }
-.stagger-3 { transition-delay: 0.3s; }
-.stagger-4 { transition-delay: 0.4s; }
-.stagger-5 { transition-delay: 0.5s; }
+    .slide {
+        position: relative;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        width: 100%;
+        height: 100vh;
+        min-height: 100vh;
+        max-height: 100vh;
+        margin: 0;
+        padding: 4rem 3rem;
+        box-sizing: border-box;
+        page-break-after: always;
+        break-after: page;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+    .slide:last-of-type { page-break-after: auto; break-after: auto; }
 
-/* ─── Responsive ─── */
-@media (max-width: 900px) {
-    section { padding: 56px 24px; }
-    h1 { font-size: 2.4rem; }
-    h2 { font-size: 1.9rem; }
-    .subtitle { font-size: 1.1rem; }
-    .big-number { font-size: 3rem; }
-    .grid-2, .grid-3, .grid-4, .comparison, .dual-hat { grid-template-columns: 1fr; }
-    .nav-dots { display: none; }
-    .flow-horizontal { flex-direction: column; }
+    .slide.dark { background: #0E1B1F !important; color: #F3F1EC !important; }
+    .slide.accent { background: #0F4C5C !important; color: #F3F1EC !important; }
+
+    .slide.dark * { color: inherit; }
+    .slide.dark h1, .slide.dark h2, .slide.dark .demo-word { color: #F3F1EC !important; }
+    .slide.dark .subhead, .slide.dark .stat-label, .slide.dark .metric .label,
+    .slide.dark .change p .mute, .slide.dark .seal { color: #9CA9AE !important; }
 }
 </style>
 </head>
 <body>
 
-<div class="progress-bar"><div class="progress-fill"></div></div>
+<div class="deck" data-mode="dark">
 
-<nav class="nav-dots" role="navigation" aria-label="Slide navigation">
-    <button class="nav-dot active" data-section="0" aria-label="Slide 1"></button>
-    <button class="nav-dot" data-section="1" aria-label="Slide 2"></button>
-    <button class="nav-dot" data-section="2" aria-label="Slide 3"></button>
-    <button class="nav-dot" data-section="3" aria-label="Slide 4"></button>
-    <button class="nav-dot" data-section="4" aria-label="Slide 5"></button>
-    <button class="nav-dot" data-section="5" aria-label="Slide 6"></button>
-    <button class="nav-dot" data-section="6" aria-label="Slide 7"></button>
-    <button class="nav-dot" data-section="7" aria-label="Slide 8"></button>
-    <button class="nav-dot" data-section="8" aria-label="Slide 9"></button>
-    <button class="nav-dot" data-section="9" aria-label="Slide 10"></button>
-    <button class="nav-dot" data-section="10" aria-label="Slide 11"></button>
-    <button class="nav-dot" data-section="11" aria-label="Slide 12"></button>
-    <button class="nav-dot" data-section="12" aria-label="Slide 13"></button>
-    <button class="nav-dot" data-section="13" aria-label="Slide 14"></button>
-</nav>
-
-<div class="slide-counter">1 / 14</div>
-
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SLIDE 1: Title -->
-<!-- ═══════════════════════════════════════════ -->
-<section id="section-0" style="background: linear-gradient(180deg, var(--dark) 0%, #0a1628 100%);">
-    <div class="container" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
-        <p class="section-label reveal">Built for Sammy Forest &bull; operator + landlord</p>
-        <h1 class="reveal stagger-1">Aedis</h1>
-        <p class="subtitle reveal stagger-2" style="max-width: 800px;">One operating layer for both sides of your business &mdash; the facilities you <span class="accent">run</span> and the operators you <span class="violet">collect rent from</span>. <span class="bold" style="color: var(--text-primary);">Eight domains, one queue, one audit trail.</span> Built today, ready to run on your data the week you give us a sandbox.</p>
-        <div style="margin-top: 40px;" class="reveal stagger-3">
-            <p style="font-weight: 600; font-size: 1rem;">Andrew Lark</p>
-            <p style="color: var(--text-dim); font-size: 0.82rem; margin-top: 2px;">CPA &bull; CFO &bull; AI Architecture &bull; SNF Operations &bull; Internal Controls</p>
-        </div>
-    </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SLIDE 2: Credentials -->
-<!-- ═══════════════════════════════════════════ -->
-<section id="section-1">
-    <div class="container">
-        <p class="section-label reveal">Background</p>
-        <h2 class="reveal stagger-1">Operations, controls, and architecture &mdash; <span class="accent">in one person</span></h2>
-
-        <div class="list-items">
-            <div class="list-item reveal stagger-1">
-                <div class="icon">&#9733;</div>
+    <!-- 1 · COLD OPEN -->
+    <section class="slide s1 dark active" data-mode="dark" data-section="1">
+        <div class="frame">
+            <div class="stat-row">
                 <div>
-                    <p><strong>14 years in skilled nursing operations</strong> &mdash; Clinical workflows, survey preparation, documentation, facility management. Direct experience across admissions, clinical, billing, HR, and compliance.</p>
+                    <div class="stat-num">8</div>
+                    <div class="stat-label">Disconnected systems per facility</div>
+                </div>
+                <div>
+                    <div class="stat-num">100%</div>
+                    <div class="stat-label">Of the synthesis is humans clicking</div>
+                </div>
+                <div>
+                    <div class="stat-num">1</div>
+                    <div class="stat-label">Decision queue if agents run across them all</div>
                 </div>
             </div>
-            <div class="list-item reveal stagger-2">
-                <div class="icon">&#9783;</div>
-                <div>
-                    <p><strong>CPA &bull; CFO &bull; 5 years public accounting &amp; internal controls</strong> &mdash; SOX compliance, audit methodology, separation of duties, financial reporting. Governance and traceability are built into every system from the start.</p>
+            <p class="eyebrow">A thesis</p>
+            <h1>Skilled nursing operations runs on eight disconnected systems &mdash; with humans clicking between them all day.</h1>
+            <p class="subhead">The incumbent vendors are not going to fix it. The operators &mdash; and the landlords who own their leases &mdash; with AI agents will.</p>
+        </div>
+        <div class="footer-mark">
+            <span><span class="brand-dot"></span>Aedis &middot; for Sammy Forest</span>
+            <span class="right">01 / 09</span>
+        </div>
+    </section>
+
+    <!-- 2 · WHAT AN SNF RUNS ON -->
+    <section class="slide s2" data-mode="light" data-section="2">
+        <div class="frame">
+            <p class="eyebrow">The operating reality</p>
+            <h2>Eight disconnected systems. Humans in the middle.</h2>
+            <div class="systems">
+                <div class="system">
+                    <div class="sys-tag">Clinical</div>
+                    <div>
+                        <div class="sys-name">EHR</div>
+                        <div class="sys-note">Charting, MDS, eMAR</div>
+                    </div>
+                </div>
+                <div class="system">
+                    <div class="sys-tag">HR &amp; Finance</div>
+                    <div>
+                        <div class="sys-name">HRIS &amp; ERP</div>
+                        <div class="sys-note">Payroll, GL, AP, time</div>
+                    </div>
+                </div>
+                <div class="system">
+                    <div class="sys-tag">Comms</div>
+                    <div>
+                        <div class="sys-name">Email, calendar, files</div>
+                        <div class="sys-note">Mail, meetings, document libraries</div>
+                    </div>
+                </div>
+                <div class="system">
+                    <div class="sys-tag">Regulatory</div>
+                    <div>
+                        <div class="sys-name">CMS &middot; OIG &middot; SAM</div>
+                        <div class="sys-note">Star ratings, exclusions, sanctions</div>
+                    </div>
+                </div>
+                <div class="system">
+                    <div class="sys-tag">Revenue</div>
+                    <div>
+                        <div class="sys-name">Billing &amp; AR</div>
+                        <div class="sys-note">Claims, denials, cash app</div>
+                    </div>
+                </div>
+                <div class="system">
+                    <div class="sys-tag">Workforce</div>
+                    <div>
+                        <div class="sys-name">Scheduling</div>
+                        <div class="sys-note">Shifts, agency, credentials</div>
+                    </div>
+                </div>
+                <div class="system">
+                    <div class="sys-tag">Reimbursement</div>
+                    <div>
+                        <div class="sys-name">MDS &amp; PDPM</div>
+                        <div class="sys-note">Acuity capture, rate optimization</div>
+                    </div>
+                </div>
+                <div class="system">
+                    <div class="sys-tag">Top of funnel</div>
+                    <div>
+                        <div class="sys-name">Admissions</div>
+                        <div class="sys-note">Referrals, intake, payer mix</div>
+                    </div>
                 </div>
             </div>
-            <div class="list-item reveal stagger-3">
-                <div class="icon">&#9635;</div>
-                <div>
-                    <p><strong>Full-stack AI architecture</strong> &mdash; Anthropic, OpenAI, AWS Bedrock, Azure. Production clinical audit systems, AP invoice automation, coverage-ratio monitoring, and agentic workflows already built and running.</p>
+            <p class="punchline">The work that creates value is the synthesis between these. <em>Today, that work is humans clicking.</em> On the landlord side it&rsquo;s asset managers re-keying PDFs &mdash; same gap, viewed from the outside.</p>
+        </div>
+        <div class="footer-mark">
+            <span><span class="brand-dot"></span>Aedis &middot; for Sammy Forest</span>
+            <span class="right">02 / 09</span>
+        </div>
+    </section>
+
+    <!-- 3 · AEDIS IN ONE FRAME -->
+    <section class="slide s3 dark" data-mode="dark" data-section="3">
+        <div class="frame">
+            <p class="eyebrow">The product</p>
+            <h2>Aedis. <span class="lit">One decision queue</span> across everything.</h2>
+            <div class="metrics">
+                <div class="metric">
+                    <div class="num">48</div>
+                    <div class="label">Autonomous agents</div>
+                </div>
+                <div class="metric">
+                    <div class="num">8</div>
+                    <div class="label">Business domains</div>
+                </div>
+                <div class="metric">
+                    <div class="num">2</div>
+                    <div class="label">Lenses &mdash; operator &amp; landlord</div>
+                </div>
+                <div class="metric">
+                    <div class="num">24</div>
+                    <div class="label">Active decisions right now</div>
+                </div>
+                <div class="metric">
+                    <div class="num">&lt;10s</div>
+                    <div class="label">Median approval per card</div>
+                </div>
+                <div class="metric">
+                    <div class="num">100%</div>
+                    <div class="label">Audited, replayable, governed</div>
                 </div>
             </div>
-            <div class="list-item reveal stagger-4">
-                <div class="icon">&#9881;</div>
-                <div>
-                    <p><strong>Every integration layer already connected</strong> &mdash; ERP (Sage / NetSuite / Workday Financials), AP gateway, M365, HRIS, PCC, banking, SharePoint, AWS, Azure. The data connections that link these into a single agentic layer are built and running &mdash; on both the operator and the landlord side.</p>
+            <p class="cue"><span class="arrow"></span>Let me show you.</p>
+        </div>
+        <div class="footer-mark">
+            <span><span class="brand-dot"></span>Aedis &middot; for Sammy Forest</span>
+            <span class="right">03 / 09</span>
+        </div>
+    </section>
+
+    <!-- 3b · BRIDGE: AGENT = EMPLOYEE -->
+    <section class="slide s3b" data-mode="light" data-section="3b">
+        <div class="frame">
+            <p class="eyebrow">The bridge</p>
+            <h2>Every agent is an employee you can <span class="accent">read line-by-line.</span></h2>
+            <div class="bridge">
+                <div class="bridge-head">
+                    <div class="bh-cell">What a team has</div>
+                    <div class="bh-cell right">What an Aedis agent has</div>
+                </div>
+                <div class="bridge-row">
+                    <div class="bc left">Job description &amp; SOP</div>
+                    <div class="bc right">YAML role definition <span class="mute">&mdash; readable, diff-able, version-controlled</span></div>
+                </div>
+                <div class="bridge-row">
+                    <div class="bc left">System access (EHR, HRIS, productivity suite)</div>
+                    <div class="bc right">Tools <span class="mute">&mdash; scoped at the API level, not the seat level</span></div>
+                </div>
+                <div class="bridge-row">
+                    <div class="bc left">Tribal knowledge &amp; the shared drive</div>
+                    <div class="bc right">A knowledge graph it queries <span class="mute">before every action</span></div>
+                </div>
+                <div class="bridge-row">
+                    <div class="bc left">Senior vs. junior staff</div>
+                    <div class="bc right">Model tier <span class="mute">&mdash; high-judgment models for hard calls, high-throughput models for volume</span></div>
+                </div>
+                <div class="bridge-row">
+                    <div class="bc left">Approval matrix</div>
+                    <div class="bc right">Decision queue with human-in-the-loop <span class="mute">at the dollar &amp; risk levels you set</span></div>
+                </div>
+                <div class="bridge-row">
+                    <div class="bc left">Meeting notes &amp; emails <span style="opacity:0.6">(imperfect)</span></div>
+                    <div class="bc right">Hash-chained audit <span class="mute">&mdash; every decision replayable, exactly as it happened</span></div>
+                </div>
+            </div>
+            <p class="closer"><strong>The difference:</strong> agents never sleep, every one of them runs every facility every day &mdash; on either hat &mdash; and every decision is logged <em style="font-style:normal;color:var(--accent);font-weight:600">before</em> it executes.</p>
+        </div>
+        <div class="footer-mark">
+            <span><span class="brand-dot"></span>Aedis &middot; for Sammy Forest</span>
+            <span class="right">04 / 09</span>
+        </div>
+    </section>
+
+    <!-- 5 · DEMO HANDOFF -->
+    <section class="slide s4 accent" data-mode="accent" data-section="5">
+        <div class="frame">
+            <div class="demo-word">Demo<span class="dot">.</span></div>
+            <div class="demo-path">Morning Briefing &nbsp;&rarr;&nbsp; Exception Queue &nbsp;&rarr;&nbsp; Decision card &nbsp;&rarr;&nbsp; Landlord Console &nbsp;&rarr;&nbsp; Audit Trail &nbsp;&rarr;&nbsp; Agent config</div>
+        </div>
+    </section>
+
+    <!-- 6 · WHY THIS WON — ENGINEERING -->
+    <section class="slide s5" data-mode="light" data-section="6">
+        <div class="frame">
+            <p class="eyebrow">Why this won</p>
+            <h2>What separates this from a consultancy and a SaaS demo.</h2>
+            <div class="pillars">
+                <div class="pillar">
+                    <h3>Credential isolation</h3>
+                    <p>Your cloud&rsquo;s secrets manager &nbsp;&rarr;&nbsp; hardened vendor key vault &nbsp;&rarr;&nbsp; MCP proxy injection at request time. Agents never hold keys. 90-day automated rotation on every critical credential.</p>
+                    <div class="tag">Defense in depth</div>
+                </div>
+                <div class="pillar">
+                    <h3>Immutable audit &amp; governance</h3>
+                    <p>SHA-256 hash chain. Monotonic sequence ordering. A 7-level governance engine: observe-only &rarr; CFO and GC sign-off. Per-agent kill-switch in &lt;15 minutes.</p>
+                    <div class="tag">SOX &amp; HIPAA ready</div>
+                </div>
+                <div class="pillar">
+                    <h3>PHI never leaves the VPC</h3>
+                    <p>Foundation models served inside your VPC &mdash; your cloud, your BAA, zero data retention configured at the model layer. RLS on every table. JWKS rotation. JWT-authenticated WebSocket push.</p>
+                    <div class="tag">In-tenant by design</div>
+                </div>
+            </div>
+            <div class="closer">FAANG-grade defaults. <span class="mute">Operator-grade controls. Landlord-grade visibility.</span></div>
+        </div>
+        <div class="footer-mark">
+            <span><span class="brand-dot"></span>Aedis &middot; for Sammy Forest</span>
+            <span class="right">06 / 09</span>
+        </div>
+    </section>
+
+    <!-- 7 · WHY ME -->
+    <section class="slide s6" data-mode="light" data-section="7">
+        <div class="frame">
+            <p class="eyebrow">Why me</p>
+            <h2>I built this as the operator I was, not as the vendor I wasn&rsquo;t.</h2>
+            <div class="arc">
+                <div class="step">
+                    <div class="era">Foundation</div>
+                    <div class="org">Big&nbsp;Four audit + internal controls</div>
+                    <div class="role">PwC and Moss Adams. SOX walkthroughs, audit methodology, controls design.</div>
+                    <div class="scope">Six industries including healthcare. The vocabulary your auditor speaks.</div>
+                </div>
+                <div class="step">
+                    <div class="era">In the seat</div>
+                    <div class="org">Aspen Healthcare</div>
+                    <div class="role">Controller &nbsp;&rarr;&nbsp; CFO. Grew the SNF portfolio from <strong>5 to 17 facilities.</strong></div>
+                    <div class="scope">Monthly close. ERP. Helped start a state JV partnership.</div>
+                </div>
+                <div class="step">
+                    <div class="era">Operator systems</div>
+                    <div class="org">Taskvisory</div>
+                    <div class="role">Founder. Set up new multi-state operators from zero.</div>
+                    <div class="scope">ERP, AP, payroll, HRIS, cash discipline, board cadence.</div>
+                </div>
+                <div class="step">
+                    <div class="era">Today</div>
+                    <div class="org">Sorellan &amp; Kairoth</div>
+                    <div class="role">Founder. A private AI engineering studio.</div>
+                    <div class="scope">Production agentic systems for operators &amp; landlords. Aedis is one.</div>
                 </div>
             </div>
         </div>
+        <div class="footer-mark">
+            <span><span class="brand-dot"></span>Aedis &middot; for Sammy Forest</span>
+            <span class="right">07 / 09</span>
+        </div>
+    </section>
 
-        <p class="reveal stagger-5" style="text-align: center; margin-top: 24px; color: var(--text-dim); font-size: 0.88rem;">
-            The technical content that follows reflects direct experience building these systems for SNF operations <span class="bold" style="color: var(--text-secondary);">and</span> for asset managers monitoring operator portfolios.
-        </p>
-    </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SLIDE 3: The frame -->
-<!-- ═══════════════════════════════════════════ -->
-<section id="section-2">
-    <div class="container">
-        <p class="section-label reveal" style="text-align: center;">The Frame</p>
-        <h2 class="reveal stagger-1" style="text-align: center; max-width: 940px; margin: 0 auto;">Most AI is a <span class="accent">feature inside something</span>. Aedis is <span class="accent">the something</span>.</h2>
-
-        <p class="subtitle reveal stagger-2" style="text-align: center; max-width: 820px; margin: 18px auto 32px; font-size: 1.05rem;">
-            ChatGPT is a chat box. Copilot is an assistant inside Microsoft Office. QuickBooks AI is one screen inside QuickBooks. They are all features. Aedis is the operating layer that runs the back office across the tools you already own &mdash; <span class="bold" style="color: var(--text-primary);">whether you&rsquo;re running the facility or collecting rent from the operator who does.</span>
-        </p>
-
-        <div class="grid-3" style="margin-bottom: 24px;">
-            <div class="card reveal stagger-3" style="padding: 22px 20px;">
-                <p class="section-label" style="color: var(--text-dim); margin-bottom: 8px;">An AI tool</p>
-                <h4 style="font-size: 1rem; margin-bottom: 6px;">Answers one question, in one app, with no memory of the rest of your business.</h4>
-                <p style="font-size: 0.85rem; color: var(--text-dim);">No reasoning chain. No evidence trail. No cross-domain action. No audit log. No policy versioning. No governance. No HITL.</p>
+    <!-- 8 · WHAT CHANGES -->
+    <section class="slide s7 dark" data-mode="dark" data-section="8">
+        <div class="frame">
+            <p class="eyebrow">What changes</p>
+            <h2>Three changes you can&rsquo;t get from a feature release.</h2>
+            <div class="changes">
+                <div class="change">
+                    <div class="idx">01</div>
+                    <p>Decision latency goes <span class="mute">from days</span> to seconds &mdash; <span class="mute">and tenant distress is visible 90 days before the rent check is late.</span></p>
+                </div>
+                <div class="change">
+                    <div class="idx">02</div>
+                    <p>Headcount leverage compounds &mdash; <span class="mute">every agent runs every facility every day, across the operator book and the landlord book.</span></p>
+                </div>
+                <div class="change">
+                    <div class="idx">03</div>
+                    <p>Compliance posture improves, <span class="mute">not degrades &mdash;</span> every action logged before it executes &mdash; <span class="mute">defensible to auditors, lenders, and bond trustees.</span></p>
+                </div>
             </div>
-            <div class="card reveal stagger-4" style="padding: 22px 20px; border-color: var(--accent);">
-                <p class="section-label accent" style="margin-bottom: 8px;">An operating layer</p>
-                <h4 style="font-size: 1rem; margin-bottom: 6px;">Runs the work across every tool, every domain, every day &mdash; with reasoning, evidence, audit, and a human in the loop.</h4>
-                <p style="font-size: 0.85rem; color: var(--text-secondary);">Eight domains today. One queue. One audit chain. One identity layer. Two lenses &mdash; operator and landlord &mdash; over the same underlying data.</p>
+            <p class="seal"><strong>Margins compound where the operating model changes</strong> &mdash; not where features get added.</p>
+        </div>
+        <div class="footer-mark">
+            <span><span class="brand-dot"></span>Aedis &middot; for Sammy Forest</span>
+            <span class="right">08 / 09</span>
+        </div>
+    </section>
+
+    <!-- 9 · CLOSE -->
+    <section class="slide s8" data-mode="light" data-section="9">
+        <div class="frame">
+            <p class="eyebrow">The close</p>
+            <h2>The right partner <span class="accent">already believes</span> the same thing.</h2>
+            <div class="terms">
+                <div class="term">
+                    <div class="n">01</div>
+                    <p>AI agents are the operating layer, not a feature &mdash; on either hat.</p>
+                </div>
+                <div class="term">
+                    <div class="n">02</div>
+                    <p>You want a partner who owns delivery, not a vendor who ships features.</p>
+                </div>
+                <div class="term">
+                    <div class="n">03</div>
+                    <p>You give me a sandbox &mdash; one facility you run, <em style="font-style:normal;color:var(--accent);font-weight:600">or</em> 2-3 of your tenant operators &mdash; so I can start implementing.</p>
+                </div>
             </div>
-            <div class="card reveal stagger-5" style="padding: 22px 20px;">
-                <p class="section-label" style="color: var(--text-dim); margin-bottom: 8px;">Waiting for a SaaS roadmap</p>
-                <h4 style="font-size: 1rem; margin-bottom: 6px;">Your vendors will ship an AI module that maybe does 40% of one domain &mdash; in 18 months. None of them will read across operator and landlord.</h4>
-                <p style="font-size: 0.85rem; color: var(--text-dim);">Then they will charge per seat for it. Then they will close it to anything outside their walls. You will still own the integration problem &mdash; twice.</p>
+            <p class="signoff">If that&rsquo;s true, the next conversation is about your data. Pick the hat.</p>
+            <div class="contact">
+                <span class="name">Andrew Lark</span>
+                <span class="sep">&middot;</span>
+                <span>Sorellan &amp; Kairoth</span>
             </div>
         </div>
-
-        <div class="source-pills reveal stagger-5" style="margin-top: 20px; justify-content: center;">
-            <span class="pill active">AP &amp; Billing</span>
-            <span class="pill active">Payroll</span>
-            <span class="pill active">HR &amp; Workforce</span>
-            <span class="pill active">Clinical</span>
-            <span class="pill active">Quality</span>
-            <span class="pill active">Admissions</span>
-            <span class="pill active">Operations</span>
-            <span class="pill active">Compliance &amp; Legal</span>
-            <span class="pill active-violet">Landlord Console</span>
+        <div class="footer-mark">
+            <span><span class="brand-dot"></span>Aedis &middot; for Sammy Forest</span>
+            <span class="right">09 / 09</span>
         </div>
-        <p class="reveal stagger-5" style="text-align: center; margin-top: 14px; font-size: 0.86rem; color: var(--text-dim);">Eight operator domains. One landlord console over all of them. <span class="bold" style="color: var(--text-secondary);">Two starting wedges below &mdash; pick one and we land it in 8 weeks. The rest is a config flag, not a new vendor purchase.</span></p>
-    </div>
-</section>
+    </section>
 
+</div>
 
-<!-- ═══════════════════════════════════════════ -->
-<!-- SLIDE 4: Two hats, two pains -->
-<!-- ═══════════════════════════════════════════ -->
-<section id="section-3">
-    <div class="container">
-        <p class="section-label reveal">The Status Quo</p>
-        <h2 class="reveal stagger-1">Two hats, two back offices, <span class="accent">same broken pattern</span></h2>
+<div class="nav" id="nav"></div>
+<div class="hint">&larr; &rarr;&nbsp; navigate &nbsp;&middot;&nbsp; F&nbsp; fullscreen</div>
 
-        <p class="subtitle reveal stagger-2" style="margin-bottom: 28px; max-width: 820px;">
-            On both sides of your business, the work today is &ldquo;PDF in &mdash; person re-keys &mdash; spreadsheet ages out.&rdquo; This is the industry as it actually runs.
-        </p>
-
-        <div class="dual-hat reveal stagger-3" style="margin-bottom: 22px;">
-            <div class="hat-col operator">
-                <h3>Operator hat &mdash; the facilities you run</h3>
-                <ul>
-                    <li>AP invoice lands in a shared inbox &mdash; sits hours</li>
-                    <li>OCR vendor reads ~70% of fields, clerk re-keys the rest</li>
-                    <li>Operator chased over email for the GL code</li>
-                    <li>Controller approves on Friday batch &mdash; cuts check Tuesday</li>
-                    <li>BEC wire requests, duplicate invoices, ghost vendors caught after the fact (if at all)</li>
-                    <li style="color: var(--red); font-weight: 600;">~3 days per invoice, 4 people, no reasoning logged</li>
-                </ul>
-            </div>
-            <div class="hat-col landlord">
-                <h3>Landlord hat &mdash; the operators in your portfolio</h3>
-                <ul>
-                    <li>Tenant operators email quarterly PDF coverage packets</li>
-                    <li>Asset manager re-keys EBITDARM into a master spreadsheet</li>
-                    <li>State survey results, F-tags, star ratings tracked manually (or not at all)</li>
-                    <li>Operator distress shows up in the rent check, not the dashboard</li>
-                    <li>No early warning on occupancy drift, quality-mix slide, or regulatory action</li>
-                    <li style="color: var(--red); font-weight: 600;">~45-90 days to know a tenant is in trouble, 0 cross-portfolio comparability</li>
-                </ul>
-            </div>
-        </div>
-
-        <p class="reveal stagger-4" style="text-align: center; color: var(--text-dim); font-size: 0.88rem; margin-top: 8px;">
-            The OCR tool reads the invoice. The PDF reader reads the coverage packet. <span class="bold" style="color: var(--text-secondary);">Everything after that is people.</span>
-        </p>
-    </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SLIDE 5: What changes -->
-<!-- ═══════════════════════════════════════════ -->
-<section id="section-4">
-    <div class="container">
-        <p class="section-label reveal">The Same Work, Agentified</p>
-        <h2 class="reveal stagger-1">Same data. Same controls. <span class="accent">Agent reads it the second it lands.</span></h2>
-
-        <p class="subtitle reveal stagger-2" style="margin-bottom: 24px; max-width: 820px;">
-            Pick either hat. The pattern is identical: an agent owns the inbox, reads the message, decides what it is, and either acts and logs it or hands you a sub-10-second decision with the evidence attached.
-        </p>
-
-        <div class="comparison reveal stagger-2">
-            <div class="comparison-col bad">
-                <h3 style="color: var(--text-dim);">Today &mdash; both hats</h3>
-                <ul>
-                    <li>Invoice / coverage packet lands in shared inbox</li>
-                    <li>OCR or PDF reader gets ~70% of fields</li>
-                    <li>Human re-keys the rest into ERP or master sheet</li>
-                    <li>Exceptions live in a spreadsheet nobody owns</li>
-                    <li>Approval batched weekly &mdash; decisions logged as initials</li>
-                    <li>Fraud / distress signals caught after the fact, if at all</li>
-                    <li style="color: var(--red); font-weight: 600;">3 days per invoice &bull; 45-90 days per coverage packet</li>
-                </ul>
-            </div>
-            <div class="comparison-col good">
-                <h3 style="color: var(--blue);">Agent path &mdash; Aedis</h3>
-                <ul>
-                    <li>Agent reads the message the second it lands</li>
-                    <li>Vendor whitelist / operator baseline + variance check</li>
-                    <li>GL code or EBITDARM ratio applied from 12-mo history</li>
-                    <li>Controls tighter: every decision has cited reasoning</li>
-                    <li>High-confidence batch auto-approved, low-confidence surfaced with evidence</li>
-                    <li>Distress signals: occupancy drift, coverage breach, F-tag spike &mdash; surfaced before the rent check is late</li>
-                    <li style="color: var(--green); font-weight: 600;">~15 seconds per invoice &bull; same-day on coverage signals</li>
-                </ul>
-            </div>
-        </div>
-
-        <p class="reveal stagger-3" style="text-align: center; color: var(--text-dim); font-size: 0.88rem; margin-top: 20px;">
-            Controls don&rsquo;t get weaker &mdash; <span class="bold" style="color: var(--text-secondary);">they get tighter, because every decision now has reasoning attached to it instead of an initial in a margin.</span>
-        </p>
-    </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SLIDE 6: Mailrooms + Landlord Console -->
-<!-- ═══════════════════════════════════════════ -->
-<section id="section-5">
-    <div class="container">
-        <p class="section-label reveal">One Platform, Two Surfaces</p>
-        <h2 class="reveal stagger-1"><span class="accent">Mailrooms</span> on the operator side. <span class="violet">Landlord Console</span> on the asset-management side.</h2>
-
-        <p class="subtitle reveal stagger-2" style="margin-bottom: 22px; max-width: 860px;">
-            Each mailbox is staffed by an agent that reads every message, decides what it is, decides whether it can act, and either acts and logs it or hands you a recommendation. <span class="bold" style="color: var(--text-secondary);">The Landlord Console is the same fabric, pointed sideways</span> &mdash; reading the operator outputs across your portfolio instead of the operator inputs from inside a single facility.
-        </p>
-
-        <div class="grid-4 reveal stagger-2" style="margin-bottom: 18px;">
-            <div class="card" style="text-align: center; padding: 20px 14px;">
-                <div style="font-size: 1.6rem; margin-bottom: 6px;">&#128176;</div>
-                <h4 style="color: var(--blue);">AP</h4>
-                <p style="font-size: 0.78rem; margin-top: 6px;">Invoices, wires, vendor master &mdash; dollars and fraud live here</p>
-            </div>
-            <div class="card" style="text-align: center; padding: 20px 14px;">
-                <div style="font-size: 1.6rem; margin-bottom: 6px;">&#129534;</div>
-                <h4 style="color: var(--blue);">Billing / AR</h4>
-                <p style="font-size: 0.78rem; margin-top: 6px;">EOBs, RAC notices, denials &mdash; auto-post against the sub-ledger</p>
-            </div>
-            <div class="card" style="text-align: center; padding: 20px 14px;">
-                <div style="font-size: 1.6rem; margin-bottom: 6px;">&#128181;</div>
-                <h4 style="color: var(--blue);">Payroll</h4>
-                <p style="font-size: 0.78rem; margin-top: 6px;">Garnishments, tax notices, timecard exceptions, statutory deadlines</p>
-            </div>
-            <div class="card" style="text-align: center; padding: 20px 14px;">
-                <div style="font-size: 1.6rem; margin-bottom: 6px;">&#128100;</div>
-                <h4 style="color: var(--blue);">HR</h4>
-                <p style="font-size: 0.78rem; margin-top: 6px;">I-9 audits, FMLA, EEOC, license renewals &mdash; statutory clocks tracked</p>
-            </div>
-        </div>
-
-        <div class="grid-3 reveal stagger-3" style="margin-bottom: 16px;">
-            <div class="card" style="border-color: var(--violet-dim); padding: 20px 18px;">
-                <h4 style="color: var(--violet);">Coverage &amp; rent-to-EBITDARM</h4>
-                <p style="font-size: 0.84rem;">Quarterly coverage packets read on arrival. Coverage ratio, occupancy, quality mix, days cash on hand &mdash; normalized across every tenant in the portfolio.</p>
-            </div>
-            <div class="card" style="border-color: var(--violet-dim); padding: 20px 18px;">
-                <h4 style="color: var(--violet);">State surveys &amp; F-tags</h4>
-                <p style="font-size: 0.84rem;">Public CMS / state portals scraped daily. New survey deficiencies, IJ-tags, state actions surfaced as decisions on the Landlord Console &mdash; not in a quarterly recap.</p>
-            </div>
-            <div class="card" style="border-color: var(--violet-dim); padding: 20px 18px;">
-                <h4 style="color: var(--violet);">Lease abstraction &amp; covenants</h4>
-                <p style="font-size: 0.84rem;">Master leases parsed once: escalators, options, coverage covenants, transfer-on-distress clauses. The agent flags the day a covenant trips &mdash; not the quarter after.</p>
-            </div>
-        </div>
-
-        <div class="grid-3 reveal stagger-4">
-            <div class="card" style="border-color: var(--green-dim);">
-                <h4 style="color: var(--green);">Auto-approved</h4>
-                <p>High-confidence items closed without touching a human. Every row has reasoning, evidence, and a confidence score on the card.</p>
-            </div>
-            <div class="card" style="border-color: rgba(245, 158, 11, 0.3);">
-                <h4 style="color: var(--amber);">Needs review</h4>
-                <p>Edge cases with a recommendation, the cited evidence, and a sub-10-second approve / escalate / defer decision.</p>
-            </div>
-            <div class="card" style="border-color: var(--red-dim);">
-                <h4 style="color: var(--red);">Escalated</h4>
-                <p>Material risk &mdash; fraud, statutory deadline, covenant breach, tenant distress &mdash; surfaced with the dollars and the deadline on the card.</p>
-            </div>
-        </div>
-
-        <p class="reveal stagger-4" style="text-align: center; color: var(--text-dim); font-size: 0.88rem; margin-top: 18px;">
-            Operator wedge starts with AP. Landlord wedge starts with coverage packets. <span class="bold" style="color: var(--text-secondary);">Pick one to pilot &mdash; the other is a config flag, not a new project.</span>
-        </p>
-    </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SLIDE 7: What the agent actually knows -->
-<!-- ═══════════════════════════════════════════ -->
-<section id="section-6">
-    <div class="container">
-        <p class="section-label reveal">Beyond OCR</p>
-        <h2 class="reveal stagger-1">What the agent <span class="accent">actually knows</span></h2>
-
-        <p class="subtitle reveal stagger-2" style="margin-bottom: 22px; max-width: 820px;">
-            An OCR tool reads characters. This agent reads context &mdash; about each facility you run, and about each operator you collect from. That is the difference between routing mail and running an SNF book.
-        </p>
-
-        <div class="grid-3 reveal stagger-2" style="margin-bottom: 14px;">
-            <div class="card">
-                <h4 style="color: var(--blue);">Vendor &amp; operator whitelist</h4>
-                <p>Which vendors are real for which facility. Which operators are on which leases. Which addresses, remit-to instructions, and EINs match the record.</p>
-            </div>
-            <div class="card">
-                <h4 style="color: var(--blue);">PO &amp; coverage history</h4>
-                <p>What a normal invoice from this vendor looks like. What a normal coverage packet from this operator looks like. Tolerance bands &mdash; learned, not configured.</p>
-            </div>
-            <div class="card">
-                <h4 style="color: var(--blue);">GL coding &amp; ratio history</h4>
-                <p>How this facility has coded this vendor for 12 months. How this operator&rsquo;s EBITDARM has trended for 12 quarters. Same code, same approver, same baseline.</p>
-            </div>
-        </div>
-
-        <div class="grid-3 reveal stagger-3" style="margin-bottom: 14px;">
-            <div class="card">
-                <h4 style="color: var(--blue);">Behavioral baseline, per signer</h4>
-                <p>What the real CFO has and has not ever signed. What the operator&rsquo;s real CFO normally certifies. New wire instructions to a generic mailbox? That&rsquo;s a flag.</p>
-            </div>
-            <div class="card">
-                <h4 style="color: var(--blue);">Distress &amp; fraud library</h4>
-                <p>Current BEC patterns in SNF AP. Current operator-distress signatures &mdash; occupancy slide + Medicaid mix-up + new survey deficiency = top-three distress signature.</p>
-            </div>
-            <div class="card">
-                <h4 style="color: var(--blue);">Statute &amp; covenant library</h4>
-                <p>I-9 NOI &mdash; 3 business days. RAC audit &mdash; statutory clock. Lease coverage covenant &mdash; quarterly test. Cited on the card with the exact clause.</p>
-            </div>
-        </div>
-
-        <div class="grid-2 reveal stagger-4" style="align-items: stretch;">
-            <div class="card">
-                <h4 style="color: var(--blue);">Policy version in force</h4>
-                <p>Your controls captured as code. The agent knows which policy version was in effect on which day at which facility &mdash; and the audit row cites it.</p>
-            </div>
-            <div class="card" style="border-color: rgba(139, 92, 246, 0.3);">
-                <h4 style="color: var(--violet);">What this means at portfolio scale</h4>
-                <p>One BEC wire stopped on the operator side pays for the platform. One tenant-distress signal flagged 90 days early on the landlord side pays for the year.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SLIDE 8: Audit trail is the moat -->
-<!-- ═══════════════════════════════════════════ -->
-<section id="section-7">
-    <div class="container">
-        <p class="section-label reveal">The Moat</p>
-        <h2 class="reveal stagger-1">Audit trail is <span class="accent">the moat</span></h2>
-
-        <p class="subtitle reveal stagger-2" style="margin-bottom: 22px; max-width: 820px;">
-            Every action the agent takes &mdash; auto-approve, escalate, defer, override &mdash; gets a row like the one below. <span class="bold">When the auditor, the lender, or the bond trustee asks how you knew the tenant was sliding, the answer is not a memory. It is a row.</span>
-        </p>
-
-        <div class="reveal stagger-2" style="background: var(--dark-card); border: 1px solid var(--dark-border); border-radius: 12px; padding: 22px; margin-bottom: 16px; font-family: 'SF Mono', 'Monaco', monospace; font-size: 0.78rem;">
-            <div style="display: grid; grid-template-columns: 150px 1fr; gap: 10px 18px; line-height: 1.55;">
-                <span style="color: var(--text-dim);">decision_id</span><span style="color: var(--text-secondary);"><span style="color: var(--violet);">D-LL-117</span> &middot; surface: Landlord Console &middot; tenant: TEN-08</span>
-                <span style="color: var(--text-dim);">agent</span><span style="color: var(--text-secondary);">coverage-monitor-agent &middot; v1.9.0</span>
-                <span style="color: var(--text-dim);">action</span><span style="color: var(--amber); font-weight: 600;">ESCALATED &mdash; covenant breach probable next quarter</span>
-                <span style="color: var(--text-dim);">reasoning</span><span style="color: var(--text-secondary);">Trailing-twelve EBITDARM coverage dropped to <code style="color:#fff;">1.18x</code> vs covenant floor of <code style="color:#fff;">1.25x</code>. Occupancy down <code style="color:#fff;">410 bps</code> over 2 quarters, Medicaid mix +<code style="color:#fff;">6.2pp</code>, new state IJ-tag at TEN-08 facility 3 of 9. Probability of Q-end covenant test failure: <code style="color:#fff;">0.74</code>.</span>
-                <span style="color: var(--text-dim);">evidence</span><span style="color: var(--text-secondary);">[coverage_packet_q1, cms_compare_scrape, state_survey_portal, lease_master_v3]</span>
-                <span style="color: var(--text-dim);">confidence</span><span style="color: var(--green); font-weight: 600;">0.91</span>
-                <span style="color: var(--text-dim);">approved_by</span><span style="color: var(--text-secondary);">asset.manager@sammyforest.example &middot; 2026-06-10 09:14:22 PT</span>
-                <span style="color: var(--text-dim);">policy_version</span><span style="color: var(--text-secondary);">sf-landlord-covenants@2026-04-01</span>
-                <span style="color: var(--text-dim);">replay</span><span style="color: var(--text-secondary);">audit/replay/D-LL-117 &middot; immutable hash-chained</span>
-            </div>
-        </div>
-
-        <div class="grid-3 reveal stagger-3">
-            <div class="card">
-                <h4 style="color: var(--blue);">Reasoning in plain English</h4>
-                <p>Not a confidence score and a black box. The actual sentence the agent used to make the call.</p>
-            </div>
-            <div class="card">
-                <h4 style="color: var(--blue);">Every evidence source cited</h4>
-                <p>ERP, M365, PCC, HRIS, CMS Compare, state survey portals, lease master, fraud library &mdash; named, versioned, replayable.</p>
-            </div>
-            <div class="card">
-                <h4 style="color: var(--blue);">Defensible to auditors &amp; lenders</h4>
-                <p>Filter by facility, tenant, or covenant. Hand the row to your auditor, your insurer, or the bond trustee &mdash; same row, same chain.</p>
-            </div>
-        </div>
-
-        <p class="reveal stagger-4" style="text-align: center; color: var(--text-dim); font-size: 0.88rem; margin-top: 20px;">
-            <span class="bold" style="color: var(--text-secondary);">This is what makes it defensible at portfolio scale &mdash; whether the portfolio is 9 facilities you run or 90 you own.</span>
-        </p>
-    </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SLIDE 9: The trade -->
-<!-- ═══════════════════════════════════════════ -->
-<section id="section-8">
-    <div class="container">
-        <p class="section-label reveal">The Trade</p>
-        <h2 class="reveal stagger-1">What I&rsquo;m <span class="accent">not</span> asking you to do</h2>
-
-        <p class="subtitle reveal stagger-2" style="margin-bottom: 28px; max-width: 820px;">
-            Three things that should not be on the table. This is the trade I&rsquo;m offering &mdash; on either hat.
-        </p>
-
-        <div class="grid-3 reveal stagger-3" style="margin-bottom: 22px;">
-            <div class="card" style="border-color: var(--red-dim); padding: 24px 20px;">
-                <div style="font-size: 1.8rem; color: var(--red); font-weight: 800; margin-bottom: 10px;">&#10007;</div>
-                <h4 style="color: var(--red); margin-bottom: 8px;">Rip-and-replace your ERP or asset-management system</h4>
-                <p>The agent works alongside Sage / NetSuite / Yardi / Juniper / whatever you run today. It reads the same data your team reads and writes back the way your team writes back.</p>
-            </div>
-            <div class="card" style="border-color: var(--red-dim); padding: 24px 20px;">
-                <div style="font-size: 1.8rem; color: var(--red); font-weight: 800; margin-bottom: 10px;">&#10007;</div>
-                <h4 style="color: var(--red); margin-bottom: 8px;">Retrain your AP team or your asset managers</h4>
-                <p>The agent works the queue the way they already work the queue. They just see fewer items, and the items they do see arrive with a recommendation and the evidence.</p>
-            </div>
-            <div class="card" style="border-color: var(--red-dim); padding: 24px 20px;">
-                <div style="font-size: 1.8rem; color: var(--red); font-weight: 800; margin-bottom: 10px;">&#10007;</div>
-                <h4 style="color: var(--red); margin-bottom: 8px;">Wait 18 months for a SaaS roadmap</h4>
-                <p>Yardi will not ship a coverage-monitoring agent that reads CMS Compare. NetSuite will not stop BEC wires. By the time either does, the next tenant has already slid.</p>
-            </div>
-        </div>
-
-        <p class="reveal stagger-4" style="text-align: center; color: var(--text-secondary); font-size: 1rem; margin-top: 8px; max-width: 760px; margin-left: auto; margin-right: auto;">
-            <span class="bold">What I am asking:</span> let an agent run the back-office mailboxes you already have &mdash; or read the operator data you already collect &mdash; on the controls you already trust.
-        </p>
-    </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SLIDE 10: Pilot plan -->
-<!-- ═══════════════════════════════════════════ -->
-<section id="section-9">
-    <div class="container">
-        <p class="section-label reveal">The Plan</p>
-        <h2 class="reveal stagger-1">How a pilot lands in <span class="accent">30 to 60 days</span></h2>
-
-        <p class="subtitle reveal stagger-2" style="margin-bottom: 28px; max-width: 820px;">
-            Pick one hat to start. Sandbox &rarr; shadow mode &rarr; live on a subset. Eight weeks. No standing meeting required.
-        </p>
-
-        <div class="dual-hat reveal stagger-3" style="margin-bottom: 22px;">
-            <div class="hat-col operator">
-                <h3>Path A &mdash; Operator pilot (one facility)</h3>
-                <ul>
-                    <li><strong style="color:#fff;">Week 1.</strong> Sandbox of ERP + AP gateway. 60-90 days of sample invoices, vendor master, PO history, GL chart.</li>
-                    <li><strong style="color:#fff;">Weeks 2-3.</strong> Connectors (ERP, M365, HRIS, banking). 2 hrs / week with one AP clerk to capture policy-as-code.</li>
-                    <li><strong style="color:#fff;">Weeks 4-6.</strong> Shadow mode &mdash; agent decides on every invoice, we compare to what your team did.</li>
-                    <li><strong style="color:#fff;">Weeks 7-8.</strong> Live on the facility. Humans approve high-confidence batch. Kill switch in your hands.</li>
-                </ul>
-            </div>
-            <div class="hat-col landlord">
-                <h3>Path B &mdash; Landlord pilot (2-3 tenants)</h3>
-                <ul>
-                    <li><strong style="color:#fff;">Week 1.</strong> Sandbox of the asset-mgmt system. Last 8 quarters of coverage packets from 2-3 tenant operators.</li>
-                    <li><strong style="color:#fff;">Weeks 2-3.</strong> Connectors (asset-mgmt sys, CMS Compare, state survey portals). Lease masters abstracted to covenant model.</li>
-                    <li><strong style="color:#fff;">Weeks 4-6.</strong> Shadow mode &mdash; agent scores each tenant weekly, we compare to your asset manager&rsquo;s read.</li>
-                    <li><strong style="color:#fff;">Weeks 7-8.</strong> Landlord Console live on the 2-3 tenants. Asset manager approves the weekly distress &amp; covenant queue.</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="grid-3 reveal stagger-4" style="margin-top: 18px;">
-            <div class="card" style="border-color: var(--green-dim);">
-                <h4 style="color: var(--green);">No workflow disruption</h4>
-                <p>Either path: the agent sits in front of the queue your team already works. They see fewer items, with better context.</p>
-            </div>
-            <div class="card" style="border-color: var(--green-dim);">
-                <h4 style="color: var(--green);">Kill switch &mdash; per surface</h4>
-                <p>You can disable any agent on any facility or any tenant, instantly. The platform reverts to the manual queue.</p>
-            </div>
-            <div class="card" style="border-color: var(--green-dim);">
-                <h4 style="color: var(--green);">Audit-ready from day one</h4>
-                <p>Every shadow-mode decision is logged. By the time you cut over, you have weeks of evidence for the auditor or the bond trustee.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SLIDE 11: Demo lead-in -->
-<!-- ═══════════════════════════════════════════ -->
-<section id="section-10" style="background: linear-gradient(180deg, var(--dark) 0%, #0a1628 100%);">
-    <div class="container" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
-        <p class="section-label reveal">Live Demo</p>
-        <h2 class="reveal stagger-1" style="max-width: 920px;">The next ten minutes is <span class="accent">the platform running on synthetic SNF data &mdash; both hats live</span></h2>
-
-        <p class="subtitle reveal stagger-2" style="max-width: 720px; margin-top: 18px; margin-bottom: 32px;">
-            Everything I just described is built. I&rsquo;m going to open it now and you can ask me anything you want while it&rsquo;s on the screen. The data is synthetic, but the shape is real &mdash; multi-facility AP, multi-tenant coverage, multi-state survey portal.
-        </p>
-
-        <div class="grid-3 reveal stagger-3" style="width: 100%; max-width: 880px; margin-bottom: 28px;">
-            <div class="card" style="text-align: center; padding: 20px 14px;">
-                <div style="font-size: 1.6rem; margin-bottom: 8px;">&#128231;</div>
-                <h4 style="color: var(--blue);">Mailrooms (operator)</h4>
-                <p style="font-size: 0.8rem; margin-top: 4px;">AP, Billing, Payroll, HR &mdash; auto-approved / needs-review / escalated counts on each</p>
-            </div>
-            <div class="card" style="text-align: center; padding: 20px 14px;">
-                <div style="font-size: 1.6rem; margin-bottom: 8px;">&#128202;</div>
-                <h4 style="color: var(--violet);">Landlord Console</h4>
-                <p style="font-size: 0.8rem; margin-top: 4px;">Per-tenant coverage trend, covenant test, F-tag stream, distress score &mdash; one pane across the portfolio</p>
-            </div>
-            <div class="card" style="text-align: center; padding: 20px 14px;">
-                <div style="font-size: 1.6rem; margin-bottom: 8px;">&#128203;</div>
-                <h4 style="color: var(--blue);">Audit Trail</h4>
-                <p style="font-size: 0.8rem; margin-top: 4px;">Every action, reasoning, evidence sources, confidence, who approved, policy version &mdash; CSV-exportable.</p>
-            </div>
-        </div>
-
-        <div class="reveal stagger-4" style="padding: 18px 28px; background: var(--dark-card); border: 1px solid var(--blue); border-radius: 12px; max-width: 720px;">
-            <p style="font-size: 0.78rem; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;">Opening the demo at</p>
-            <p style="font-size: 0.95rem; color: var(--blue); font-family: 'SF Mono', 'Monaco', monospace; word-break: break-all;">goforit5.github.io/hosted-pages/aedis-revamp/</p>
-        </div>
-    </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SLIDE 12: Governance -->
-<!-- ═══════════════════════════════════════════ -->
-<section id="section-11">
-    <div class="container">
-        <p class="section-label reveal">Governance &amp; Control</p>
-        <h2 class="reveal stagger-1">Governed AI &mdash; from data access<br>to <span class="accent">production deployment</span></h2>
-
-        <p class="subtitle reveal stagger-2" style="margin-bottom: 24px; max-width: 820px;">Every agent action is auditable, reversible, and human-approved. Autonomous preparation with human accountability preserved.</p>
-
-        <div class="grid-3 reveal stagger-3" style="margin-bottom: 16px;">
-            <div class="card" style="border-color: var(--green-dim); padding: 16px 18px;">
-                <h4 style="color: var(--green);">Human-in-the-Loop</h4>
-                <p>Agents <strong style="color:white;">propose</strong>, humans <strong style="color:white;">approve</strong>. Every ERP, PCC, or asset-mgmt write-back shows a diff preview. No autonomous writes without explicit approval.</p>
-            </div>
-            <div class="card" style="border-color: var(--green-dim); padding: 16px 18px;">
-                <h4 style="color: var(--green);">Complete Audit Trail</h4>
-                <p>Every action logged &mdash; timestamp, user, data accessed, rationale. Three-layer audit: hooks, middleware, DB triggers. <strong style="color:white;">SOX-ready</strong> from day one.</p>
-            </div>
-            <div class="card" style="border-color: var(--green-dim); padding: 16px 18px;">
-                <h4 style="color: var(--green);">Role-Based Access</h4>
-                <p>Agents inherit user permissions. AP clerk sees AP queue. Asset manager sees their tenants. Principal sees the portfolio. <strong style="color:white;">Same RBAC you already enforce.</strong></p>
-            </div>
-        </div>
-
-        <div class="grid-2 reveal stagger-4" style="margin-bottom: 16px; align-items: start;">
-            <div class="card" style="padding: 16px 18px;">
-                <h4 style="color: var(--blue);">Regulatory Compliance</h4>
-                <ul style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.55; padding-left: 16px;">
-                    <li><strong style="color:white;">SOX</strong> &mdash; Immutable hash-chained logs, separation of duties, approval records</li>
-                    <li><strong style="color:white;">HIPAA</strong> &mdash; BAA-covered, PHI tokenized at the boundary if/when it touches a mailbox</li>
-                    <li><strong style="color:white;">IRS / DOL / USCIS</strong> &mdash; Statutory deadlines tracked, citations on every decision card</li>
-                    <li><strong style="color:white;">State regs &amp; survey law</strong> &mdash; Multi-state employment + survey-action rules per facility</li>
-                </ul>
-            </div>
-            <div class="card" style="padding: 16px 18px;">
-                <h4 style="color: var(--blue);">AI Safety Controls</h4>
-                <ul style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.55; padding-left: 16px;">
-                    <li><strong style="color:white;">Hallucination guard</strong> &mdash; Sources cited, confidence scored</li>
-                    <li><strong style="color:white;">Read-only default</strong> &mdash; Write requires explicit approval</li>
-                    <li><strong style="color:white;">Governance levels</strong> &mdash; Full approval &rarr; relax as trust earned</li>
-                    <li><strong style="color:white;">Kill switch</strong> &mdash; Disable any agent instantly, per facility or per tenant</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="grid-3 reveal stagger-5" style="margin-bottom: 16px;">
-            <div class="card" style="padding: 16px 18px;">
-                <h4 style="color: var(--blue);">Reliability &amp; Consistency</h4>
-                <p>Agents run defined workflows, not open-ended generation. Same input produces same structured output. Monitored, versioned, regression-tested.</p>
-            </div>
-            <div class="card" style="padding: 16px 18px;">
-                <h4 style="color: var(--blue);">Adoption &amp; Change Management</h4>
-                <p>Agents prepare decisions. Humans approve in under 10 seconds. No training on new software. The interface is a decision queue, not an application.</p>
-            </div>
-            <div class="card" style="padding: 16px 18px;">
-                <h4 style="color: var(--blue);">Data Privacy &amp; Governance</h4>
-                <p>Processed in your cloud boundary (or ours, your call). RBAC inherited from your existing access model. No data leaves your environment. Every data touch audited end-to-end.</p>
-            </div>
-        </div>
-
-        <p class="reveal" style="text-align: center; color: var(--text-dim); font-size: 0.88rem;">
-            Your legal reviews the architecture. Your compliance sets the rules. Your people stay in control. <span class="bold" style="color: var(--text-secondary);">The AI moves faster between the guardrails.</span>
-        </p>
-    </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SLIDE 13: The ask -->
-<!-- ═══════════════════════════════════════════ -->
-<section id="section-12" class="light-section">
-    <div class="container" style="display: flex; flex-direction: column; align-items: center;">
-        <p class="section-label reveal" style="text-align: center;">The Ask</p>
-        <h2 class="reveal stagger-1" style="text-align: center; max-width: 880px;">What I need from you to start</h2>
-        <p class="subtitle reveal stagger-2" style="max-width: 720px; margin-bottom: 32px; text-align: center;">
-            Four things. Same list whether we start on the operator side or the landlord side &mdash; pick one. Give me these and I&rsquo;m in shadow mode by week 4 and live by week 8.
-        </p>
-
-        <div class="grid-2 reveal stagger-3" style="width: 100%; max-width: 920px; text-align: left; margin-bottom: 22px;">
-            <div class="card" style="padding: 22px;">
-                <div style="font-size: 1.4rem; font-weight: 800; color: var(--blue); margin-bottom: 8px;">1</div>
-                <h4 style="margin-bottom: 6px;">Sandbox + API access</h4>
-                <p><strong>Operator path:</strong> sandbox tenant of your ERP and AP gateway. <strong>Landlord path:</strong> sandbox / export of your asset-management system. Read/write on sandbox, read-only on production for the first month.</p>
-            </div>
-            <div class="card" style="padding: 22px;">
-                <div style="font-size: 1.4rem; font-weight: 800; color: var(--blue); margin-bottom: 8px;">2</div>
-                <h4 style="margin-bottom: 6px;">Sample data &mdash; one facility or 2-3 tenants</h4>
-                <p><strong>Operator:</strong> 60-90 days of invoices, vendor master, PO history, GL chart. <strong>Landlord:</strong> last 8 quarters of coverage packets + lease masters for 2-3 tenant operators.</p>
-            </div>
-            <div class="card" style="padding: 22px;">
-                <div style="font-size: 1.4rem; font-weight: 800; color: var(--blue); margin-bottom: 8px;">3</div>
-                <h4 style="margin-bottom: 6px;">2 hours / week with one operator</h4>
-                <p>Read-only screen-share with one AP clerk (operator path) or one asset manager (landlord path) for the first three weeks. Watching how the queue actually gets worked so I can turn that into policy-as-code.</p>
-            </div>
-            <div class="card" style="padding: 22px;">
-                <div style="font-size: 1.4rem; font-weight: 800; color: var(--blue); margin-bottom: 8px;">4</div>
-                <h4 style="margin-bottom: 6px;">One named executive sponsor</h4>
-                <p>When something needs a decision, it gets one in a day, not a week. Every question after kickoff flows through the Assist dashboard inside the product &mdash; no email threads, no Slack channel, no standing meeting.</p>
-            </div>
-        </div>
-
-        <div class="reveal stagger-4" style="background: white; border: 2px solid var(--blue); border-radius: 12px; padding: 22px 28px; max-width: 880px; width: 100%; text-align: center;">
-            <p style="font-size: 0.7rem; color: var(--blue); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700;">Outcome</p>
-            <p style="font-size: 1.05rem; color: #1a1a1a; line-height: 1.55; font-weight: 600;">
-                Shadow mode by <span class="accent">week 4</span>. Live on a facility or tenant subset by <span class="accent">week 8</span>. I implement solo from there. <span style="color: #6b7280; font-weight: 500;">No exclusivity, no lock-in, no per-seat trap.</span>
-            </p>
-        </div>
-    </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════ -->
-<!-- SLIDE 14: Closing -->
-<!-- ═══════════════════════════════════════════ -->
-<section id="section-13" style="background: linear-gradient(180deg, var(--dark) 0%, #0a1628 100%);">
-    <div class="container" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-        <p class="section-label reveal">What&rsquo;s Next</p>
-        <h2 class="reveal stagger-1" style="max-width: 960px;">One operating layer. <span class="accent">Both hats.</span> Built today, running on your data this month.</h2>
-
-        <div class="reveal stagger-2" style="max-width: 780px; margin-top: 8px;">
-            <p style="font-size: 1.05rem; color: var(--text-secondary); line-height: 1.65; margin-bottom: 20px;">
-                Sammy &mdash; pick the wedge. If it&rsquo;s the operator side, the thing I&rsquo;d like to start next week is the sandbox and the sample invoices from one of your facilities, and I&rsquo;ll have the agent in shadow mode on AP by the end of the month. If it&rsquo;s the landlord side, give me the last 8 quarters of coverage packets from 2-3 of your tenant operators and I&rsquo;ll have the Landlord Console reading them weekly by the end of the month.
-            </p>
-            <p style="font-size: 1.05rem; color: var(--text-secondary); line-height: 1.65;">
-                Nothing on the screen today is a roadmap. <span class="bold">It&rsquo;s the product. One person who built it, and one person who can change it the same day you ask.</span>
-            </p>
-        </div>
-
-        <p class="reveal stagger-3" style="margin-top: 48px; color: var(--text-dim); font-size: 0.95rem; font-weight: 500;">
-            One BEC wire stopped on the operator side, or one tenant-distress signal flagged 90 days early on the landlord side &mdash; either one pays for the year.
-        </p>
-
-        <div style="margin-top: 40px;" class="reveal stagger-4">
-            <p style="font-weight: 600; font-size: 1rem;">Andrew Lark</p>
-            <p style="color: var(--text-dim); font-size: 0.82rem; margin-top: 2px;">Aedis &bull; AI Architecture &bull; SNF Operations &bull; Internal Controls</p>
-        </div>
-    </div>
-</section>
-
-
-
-
-<!-- ═══════════════════════════════════════════ -->
 <script>
-const animateObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
-        else entry.target.classList.remove('visible');
+(function () {
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const deck = document.querySelector('.deck');
+    const navEl = document.getElementById('nav');
+    let current = 0;
+
+    slides.forEach((_, i) => {
+        const b = document.createElement('button');
+        b.className = 'dot' + (i === 0 ? ' active' : '');
+        b.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+        b.addEventListener('click', () => go(i));
+        navEl.appendChild(b);
     });
-}, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+    const dots = Array.from(navEl.querySelectorAll('.dot'));
 
-document.querySelectorAll('.reveal').forEach(el => animateObserver.observe(el));
+    function go(n) {
+        if (n < 0 || n >= slides.length || n === current) return;
+        slides[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = n;
+        slides[current].classList.add('active');
+        dots[current].classList.add('active');
+        deck.dataset.mode = slides[current].dataset.mode || 'light';
+    }
 
-const sections = document.querySelectorAll('section');
-const dots = document.querySelectorAll('.nav-dot');
-const counter = document.querySelector('.slide-counter');
+    function next() { go(Math.min(current + 1, slides.length - 1)); }
+    function prev() { go(Math.max(current - 1, 0)); }
 
-const navObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const idx = entry.target.id.split('-')[1];
-            dots.forEach(d => d.classList.remove('active'));
-            const activeDot = document.querySelector(`[data-section="${idx}"]`);
-            if (activeDot) activeDot.classList.add('active');
-            counter.textContent = `${parseInt(idx) + 1} / ${sections.length}`;
+    document.addEventListener('keydown', (e) => {
+        switch (e.key) {
+            case 'ArrowRight':
+            case 'ArrowDown':
+            case 'PageDown':
+            case ' ':
+                e.preventDefault(); next(); break;
+            case 'ArrowLeft':
+            case 'ArrowUp':
+            case 'PageUp':
+                e.preventDefault(); prev(); break;
+            case 'Home':
+                e.preventDefault(); go(0); break;
+            case 'End':
+                e.preventDefault(); go(slides.length - 1); break;
+            case 'f':
+            case 'F':
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen?.();
+                } else {
+                    document.exitFullscreen?.();
+                }
+                break;
         }
     });
-}, { threshold: 0.5 });
 
-sections.forEach(section => navObserver.observe(section));
+    let touchX = null;
+    document.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend', (e) => {
+        if (touchX === null) return;
+        const dx = e.changedTouches[0].clientX - touchX;
+        if (Math.abs(dx) > 50) { dx < 0 ? next() : prev(); }
+        touchX = null;
+    }, { passive: true });
 
-dots.forEach(dot => {
-    dot.addEventListener('click', () => {
-        document.getElementById(`section-${dot.dataset.section}`).scrollIntoView({ behavior: 'smooth' });
-    });
-});
-
-document.addEventListener('keydown', (e) => {
-    const currentSection = Math.round(window.scrollY / window.innerHeight);
-    if (e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
-        e.preventDefault();
-        const next = Math.min(currentSection + 1, sections.length - 1);
-        document.getElementById(`section-${next}`).scrollIntoView({ behavior: 'smooth' });
-    } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
-        e.preventDefault();
-        const prev = Math.max(currentSection - 1, 0);
-        document.getElementById(`section-${prev}`).scrollIntoView({ behavior: 'smooth' });
-    }
-});
-
-window.addEventListener('scroll', () => {
-    const totalHeight = document.body.scrollHeight - window.innerHeight;
-    const progress = totalHeight > 0 ? (window.scrollY / totalHeight) * 100 : 0;
-    document.querySelector('.progress-fill').style.width = `${progress}%`;
-});
+    deck.dataset.mode = slides[0].dataset.mode || 'light';
+})();
 </script>
 
 </body>
