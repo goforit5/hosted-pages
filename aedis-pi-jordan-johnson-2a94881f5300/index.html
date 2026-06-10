@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The PI Firm of 2026 — An Agentic OS · For Jordan Johnson</title>
+<meta name="description" content="Humans review. Agents do. A pitch for Jordan Johnson by Andrew Lark / Taskvisory.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy-900: #050E24;
+  --navy-800: #0A1F44;
+  --navy-700: #122a55;
+  --navy-600: #1d3a72;
+  --blue-500: #3B82F6;
+  --blue-400: #60A5FA;
+  --blue-300: #93C5FD;
+  --cream-100: #FAF7F2;
+  --cream-200: #F5EFE6;
+  --cream-300: #EEE6D7;
+  --ink-900: #0B1B36;
+  --ink-700: #243757;
+  --ink-500: #56668A;
+  --ink-300: #8895B1;
+  --coral: #FF6B5B;
+  --coral-dark: #E85440;
+  --green: #10B981;
+  --yellow: #F59E0B;
+  --red: #EF4444;
+  --hairline: rgba(11, 27, 54, 0.08);
+  --hairline-dark: rgba(255, 255, 255, 0.12);
+  --shadow-sm: 0 1px 2px rgba(11, 27, 54, 0.04), 0 1px 3px rgba(11, 27, 54, 0.04);
+  --shadow-md: 0 8px 24px rgba(11, 27, 54, 0.08), 0 2px 6px rgba(11, 27, 54, 0.04);
+  --shadow-lg: 0 24px 60px rgba(11, 27, 54, 0.12), 0 8px 20px rgba(11, 27, 54, 0.06);
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { background: var(--cream-100); color: var(--ink-900); font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; letter-spacing: -0.011em; }
+body { scroll-snap-type: y mandatory; overflow-y: scroll; height: 100vh; overflow-x: hidden; scroll-behavior: smooth; }
+section.slide { scroll-snap-align: start; scroll-snap-stop: always; min-height: 100vh; width: 100%; display: flex; flex-direction: column; position: relative; padding: 64px 96px 80px; overflow: hidden; }
+section.slide.dark { background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-800) 70%, var(--navy-700) 100%); color: var(--cream-100); }
+section.slide.dark .ink-700, section.slide.dark .ink-500, section.slide.dark .ink-300 { color: rgba(250, 247, 242, 0.72); }
+section.slide.cream { background: linear-gradient(180deg, var(--cream-100) 0%, var(--cream-200) 100%); }
+section.slide.cream-deep { background: linear-gradient(180deg, var(--cream-200) 0%, var(--cream-300) 100%); }
+
+.eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--blue-500); margin-bottom: 18px; }
+section.dark .eyebrow { color: var(--blue-400); }
+.title { font-size: 56px; font-weight: 700; line-height: 1.05; letter-spacing: -0.025em; color: var(--ink-900); max-width: 1100px; }
+section.dark .title { color: var(--cream-100); }
+.subtitle { font-size: 22px; font-weight: 400; line-height: 1.4; color: var(--ink-500); margin-top: 18px; max-width: 880px; letter-spacing: -0.008em; }
+section.dark .subtitle { color: rgba(250, 247, 242, 0.7); }
+.caption { font-size: 14px; color: var(--ink-300); margin-top: 14px; font-style: italic; }
+section.dark .caption { color: rgba(250, 247, 242, 0.55); }
+
+.footer { position: absolute; bottom: 24px; left: 96px; right: 96px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--ink-300); letter-spacing: 0.04em; }
+section.dark .footer { color: rgba(250, 247, 242, 0.4); }
+.footer .mark { display: flex; align-items: center; gap: 10px; }
+.footer .mark .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--coral); }
+
+.page-indicator { position: fixed; bottom: 24px; right: 24px; z-index: 50; padding: 8px 14px; border-radius: 999px; background: rgba(11, 27, 54, 0.7); color: rgba(250, 247, 242, 0.9); font-size: 12px; font-weight: 500; letter-spacing: 0.04em; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); font-variant-numeric: tabular-nums; }
+
+.scroll-hint { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 49; font-size: 11px; color: rgba(11, 27, 54, 0.45); letter-spacing: 0.18em; text-transform: uppercase; animation: pulse 2.4s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 0.45; transform: translate(-50%, 0); } 50% { opacity: 0.85; transform: translate(-50%, -4px); } }
+
+/* ======================== SLIDE 1: COVER ======================== */
+.cover { justify-content: center; }
+.cover .brand { display: flex; align-items: center; gap: 14px; margin-bottom: 64px; font-size: 13px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(250, 247, 242, 0.6); }
+.cover .brand .glyph { width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%); display: flex; align-items: center; justify-content: center; color: var(--cream-100); font-weight: 700; font-size: 14px; }
+.cover .super-title { font-size: 92px; font-weight: 700; line-height: 0.98; letter-spacing: -0.035em; color: var(--cream-100); max-width: 1200px; }
+.cover .super-title .accent { background: linear-gradient(120deg, var(--blue-400) 0%, var(--blue-300) 60%, var(--cream-100) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.cover .super-sub { margin-top: 32px; font-size: 30px; font-weight: 400; color: rgba(250, 247, 242, 0.78); letter-spacing: -0.01em; max-width: 980px; }
+.cover .meta { margin-top: 96px; display: flex; gap: 60px; font-size: 13px; }
+.cover .meta div { display: flex; flex-direction: column; gap: 4px; }
+.cover .meta .label { font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(250, 247, 242, 0.45); }
+.cover .meta .value { font-size: 16px; font-weight: 500; color: rgba(250, 247, 242, 0.92); letter-spacing: -0.005em; }
+
+/* ======================== SLIDE 2: ROUTING TABLE ======================== */
+.routing-table { margin-top: 36px; background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden; max-width: 1240px; border: 1px solid var(--hairline); }
+.routing-table table { width: 100%; border-collapse: collapse; }
+.routing-table th { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-500); text-align: left; padding: 18px 28px 14px; border-bottom: 1px solid var(--hairline); background: var(--cream-200); }
+.routing-table td { padding: 14px 28px; font-size: 16px; border-bottom: 1px solid var(--hairline); color: var(--ink-700); vertical-align: middle; letter-spacing: -0.005em; }
+.routing-table tr:last-child td { border-bottom: none; }
+.routing-table tr:hover td { background: rgba(59, 130, 246, 0.03); }
+.routing-table td code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: rgba(59, 130, 246, 0.1); color: var(--blue-500); padding: 4px 10px; border-radius: 6px; font-weight: 500; }
+.routing-table .chain { font-weight: 600; color: var(--ink-900); display: flex; align-items: center; gap: 10px; }
+.routing-table .chain::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--coral); }
+.kicker { margin-top: 28px; font-size: 22px; font-weight: 500; color: var(--ink-900); letter-spacing: -0.015em; }
+.kicker em { font-style: normal; color: var(--coral); }
+
+/* ======================== SLIDE 3: THE SHIFT ======================== */
+.shift { justify-content: center; align-items: center; text-align: center; }
+.shift .hero { font-size: 156px; font-weight: 700; line-height: 0.95; letter-spacing: -0.045em; color: var(--cream-100); }
+.shift .hero .grad { background: linear-gradient(120deg, var(--blue-400) 0%, var(--blue-300) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.shift .hero-sub { margin-top: 56px; font-size: 26px; font-weight: 400; color: rgba(250, 247, 242, 0.7); letter-spacing: -0.005em; }
+.shift .hero-sub span { color: var(--cream-100); font-weight: 500; padding: 0 18px; position: relative; }
+.shift .hero-sub span + span::before { content: '·'; position: absolute; left: -4px; color: rgba(250, 247, 242, 0.3); }
+
+/* ======================== SLIDE 4: WHERE HOURS GO ======================== */
+.hours-grid { margin-top: 40px; display: grid; grid-template-columns: 1.1fr 1fr; gap: 60px; align-items: center; }
+.hours-chart { position: relative; aspect-ratio: 1; max-width: 520px; }
+.hours-chart svg { width: 100%; height: 100%; }
+.hours-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+.hours-center .num { font-size: 64px; font-weight: 700; color: var(--ink-900); letter-spacing: -0.04em; line-height: 1; }
+.hours-center .label { font-size: 13px; font-weight: 500; color: var(--ink-500); margin-top: 4px; letter-spacing: 0.04em; text-transform: uppercase; }
+.hours-legend { display: flex; flex-direction: column; gap: 14px; }
+.hours-legend .item { display: flex; align-items: center; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--hairline); }
+.hours-legend .swatch { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+.hours-legend .name { flex: 1; font-size: 16px; color: var(--ink-700); }
+.hours-legend .pct { font-size: 18px; font-weight: 600; color: var(--ink-900); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+
+/* ======================== SLIDE 5: 12 DEPARTMENTS ======================== */
+.dept-grid { margin-top: 40px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; max-width: 1280px; }
+.dept-card { background: white; border-radius: var(--radius-md); padding: 22px 24px; box-shadow: var(--shadow-sm); border: 1px solid var(--hairline); transition: transform 0.25s ease, box-shadow 0.25s ease; }
+.dept-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.dept-card .num { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; color: var(--blue-500); margin-bottom: 8px; }
+.dept-card .name { font-size: 16px; font-weight: 600; color: var(--ink-900); line-height: 1.25; margin-bottom: 6px; letter-spacing: -0.012em; }
+.dept-card .tag { font-size: 13px; color: var(--ink-500); line-height: 1.5; }
+
+/* ======================== SLIDE 6: AGENT LAYER ======================== */
+.agent-board { margin-top: 32px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; max-width: 1340px; }
+.agent-col { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--radius-md); padding: 14px 12px; }
+.agent-col .head { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue-400); margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); line-height: 1.2; }
+.agent-col .agent { font-size: 11px; line-height: 1.5; color: rgba(250, 247, 242, 0.78); padding: 3px 0; letter-spacing: -0.005em; }
+.agent-callout { margin-top: 30px; display: inline-flex; align-items: center; gap: 18px; padding: 14px 26px; background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(96, 165, 250, 0.3); border-radius: 999px; font-size: 14px; color: var(--cream-100); font-weight: 500; letter-spacing: 0.02em; align-self: flex-start; }
+.agent-callout span { color: var(--blue-300); }
+
+/* ======================== SLIDE 7: MEDICAL RECORDS DEEP DIVE ======================== */
+.records-grid { margin-top: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.agent-mini-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.agent-mini { background: white; border: 1px solid var(--hairline); border-radius: var(--radius-md); padding: 16px 18px; box-shadow: var(--shadow-sm); }
+.agent-mini .name { font-size: 14px; font-weight: 600; color: var(--ink-900); margin-bottom: 4px; letter-spacing: -0.01em; }
+.agent-mini .desc { font-size: 12px; line-height: 1.45; color: var(--ink-500); }
+.timeline { background: var(--navy-900); border-radius: var(--radius-lg); padding: 24px 28px; color: var(--cream-100); box-shadow: var(--shadow-lg); position: relative; overflow: hidden; }
+.timeline::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--blue-400), transparent); }
+.timeline .case-label { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue-300); margin-bottom: 4px; }
+.timeline .case-title { font-size: 18px; font-weight: 600; color: var(--cream-100); margin-bottom: 18px; letter-spacing: -0.012em; }
+.timeline .events { display: flex; flex-direction: column; gap: 8px; }
+.timeline .event { display: grid; grid-template-columns: 100px 1fr; gap: 14px; padding: 6px 0; font-size: 13px; align-items: baseline; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+.timeline .event:last-of-type { border-bottom: none; }
+.timeline .event .time { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--blue-300); letter-spacing: -0.005em; }
+.timeline .event .what { color: rgba(250, 247, 242, 0.88); line-height: 1.45; }
+.timeline .event.human .what { color: var(--coral); font-weight: 500; }
+.timeline .summary { margin-top: 18px; padding: 14px 16px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.18) 0%, rgba(96, 165, 250, 0.08) 100%); border-radius: var(--radius-md); border: 1px solid rgba(96, 165, 250, 0.25); font-size: 14px; line-height: 1.4; color: var(--cream-100); font-weight: 500; }
+.timeline .summary strong { font-weight: 700; color: var(--blue-300); }
+
+/* ======================== SLIDE 8: DEMAND & NEGOTIATION ======================== */
+.dn-grid { margin-top: 28px; display: grid; grid-template-columns: 1fr 1.1fr; gap: 40px; align-items: start; }
+.scenario { background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); padding: 26px 30px; border: 1px solid var(--hairline); position: relative; }
+.scenario .scenario-label { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--coral); margin-bottom: 8px; }
+.scenario .scenario-headline { font-size: 18px; font-weight: 600; color: var(--ink-900); margin-bottom: 18px; line-height: 1.35; letter-spacing: -0.012em; }
+.scenario .step { display: flex; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--hairline); align-items: flex-start; }
+.scenario .step:last-child { border-bottom: none; }
+.scenario .step .marker { width: 22px; height: 22px; border-radius: 50%; background: var(--cream-200); color: var(--ink-700); font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+.scenario .step.human .marker { background: var(--coral); color: white; }
+.scenario .step .text { font-size: 14px; line-height: 1.5; color: var(--ink-700); }
+.scenario .step.human .text { color: var(--ink-900); font-weight: 500; }
+.scenario .step .text em { font-style: normal; color: var(--blue-500); font-weight: 500; }
+.scenario .bottom-line { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--hairline); font-size: 16px; font-weight: 600; color: var(--ink-900); letter-spacing: -0.01em; }
+
+/* ======================== SLIDE 9: HITL CARD ======================== */
+.hitl-stage { margin-top: 36px; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+.hitl-card { width: 100%; max-width: 720px; background: white; border-radius: var(--radius-lg); box-shadow: 0 30px 80px rgba(11, 27, 54, 0.16), 0 8px 24px rgba(11, 27, 54, 0.08); overflow: hidden; border: 1px solid var(--hairline); }
+.hitl-header { padding: 20px 28px; border-bottom: 1px solid var(--hairline); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(180deg, white 0%, var(--cream-200) 100%); }
+.hitl-header .agent-line { display: flex; flex-direction: column; gap: 4px; }
+.hitl-header .agent-name { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue-500); }
+.hitl-header .case-line { font-size: 16px; font-weight: 600; color: var(--ink-900); letter-spacing: -0.012em; }
+.hitl-conf { display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 999px; font-size: 12px; font-weight: 600; color: #B45309; letter-spacing: -0.005em; }
+.hitl-conf .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--yellow); }
+.hitl-body { padding: 24px 28px; }
+.hitl-body .label { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-500); margin-bottom: 8px; }
+.hitl-body .action { font-size: 17px; line-height: 1.45; color: var(--ink-900); font-weight: 500; letter-spacing: -0.01em; }
+.hitl-body .evidence { margin-top: 22px; padding: 16px 20px; background: var(--cream-200); border-radius: var(--radius-sm); }
+.hitl-body .evidence ul { list-style: none; }
+.hitl-body .evidence li { padding: 5px 0; font-size: 13px; color: var(--ink-700); line-height: 1.4; padding-left: 18px; position: relative; }
+.hitl-body .evidence li::before { content: ''; position: absolute; left: 0; top: 11px; width: 6px; height: 6px; border-radius: 50%; background: var(--blue-500); }
+.hitl-actions { padding: 18px 28px 22px; display: flex; gap: 10px; border-top: 1px solid var(--hairline); background: var(--cream-100); }
+.hitl-btn { flex: 1; padding: 13px 16px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; text-align: center; letter-spacing: -0.005em; cursor: pointer; transition: all 0.15s ease; border: 1px solid transparent; }
+.hitl-btn.approve { background: var(--coral); color: white; flex: 1.4; box-shadow: 0 2px 6px rgba(255, 107, 91, 0.3); }
+.hitl-btn.approve:hover { background: var(--coral-dark); }
+.hitl-btn.edit { background: white; color: var(--ink-700); border-color: var(--hairline); }
+.hitl-btn.reject { background: white; color: var(--ink-500); border-color: var(--hairline); }
+.hitl-btn.why { background: transparent; color: var(--blue-500); font-weight: 500; flex: 0.9; }
+.hitl-caption { font-size: 15px; color: var(--ink-500); text-align: center; max-width: 640px; }
+.hitl-caption strong { color: var(--ink-900); font-weight: 600; }
+
+/* ======================== SLIDE 10: OLD VS NEW ======================== */
+.compare { margin-top: 32px; background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden; max-width: 1340px; border: 1px solid var(--hairline); }
+.compare table { width: 100%; border-collapse: collapse; }
+.compare th { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; padding: 18px 24px 14px; border-bottom: 1px solid var(--hairline); text-align: left; }
+.compare th:first-child { color: var(--ink-500); background: var(--cream-200); }
+.compare th:nth-child(2) { color: var(--ink-500); background: var(--cream-200); }
+.compare th:nth-child(3) { color: var(--coral); background: var(--cream-200); }
+.compare td { padding: 16px 24px; font-size: 14px; border-bottom: 1px solid var(--hairline); line-height: 1.45; color: var(--ink-700); vertical-align: top; letter-spacing: -0.005em; }
+.compare td:first-child { font-weight: 600; color: var(--ink-900); width: 22%; }
+.compare td:nth-child(2) { width: 38%; color: var(--ink-500); }
+.compare td:nth-child(3) { width: 40%; color: var(--ink-900); }
+.compare td:nth-child(3) strong { color: var(--coral); font-weight: 700; }
+.compare tr:last-child td { border-bottom: none; }
+
+/* ======================== SLIDE 11: GRAPH ======================== */
+.graph-grid { margin-top: 30px; display: grid; grid-template-columns: 1.4fr 1fr; gap: 50px; align-items: center; }
+.graph-svg { background: white; border-radius: var(--radius-lg); padding: 18px; box-shadow: var(--shadow-md); border: 1px solid var(--hairline); aspect-ratio: 1.15; }
+.graph-svg svg { width: 100%; height: 100%; }
+.graph-side { display: flex; flex-direction: column; gap: 16px; }
+.graph-question { padding: 18px 22px; background: var(--cream-200); border-radius: var(--radius-md); border-left: 3px solid var(--coral); }
+.graph-question .q { font-size: 15px; font-weight: 600; color: var(--ink-900); letter-spacing: -0.01em; }
+.graph-question .a { margin-top: 4px; font-size: 13px; color: var(--ink-500); }
+.graph-side .closer { margin-top: 12px; font-size: 16px; font-weight: 600; color: var(--ink-900); letter-spacing: -0.01em; }
+.graph-side .closer span { color: var(--coral); }
+
+/* ======================== SLIDE 12: MCPs ======================== */
+.mcp-hub { margin-top: 30px; position: relative; height: 540px; display: flex; align-items: center; justify-content: center; }
+.mcp-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 20px 60px rgba(255, 107, 91, 0.4); color: white; z-index: 10; }
+.mcp-center .name { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+.mcp-center .sub { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; margin-top: 4px; opacity: 0.85; }
+.mcp-node { position: absolute; padding: 12px 18px; background: white; border-radius: 999px; box-shadow: var(--shadow-md); border: 1px solid var(--hairline); font-size: 13px; font-weight: 500; color: var(--ink-700); display: flex; align-items: center; gap: 8px; letter-spacing: -0.005em; }
+.mcp-node::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--blue-500); }
+.mcp-lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+.mcp-caption { margin-top: 18px; font-size: 16px; color: var(--ink-500); text-align: center; max-width: 800px; font-style: italic; }
+
+/* ======================== SLIDE 13: CONFIDENCE GATING ======================== */
+.gating-grid { margin-top: 36px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1280px; }
+.gate-card { background: white; border-radius: var(--radius-lg); padding: 30px; box-shadow: var(--shadow-md); border: 1px solid var(--hairline); position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 14px; }
+.gate-card .gate-light { width: 18px; height: 18px; border-radius: 50%; }
+.gate-card.auto .gate-light { background: var(--green); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.15); }
+.gate-card.hitl .gate-light { background: var(--yellow); box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.15); }
+.gate-card.drop .gate-light { background: var(--red); box-shadow: 0 0 0 6px rgba(239, 68, 68, 0.15); }
+.gate-card .gate-label { font-size: 12px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-500); }
+.gate-card .gate-range { font-size: 36px; font-weight: 700; color: var(--ink-900); letter-spacing: -0.025em; line-height: 1; font-variant-numeric: tabular-nums; }
+.gate-card .gate-name { font-size: 18px; font-weight: 600; color: var(--ink-900); letter-spacing: -0.012em; }
+.gate-card .gate-ex-label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-300); margin-top: 8px; }
+.gate-card .gate-ex { font-size: 13px; color: var(--ink-700); line-height: 1.5; padding: 12px 16px; background: var(--cream-200); border-radius: var(--radius-sm); font-style: italic; }
+.gating-closer { margin-top: 30px; text-align: center; font-size: 17px; color: var(--ink-700); letter-spacing: -0.005em; }
+.gating-closer strong { color: var(--ink-900); font-weight: 600; }
+
+/* ======================== SLIDE 14: ECONOMICS ======================== */
+.econ-grid { margin-top: 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; max-width: 1300px; }
+.econ-col { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-lg); padding: 32px; }
+.econ-col.new { background: linear-gradient(135deg, rgba(255, 107, 91, 0.12) 0%, rgba(255, 107, 91, 0.04) 100%); border-color: rgba(255, 107, 91, 0.3); }
+.econ-col .col-label { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(250, 247, 242, 0.55); margin-bottom: 20px; }
+.econ-col.new .col-label { color: var(--coral); }
+.econ-col ul { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.econ-col li { font-size: 15px; line-height: 1.5; color: rgba(250, 247, 242, 0.82); padding-left: 22px; position: relative; letter-spacing: -0.005em; }
+.econ-col li::before { content: ''; position: absolute; left: 0; top: 9px; width: 8px; height: 1px; background: rgba(250, 247, 242, 0.4); }
+.econ-col.new li::before { background: var(--coral); }
+.econ-col li strong { color: var(--cream-100); font-weight: 600; }
+.econ-bignum { margin-top: 36px; text-align: center; font-size: 36px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.15; color: var(--cream-100); }
+.econ-bignum .pop { background: linear-gradient(120deg, var(--coral) 0%, #FFB199 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.econ-disclaimer { margin-top: 16px; text-align: center; font-size: 11px; color: rgba(250, 247, 242, 0.42); font-style: italic; }
+
+/* ======================== SLIDE 15: AUDIT ======================== */
+.audit-grid { margin-top: 36px; max-width: 1100px; }
+.audit-item { display: flex; gap: 18px; padding: 18px 0; border-bottom: 1px solid var(--hairline); align-items: flex-start; }
+.audit-item:last-child { border-bottom: none; }
+.audit-icon { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-400) 100%); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25); font-variant-numeric: tabular-nums; }
+.audit-body { flex: 1; }
+.audit-title { font-size: 17px; font-weight: 600; color: var(--ink-900); letter-spacing: -0.012em; margin-bottom: 4px; }
+.audit-desc { font-size: 14px; color: var(--ink-500); line-height: 1.5; }
+.audit-closer { margin-top: 32px; padding: 22px 28px; background: linear-gradient(135deg, var(--navy-800) 0%, var(--navy-700) 100%); border-radius: var(--radius-lg); color: var(--cream-100); font-size: 18px; font-weight: 500; letter-spacing: -0.012em; box-shadow: var(--shadow-md); }
+.audit-closer strong { color: var(--blue-300); font-weight: 700; }
+
+/* ======================== SLIDE 16: WHY NOW WHY US ======================== */
+.why-grid { margin-top: 40px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1280px; }
+.why-card { background: white; border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-md); border: 1px solid var(--hairline); display: flex; flex-direction: column; gap: 16px; }
+.why-card .why-label { font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--coral); }
+.why-card .why-headline { font-size: 22px; font-weight: 700; color: var(--ink-900); letter-spacing: -0.018em; line-height: 1.2; }
+.why-card .why-body { font-size: 14px; color: var(--ink-500); line-height: 1.55; }
+.why-card .why-body strong { color: var(--ink-900); font-weight: 600; }
+
+/* ======================== SLIDE 17: PILOT + CTA ======================== */
+.pilot-grid { margin-top: 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.pilot-list { display: flex; flex-direction: column; gap: 20px; }
+.pilot-row { display: flex; gap: 18px; align-items: flex-start; }
+.pilot-row .key { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--blue-300); width: 90px; padding-top: 4px; flex-shrink: 0; }
+.pilot-row .val { font-size: 17px; line-height: 1.4; color: var(--cream-100); font-weight: 500; letter-spacing: -0.01em; }
+.pilot-row .val em { font-style: normal; color: var(--coral); }
+.pilot-cta { display: flex; flex-direction: column; gap: 28px; align-items: flex-start; }
+.pilot-cta .cta-headline { font-size: 44px; font-weight: 700; line-height: 1.05; letter-spacing: -0.028em; color: var(--cream-100); }
+.pilot-cta .cta-headline .pop { background: linear-gradient(120deg, var(--coral) 0%, #FFB199 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.pilot-cta .sig { display: flex; flex-direction: column; gap: 4px; padding-top: 18px; border-top: 1px solid rgba(255, 255, 255, 0.12); }
+.pilot-cta .sig .name { font-size: 16px; font-weight: 600; color: var(--cream-100); letter-spacing: -0.005em; }
+.pilot-cta .sig .meta { font-size: 14px; color: rgba(250, 247, 242, 0.55); }
+.pilot-cta .sig .meta a { color: var(--blue-300); text-decoration: none; border-bottom: 1px solid rgba(96, 165, 250, 0.3); padding-bottom: 1px; }
+
+/* ======================== PRINT ======================== */
+@media print {
+  @page { size: landscape; margin: 0; }
+  html, body { background: white !important; overflow: visible !important; height: auto !important; scroll-snap-type: none !important; }
+  body { scroll-snap-type: none !important; }
+  section.slide { min-height: 100vh !important; height: 100vh !important; page-break-after: always !important; break-after: page !important; padding: 40px 56px 50px !important; scroll-snap-align: none !important; }
+  section.slide:last-child { page-break-after: auto !important; }
+  section.slide.dark { background: var(--navy-800) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact; }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .page-indicator, .scroll-hint { display: none !important; }
+  .title { font-size: 42px !important; }
+  .cover .super-title { font-size: 72px !important; }
+  .shift .hero { font-size: 120px !important; }
+  .agent-board { grid-template-columns: repeat(6, 1fr) !important; }
+}
+
+@media (max-width: 1200px) {
+  section.slide { padding: 48px 56px 70px; }
+  .footer { left: 56px; right: 56px; }
+  .title { font-size: 44px; }
+  .cover .super-title { font-size: 72px; }
+  .shift .hero { font-size: 112px; }
+  .dept-grid { grid-template-columns: repeat(3, 1fr); }
+  .agent-board { grid-template-columns: repeat(4, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== SLIDE 1: COVER ==================== -->
+<section class="slide dark cover">
+  <div class="brand">
+    <div class="glyph">A</div>
+    <div>Taskvisory · Aedis Pattern</div>
+  </div>
+  <h1 class="super-title">The PI Firm of 2026.<br><span class="accent">An Agentic OS.</span></h1>
+  <p class="super-sub">Humans review. Agents do.</p>
+  <div class="meta">
+    <div>
+      <span class="label">For</span>
+      <span class="value">Jordan Johnson</span>
+    </div>
+    <div>
+      <span class="label">Prepared by</span>
+      <span class="value">Andrew Lark · Taskvisory</span>
+    </div>
+    <div>
+      <span class="label">Date</span>
+      <span class="value">June 10, 2026</span>
+    </div>
+  </div>
+  <div class="footer">
+    <span class="mark"><span class="dot"></span>Confidential · Prepared for Jordan Johnson · 2026-06-10</span>
+    <span>01 / 10</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 2: ROUTING TABLE ==================== -->
+<section class="slide cream">
+  <div class="eyebrow">The Hook</div>
+  <h2 class="title">Every piece of mail becomes a workflow.</h2>
+  <p class="subtitle">The firm's mail bin and inbox stop being a queue and become a routing event. Document Vault classifies the inbound, the right department's agent chain fires, the human approves the output.</p>
+  <div class="routing-table">
+    <table>
+      <thead>
+        <tr><th>Inbound Document</th><th>Classified As</th><th>Fires Chain In</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Police report PDF</td><td><code>police_report</code></td><td class="chain">Investigation</td></tr>
+        <tr><td>Medical record / bill</td><td><code>medical_record</code> · <code>medical_bill</code></td><td class="chain">Records + Damages</td></tr>
+        <tr><td>Carrier letter / adjuster email</td><td><code>insurance_correspondence</code> · <code>offer</code></td><td class="chain">Negotiation</td></tr>
+        <tr><td>Lien notice (Medicare, ERISA, hospital)</td><td><code>lien_notice</code></td><td class="chain">Settlement</td></tr>
+        <tr><td>Court filing / opposing counsel pleading</td><td><code>court_filing</code></td><td class="chain">Litigation</td></tr>
+        <tr><td>Settlement check</td><td><code>settlement_check</code></td><td class="chain">Disbursement</td></tr>
+        <tr><td>Subpoena</td><td><code>subpoena</code></td><td class="chain">Discovery</td></tr>
+        <tr><td>Client question email</td><td><code>client_inquiry</code></td><td class="chain">Client Comms</td></tr>
+        <tr><td>Voicemail transcript</td><td><code>intake_lead</code></td><td class="chain">New Business</td></tr>
+        <tr><td>Invoice (court reporter, expert, filing)</td><td><code>case_cost</code></td><td class="chain">Finance</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="kicker">The paralegal queue <em>disappears.</em></p>
+  <div class="footer">
+    <span class="mark"><span class="dot"></span>Confidential · Prepared for Jordan Johnson · 2026-06-10</span>
+    <span>02 / 10</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 3: THE SHIFT ==================== -->
+<section class="slide dark shift">
+  <h2 class="hero">Humans review.<br><span class="grad">Agents do.</span></h2>
+  <p class="hero-sub"><span>~80% of a PI firm's hours are rote</span><span>Three taps</span><span>Zero typing</span></p>
+  <div class="footer">
+    <span class="mark"><span class="dot"></span>Confidential · Prepared for Jordan Johnson · 2026-06-10</span>
+    <span>03 / 10</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 4: 12 DEPARTMENTS ==================== -->
+<section class="slide cream">
+  <div class="eyebrow">The Map</div>
+  <h2 class="title">Decompose by department, not technology.</h2>
+  <p class="subtitle">Twelve departments. <strong>~60 narrow agents</strong> across them. Each agent does one job, escalates when unsure, and writes an audit row. Nothing abstract — agents are named after the human task they replace.</p>
+  <div class="dept-grid">
+    <div class="dept-card"><div class="num">01</div><div class="name">Intake &amp; New Business</div><div class="tag">Capture, qualify, conflict-check, sign up.</div></div>
+    <div class="dept-card"><div class="num">02</div><div class="name">Case Investigation</div><div class="tag">Police report, scene, witnesses, carrier ID.</div></div>
+    <div class="dept-card"><div class="num">03</div><div class="name">Medical Treatment &amp; Records</div><div class="tag">Identify, request, chase, code, gap-detect.</div></div>
+    <div class="dept-card"><div class="num">04</div><div class="name">Liability &amp; Damages</div><div class="tag">Fault, specials, generals, expert match.</div></div>
+    <div class="dept-card"><div class="num">05</div><div class="name">Demand &amp; Negotiation</div><div class="tag">Draft, anchor, counter, settlement curve.</div></div>
+    <div class="dept-card"><div class="num">06</div><div class="name">Litigation</div><div class="tag">Pleadings, discovery, depositions, motions.</div></div>
+    <div class="dept-card"><div class="num">07</div><div class="name">Trial &amp; Mediation</div><div class="tag">Backward plan, exhibits, jury research.</div></div>
+    <div class="dept-card"><div class="num">08</div><div class="name">Settlement &amp; Disbursement</div><div class="tag">Release, lien negotiate, IOLTA, payout.</div></div>
+    <div class="dept-card"><div class="num">09</div><div class="name">Client Communication</div><div class="tag">Proactive status, Q&amp;A, scheduling.</div></div>
+    <div class="dept-card"><div class="num">10</div><div class="name">Marketing &amp; Referral Ops</div><div class="tag">Attribution, referral fees, ROAS.</div></div>
+    <div class="dept-card"><div class="num">11</div><div class="name">Finance &amp; Operations</div><div class="tag">Case costs, vendors, trust reconcile.</div></div>
+    <div class="dept-card"><div class="num">12</div><div class="name">Compliance &amp; Risk</div><div class="tag">Statute watch, conflicts, bar rules.</div></div>
+  </div>
+  <div class="footer">
+    <span class="mark"><span class="dot"></span>Confidential · Prepared for Jordan Johnson · 2026-06-10</span>
+    <span>04 / 10</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 5: MEDICAL RECORDS DEEP DIVE ==================== -->
+<section class="slide cream">
+  <div class="eyebrow">Deep Dive · Department 03</div>
+  <h2 class="title">How the Records team works without people.</h2>
+  <div class="records-grid">
+    <div class="agent-mini-grid">
+      <div class="agent-mini"><div class="name">Provider Identifier</div><div class="desc">Extracts providers from intake, bills, prior records; dedupes against the graph.</div></div>
+      <div class="agent-mini"><div class="name">Records Requester</div><div class="desc">Generates HIPAA + provider-specific form; sends via fax / portal / e-fax MCP.</div></div>
+      <div class="agent-mini"><div class="name">Records Chaser</div><div class="desc">Daily age check; escalates at T-14, T-21, T-30.</div></div>
+      <div class="agent-mini"><div class="name">Bill Collector</div><div class="desc">Pulls bills from records or sends bill-specific requests; extracts CPT / UB-04 lines.</div></div>
+      <div class="agent-mini"><div class="name">ICD-10 / CPT Mapper</div><div class="desc">Codes diagnoses and treatments; links straight to the specials calculator.</div></div>
+      <div class="agent-mini"><div class="name">Treatment-Gap Detector</div><div class="desc">Flags missed PT, MMI date estimate, treatment-trajectory anomalies.</div></div>
+    </div>
+    <div class="timeline">
+      <div class="case-label">Worked Example</div>
+      <div class="case-title">Mendez v. Allstate · Monday morning</div>
+      <div class="events">
+        <div class="event"><span class="time">8:14:00am</span><span class="what">St. Joseph ER bill arrives in scanned mail (DOS 2026-05-12, $4,217.40).</span></div>
+        <div class="event"><span class="time">8:14:03am</span><span class="what">Vault classifies as <em>medical_bill</em>.</span></div>
+        <div class="event"><span class="time">8:14:08am</span><span class="what">Provider Identifier resolves St. Joseph Hospital.</span></div>
+        <div class="event"><span class="time">8:14:12am</span><span class="what">Bill Collector extracts CPT 99284 + 72148 ($4,217.40).</span></div>
+        <div class="event"><span class="time">8:14:18am</span><span class="what">ICD-10 Mapper codes S13.4XXA (cervical sprain) + S06.0X0A (concussion).</span></div>
+        <div class="event"><span class="time">8:14:22am</span><span class="what">Gap Detector flags missed PT at Foothill Physical Therapy.</span></div>
+        <div class="event"><span class="time">8:14:25am</span><span class="what">Drafts SMS to Maria: <em>"Hi Maria, we noticed you missed your 5/22 PT — should we reschedule?"</em></span></div>
+        <div class="event human"><span class="time">8:14:31am</span><span class="what">Attorney approves SMS in 6 seconds.</span></div>
+      </div>
+      <div class="summary"><strong>23 seconds of agent work. 6 seconds of human work.</strong> Zero paralegal hours.</div>
+    </div>
+  </div>
+  <div class="footer">
+    <span class="mark"><span class="dot"></span>Confidential · Prepared for Jordan Johnson · 2026-06-10</span>
+    <span>05 / 10</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 6: HITL CARD ==================== -->
+<section class="slide cream-deep">
+  <div class="eyebrow">The Whole Pitch in One Picture</div>
+  <h2 class="title">Every decision is a card.</h2>
+  <div class="hitl-stage">
+    <div class="hitl-card">
+      <div class="hitl-header">
+        <div class="agent-line">
+          <div class="agent-name">Records Requester</div>
+          <div class="case-line">Mendez v. Allstate · #2026-417</div>
+        </div>
+        <div class="hitl-conf"><span class="dot"></span>Confidence 0.78 · HITL</div>
+      </div>
+      <div class="hitl-body">
+        <div class="label">Recommended Action</div>
+        <div class="action">Send HIPAA-compliant records request to <strong>St. Joseph Hospital ER</strong> (DOS 2026-05-12) by fax.</div>
+        <div class="evidence">
+          <div class="label" style="margin-bottom: 10px;">Evidence</div>
+          <ul>
+            <li>Provider extracted from intake form (line 14)</li>
+            <li>CPT match: 99284 emergency visit</li>
+            <li>Gap: ER admission logged, no discharge note</li>
+          </ul>
+        </div>
+      </div>
+      <div class="hitl-actions">
+        <div class="hitl-btn approve">Approve</div>
+        <div class="hitl-btn edit">Edit</div>
+        <div class="hitl-btn reject">Reject</div>
+        <div class="hitl-btn why">Why this confidence?</div>
+      </div>
+    </div>
+    <p class="hitl-caption"><strong>Three taps. Zero typing. Evidence inline. Alternative one click away.</strong> That is the product.</p>
+  </div>
+  <div class="footer">
+    <span class="mark"><span class="dot"></span>Confidential · Prepared for Jordan Johnson · 2026-06-10</span>
+    <span>06 / 10</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 10: OLD VS NEW ==================== -->
+<section class="slide cream">
+  <div class="eyebrow">The Delta</div>
+  <h2 class="title">Routine work, side by side.</h2>
+  <div class="compare">
+    <table>
+      <thead>
+        <tr>
+          <th>Task</th>
+          <th>Filevine / MyCase / Litify today</th>
+          <th>Agentic OS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Records request</td><td>Paralegal fills HIPAA, faxes, follows up weekly</td><td>Agent generates + sends + chases + parses + codes. <strong>Human: 7s.</strong></td></tr>
+        <tr><td>Status update</td><td>Attorney drafts</td><td>Agent drafts from graph state. <strong>Human: 4s.</strong></td></tr>
+        <tr><td>Demand package</td><td>Paralegal: 8–12 hours</td><td>Agent: 4 minutes. <strong>Human review: 90s.</strong></td></tr>
+        <tr><td>Adjuster negotiation</td><td>Attorney guesses range</td><td>Agent shows last 50 settlements, anchor, BATNA. <strong>Human: 30s.</strong></td></tr>
+        <tr><td>Conflict check</td><td>Manual search</td><td>Auto-runs on every lead, blocks signup. <strong>Human: 0s.</strong></td></tr>
+        <tr><td>Lien resolution</td><td>Paralegal chases by phone</td><td>Agent emails + faxes payors, parses, proposes. <strong>Human: 20s.</strong></td></tr>
+        <tr><td>Statute watcher</td><td>Calendar reminders</td><td>Continuous graph check; pages on T-30. <strong>Human: 0s unless triggered.</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="footer">
+    <span class="mark"><span class="dot"></span>Confidential · Prepared for Jordan Johnson · 2026-06-10</span>
+    <span>07 / 10</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 8: CONFIDENCE GATING ==================== -->
+<section class="slide cream">
+  <div class="eyebrow">The Trust Model</div>
+  <h2 class="title">Agents know when to stop.</h2>
+  <p class="subtitle">Every action carries a confidence score. The gate decides who acts — the agent, the human, or both.</p>
+  <div class="gating-grid">
+    <div class="gate-card auto">
+      <div class="gate-light"></div>
+      <div class="gate-label">Auto</div>
+      <div class="gate-range">≥ 0.85</div>
+      <div class="gate-name">Agent acts alone</div>
+      <div class="gate-ex-label">Example</div>
+      <div class="gate-ex">"Records request to a provider Mendez previously listed in intake. Sends without asking."</div>
+    </div>
+    <div class="gate-card hitl">
+      <div class="gate-light"></div>
+      <div class="gate-label">HITL</div>
+      <div class="gate-range">0.50 – 0.85</div>
+      <div class="gate-name">Human reviews</div>
+      <div class="gate-ex-label">Example</div>
+      <div class="gate-ex">"Counter-offer to Sarah Kim. Attorney reviews 30 seconds, taps approve."</div>
+    </div>
+    <div class="gate-card drop">
+      <div class="gate-light"></div>
+      <div class="gate-label">Drop</div>
+      <div class="gate-range">&lt; 0.50</div>
+      <div class="gate-name">Escalate &amp; explain</div>
+      <div class="gate-ex-label">Example</div>
+      <div class="gate-ex">"Ambiguous demand-letter inbound — escalates to senior partner with reasoning."</div>
+    </div>
+  </div>
+  <p class="gating-closer"><strong>Same gating proven in Aedis healthcare for 14 months.</strong></p>
+  <div class="footer">
+    <span class="mark"><span class="dot"></span>Confidential · Prepared for Jordan Johnson · 2026-06-10</span>
+    <span>08 / 10</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 14: ECONOMICS ==================== -->
+<section class="slide dark">
+  <div class="eyebrow">The Close</div>
+  <h2 class="title">5× leverage per attorney.</h2>
+  <div class="econ-grid">
+    <div class="econ-col">
+      <div class="col-label">Today</div>
+      <ul>
+        <li>1 attorney handles <strong>~10 active cases</strong></li>
+        <li>1 paralegal per attorney</li>
+        <li>1 intake specialist per <strong>~30 leads / month</strong></li>
+        <li>Settlement velocity bound by records + lien speed</li>
+      </ul>
+    </div>
+    <div class="econ-col new">
+      <div class="col-label">With the OS</div>
+      <ul>
+        <li>1 attorney handles <strong>~50 active cases</strong></li>
+        <li>Paralegal becomes review-queue manager — same role, 5× the throughput</li>
+        <li>Intake <strong>fully automated</strong></li>
+        <li>Settlement velocity bound by <strong>carrier response speed only</strong></li>
+      </ul>
+    </div>
+  </div>
+  <div class="econ-bignum">Same attorneys. <span class="pop">5× the case load.</span><br>Same quality. Better margins.</div>
+  <div class="econ-disclaimer">Illustrative. Actual ratios depend on case mix and review staffing.</div>
+  <div class="footer">
+    <span class="mark"><span class="dot"></span>Confidential · Prepared for Jordan Johnson · 2026-06-10</span>
+    <span>09 / 10</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 10: PILOT + CTA ==================== -->
+<section class="slide dark">
+  <div class="eyebrow">The Ask</div>
+  <h2 class="title">Two weeks. One case. Measurable lift.</h2>
+  <p class="subtitle" style="margin-bottom: 8px;">Aedis pattern already in production: 8 domains · 64 agents · 14 months in healthcare. AEOS Brain (16K+ nodes), HITL RPC, Document Vault, audit infrastructure — all live. Jordan is the first PI deployment.</p>
+  <div class="pilot-grid">
+    <div class="pilot-list">
+      <div class="pilot-row">
+        <div class="key">Scope</div>
+        <div class="val">Department 3 — Medical Records only.</div>
+      </div>
+      <div class="pilot-row">
+        <div class="key">Case</div>
+        <div class="val">One active case Jordan picks. Mid-treatment. Multiple providers.</div>
+      </div>
+      <div class="pilot-row">
+        <div class="key">Measure</div>
+        <div class="val"><em>Paralegal hours</em> spent on records chasing — before vs. after.</div>
+      </div>
+      <div class="pilot-row">
+        <div class="key">Timeline</div>
+        <div class="val">Kick off <em>Monday 2026-06-15</em>. Results brief <em>Friday 2026-06-26</em>.</div>
+      </div>
+      <div class="pilot-row">
+        <div class="key">Risk</div>
+        <div class="val">Read-only on the existing CMS. Agents stage outputs for human approval. No mutations until Jordan signs the pilot scope.</div>
+      </div>
+    </div>
+    <div class="pilot-cta">
+      <div class="cta-headline">Pick the case.<br>Sign mutual NDA.<br><span class="pop">Kick off Monday.</span></div>
+      <div class="sig">
+        <div class="name">Andrew Lark</div>
+        <div class="meta">Founder, Taskvisory · <a href="mailto:andrew@taskvisory.com">andrew@taskvisory.com</a></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <span class="mark"><span class="dot"></span>Confidential · Prepared for Jordan Johnson · 2026-06-10</span>
+    <span>10 / 10</span>
+  </div>
+</section>
+
+<div class="page-indicator" id="pageIndicator">01 / 10</div>
+
+<script>
+  const slides = document.querySelectorAll('section.slide');
+  const indicator = document.getElementById('pageIndicator');
+  const total = slides.length;
+  const pad = n => String(n).padStart(2, '0');
+
+  function currentIndex() {
+    const y = window.scrollY + window.innerHeight / 2;
+    let best = 0;
+    slides.forEach((s, i) => {
+      const top = s.offsetTop;
+      if (y >= top) best = i;
+    });
+    return best;
+  }
+
+  function update() {
+    const i = currentIndex();
+    indicator.textContent = pad(i + 1) + ' / ' + pad(total);
+  }
+
+  document.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('load', update);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
+      e.preventDefault();
+      const next = Math.min(currentIndex() + 1, total - 1);
+      slides[next].scrollIntoView({ behavior: 'smooth' });
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
+      e.preventDefault();
+      const prev = Math.max(currentIndex() - 1, 0);
+      slides[prev].scrollIntoView({ behavior: 'smooth' });
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      slides[0].scrollIntoView({ behavior: 'smooth' });
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      slides[total - 1].scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+</script>
+
+</body>
+</html>
