@@ -18,8 +18,8 @@
     "file": "assets/aedis-data-domains-DFxGm742.js",
     "name": "aedis-data-domains"
   },
-  "_aedis-data-pages-Bjx5dLSh.js": {
-    "file": "assets/aedis-data-pages-Bjx5dLSh.js",
+  "_aedis-data-pages-oY4SScvC.js": {
+    "file": "assets/aedis-data-pages-oY4SScvC.js",
     "name": "aedis-data-pages"
   },
   "_api-DedVCR6M.js": {
@@ -121,8 +121,8 @@
       "_context-Da4RdN89.js"
     ]
   },
-  "_useFacilities-gl3n5-Kb.js": {
-    "file": "assets/useFacilities-gl3n5-Kb.js",
+  "_useFacilities-DgmysuZW.js": {
+    "file": "assets/useFacilities-DgmysuZW.js",
     "name": "useFacilities",
     "imports": [
       "_rolldown-runtime-QTnfLwEv.js",
@@ -131,7 +131,7 @@
     ]
   },
   "index.html": {
-    "file": "assets/index-DmUPl-yy.js",
+    "file": "assets/index-DdcJbEV6.js",
     "name": "index",
     "src": "index.html",
     "isEntry": true,
@@ -226,7 +226,7 @@
     ]
   },
   "src/components/AgentDirectory.jsx": {
-    "file": "assets/AgentDirectory-DcBWdg6-.js",
+    "file": "assets/AgentDirectory-Dpd8j7L6.js",
     "name": "AgentDirectory",
     "src": "src/components/AgentDirectory.jsx",
     "isDynamicEntry": true,
@@ -238,7 +238,7 @@
     ]
   },
   "src/components/AgentInspector.jsx": {
-    "file": "assets/AgentInspector-DpeWK-pX.js",
+    "file": "assets/AgentInspector-DkDqsvjR.js",
     "name": "AgentInspector",
     "src": "src/components/AgentInspector.jsx",
     "isDynamicEntry": true,
@@ -250,7 +250,7 @@
     ]
   },
   "src/components/AgentView.jsx": {
-    "file": "assets/AgentView-JVool-xh.js",
+    "file": "assets/AgentView-Buz3TBlb.js",
     "name": "AgentView",
     "src": "src/components/AgentView.jsx",
     "isDynamicEntry": true,
@@ -268,8 +268,20 @@
       "src/components/PolicyConsole.jsx"
     ]
   },
+  "src/components/ApInvoiceApprovalsPage.jsx": {
+    "file": "assets/ApInvoiceApprovalsPage-DWw3M3mE.js",
+    "name": "ApInvoiceApprovalsPage",
+    "src": "src/components/ApInvoiceApprovalsPage.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-QTnfLwEv.js",
+      "index.html",
+      "_jsx-runtime-By8HlURe.js",
+      "_react-CZI7_Jkm.js"
+    ]
+  },
   "src/components/AuditReplay.jsx": {
-    "file": "assets/AuditReplay-DimbvksU.js",
+    "file": "assets/AuditReplay-CiQSc9Aw.js",
     "name": "AuditReplay",
     "src": "src/components/AuditReplay.jsx",
     "isDynamicEntry": true,
@@ -282,7 +294,7 @@
     ]
   },
   "src/components/AuditTrail.jsx": {
-    "file": "assets/AuditTrail-DeTGeR8b.js",
+    "file": "assets/AuditTrail-CLwQQAGK.js",
     "name": "AuditTrail",
     "src": "src/components/AuditTrail.jsx",
     "isDynamicEntry": true,
@@ -294,7 +306,7 @@
     ]
   },
   "src/components/BriefingView.jsx": {
-    "file": "assets/BriefingView-CiB1dyi3.js",
+    "file": "assets/BriefingView-DWHRm6zF.js",
     "name": "BriefingView",
     "src": "src/components/BriefingView.jsx",
     "isDynamicEntry": true,
@@ -304,11 +316,11 @@
       "_jsx-runtime-By8HlURe.js",
       "_react-CZI7_Jkm.js",
       "_aedis-data-decisions-BUZpSSBG.js",
-      "_useFacilities-gl3n5-Kb.js"
+      "_useFacilities-DgmysuZW.js"
     ]
   },
   "src/components/EscalationCard.jsx": {
-    "file": "assets/EscalationCard-CfDOwz2f.js",
+    "file": "assets/EscalationCard-bMaBEynY.js",
     "name": "EscalationCard",
     "src": "src/components/EscalationCard.jsx",
     "isDynamicEntry": true,
@@ -320,7 +332,7 @@
     ]
   },
   "src/components/ImprovementView.jsx": {
-    "file": "assets/ImprovementView-BNgRZInG.js",
+    "file": "assets/ImprovementView-VfcV4EA0.js",
     "name": "ImprovementView",
     "src": "src/components/ImprovementView.jsx",
     "isDynamicEntry": true,
@@ -339,7 +351,7 @@
     ]
   },
   "src/components/PhiBoundaryView.jsx": {
-    "file": "assets/PhiBoundaryView-CxWFibVc.js",
+    "file": "assets/PhiBoundaryView-CAg1tCMJ.js",
     "name": "PhiBoundaryView",
     "src": "src/components/PhiBoundaryView.jsx",
     "isDynamicEntry": true,
@@ -352,7 +364,7 @@
     ]
   },
   "src/components/PolicyConsole.jsx": {
-    "file": "assets/PolicyConsole-C_6lWrPv.js",
+    "file": "assets/PolicyConsole-B_Psjbe_.js",
     "name": "PolicyConsole",
     "src": "src/components/PolicyConsole.jsx",
     "isDynamicEntry": true,
@@ -362,7 +374,7 @@
     ]
   },
   "src/components/ReviewerConsole.jsx": {
-    "file": "assets/ReviewerConsole-D8p6UPDZ.js",
+    "file": "assets/ReviewerConsole-QZ6mA6Gp.js",
     "name": "ReviewerConsole",
     "src": "src/components/ReviewerConsole.jsx",
     "isDynamicEntry": true,
@@ -375,7 +387,7 @@
     ]
   },
   "src/components/SettingsView.jsx": {
-    "file": "assets/SettingsView-Cu0MKUAj.js",
+    "file": "assets/SettingsView-D3tNAr2g.js",
     "name": "SettingsView",
     "src": "src/components/SettingsView.jsx",
     "isDynamicEntry": true,
@@ -385,11 +397,11 @@
       "_jsx-runtime-By8HlURe.js",
       "_react-CZI7_Jkm.js",
       "_roles-CUvJ6euu.js",
-      "_useFacilities-gl3n5-Kb.js"
+      "_useFacilities-DgmysuZW.js"
     ]
   },
   "src/components/ShellView.jsx": {
-    "file": "assets/ShellView-yW6oZAGi.js",
+    "file": "assets/ShellView-CP0pw3ER.js",
     "name": "ShellView",
     "src": "src/components/ShellView.jsx",
     "isDynamicEntry": true,
@@ -401,13 +413,16 @@
       "_audit-replay-CAkGjF0a.js",
       "_aedis-data-decisions-BUZpSSBG.js",
       "_aedis-data-domains-DFxGm742.js",
-      "_aedis-data-pages-Bjx5dLSh.js",
+      "_aedis-data-pages-oY4SScvC.js",
       "_roles-CUvJ6euu.js",
-      "_useFacilities-gl3n5-Kb.js"
+      "_useFacilities-DgmysuZW.js"
+    ],
+    "dynamicImports": [
+      "src/components/ApInvoiceApprovalsPage.jsx"
     ]
   },
   "src/components/SyntheticAdminPage.jsx": {
-    "file": "assets/SyntheticAdminPage-XaJq15vj.js",
+    "file": "assets/SyntheticAdminPage-CvknfTmz.js",
     "name": "SyntheticAdminPage",
     "src": "src/components/SyntheticAdminPage.jsx",
     "isDynamicEntry": true,
@@ -419,7 +434,7 @@
     ]
   },
   "src/components/TeamChat.jsx": {
-    "file": "assets/TeamChat-BODXeAk-.js",
+    "file": "assets/TeamChat-FSAN0Pfm.js",
     "name": "TeamChat",
     "src": "src/components/TeamChat.jsx",
     "isDynamicEntry": true,
@@ -431,7 +446,7 @@
     ]
   },
   "src/components/improvement/FindingsTab.jsx": {
-    "file": "assets/FindingsTab-DL9Fa5Mp.js",
+    "file": "assets/FindingsTab-C26uSdyn.js",
     "name": "FindingsTab",
     "src": "src/components/improvement/FindingsTab.jsx",
     "isDynamicEntry": true,
@@ -444,7 +459,7 @@
     ]
   },
   "src/components/improvement/HistoryTab.jsx": {
-    "file": "assets/HistoryTab-LXs-Tnll.js",
+    "file": "assets/HistoryTab-D8pPJchW.js",
     "name": "HistoryTab",
     "src": "src/components/improvement/HistoryTab.jsx",
     "isDynamicEntry": true,
@@ -458,7 +473,7 @@
     ]
   },
   "src/components/improvement/LiveCalibrationTab.jsx": {
-    "file": "assets/LiveCalibrationTab-DKltRGdq.js",
+    "file": "assets/LiveCalibrationTab-BQE2gHge.js",
     "name": "LiveCalibrationTab",
     "src": "src/components/improvement/LiveCalibrationTab.jsx",
     "isDynamicEntry": true,
@@ -471,7 +486,7 @@
     ]
   },
   "src/components/improvement/ProposalsTab.jsx": {
-    "file": "assets/ProposalsTab-BE-hVAJO.js",
+    "file": "assets/ProposalsTab-jqhQiV2I.js",
     "name": "ProposalsTab",
     "src": "src/components/improvement/ProposalsTab.jsx",
     "isDynamicEntry": true,
@@ -485,7 +500,7 @@
     ]
   },
   "src/components/improvement/ReportsTab.jsx": {
-    "file": "assets/ReportsTab-ztjWCUrI.js",
+    "file": "assets/ReportsTab-BQ74MAsw.js",
     "name": "ReportsTab",
     "src": "src/components/improvement/ReportsTab.jsx",
     "isDynamicEntry": true,
