@@ -6,10 +6,6 @@
       "_jsx-runtime-By8HlURe.js"
     ]
   },
-  "_NoopMeter-oQ3V9vG0.js": {
-    "file": "assets/NoopMeter-oQ3V9vG0.js",
-    "name": "NoopMeter"
-  },
   "_aedis-data-decisions-BUZpSSBG.js": {
     "file": "assets/aedis-data-decisions-BUZpSSBG.js",
     "name": "aedis-data-decisions"
@@ -22,8 +18,8 @@
     "file": "assets/aedis-data-pages-oY4SScvC.js",
     "name": "aedis-data-pages"
   },
-  "_apInvoices-CjSRsENj.js": {
-    "file": "assets/apInvoices-CjSRsENj.js",
+  "_apInvoices-DMWdT3Ce.js": {
+    "file": "assets/apInvoices-DMWdT3Ce.js",
     "name": "apInvoices"
   },
   "_api-DedVCR6M.js": {
@@ -38,6 +34,17 @@
     "file": "assets/context-Da4RdN89.js",
     "name": "context"
   },
+  "_context-api-C0JGXBFP.js": {
+    "file": "assets/context-api-C0JGXBFP.js",
+    "name": "context-api",
+    "imports": [
+      "_trace-api-DF_mBwwU.js"
+    ]
+  },
+  "_diag-api-Brm6ZnUi.js": {
+    "file": "assets/diag-api-Brm6ZnUi.js",
+    "name": "diag-api"
+  },
   "_esm-B6mpqV9d.js": {
     "file": "assets/esm-B6mpqV9d.js",
     "name": "esm",
@@ -45,55 +52,22 @@
       "_rolldown-runtime-QTnfLwEv.js"
     ]
   },
-  "_esm-B7hPfCDH.js": {
-    "file": "assets/esm-B7hPfCDH.js",
+  "_esm-C7UP4wZO.js": {
+    "file": "assets/esm-C7UP4wZO.js",
     "name": "esm",
     "imports": [
-      "_trace-api-CcTouX4_.js",
-      "_context-Da4RdN89.js",
+      "_rolldown-runtime-QTnfLwEv.js",
+      "_trace-api-DF_mBwwU.js",
+      "_diag-api-Brm6ZnUi.js"
+    ]
+  },
+  "_esm-DH3xrTmW.js": {
+    "file": "assets/esm-DH3xrTmW.js",
+    "name": "esm",
+    "imports": [
+      "_rolldown-runtime-QTnfLwEv.js",
+      "_diag-api-Brm6ZnUi.js",
       "_esm-B6mpqV9d.js"
-    ]
-  },
-  "_esm-BDOIkWhQ.js": {
-    "file": "assets/esm-BDOIkWhQ.js",
-    "name": "esm",
-    "imports": [
-      "_rolldown-runtime-QTnfLwEv.js",
-      "_trace-api-CcTouX4_.js",
-      "_esm-B7hPfCDH.js",
-      "_esm-B6mpqV9d.js"
-    ]
-  },
-  "_esm-BMucfWXC.js": {
-    "file": "assets/esm-BMucfWXC.js",
-    "name": "esm",
-    "imports": [
-      "_rolldown-runtime-QTnfLwEv.js",
-      "_trace-api-CcTouX4_.js",
-      "_esm-B7hPfCDH.js",
-      "_NoopMeter-oQ3V9vG0.js",
-      "_esm-BDOIkWhQ.js",
-      "_esm-B6mpqV9d.js"
-    ]
-  },
-  "_esm-Dl-LtHvA.js": {
-    "file": "assets/esm-Dl-LtHvA.js",
-    "name": "esm",
-    "imports": [
-      "_rolldown-runtime-QTnfLwEv.js",
-      "_trace-api-CcTouX4_.js",
-      "_NoopMeter-oQ3V9vG0.js"
-    ]
-  },
-  "_esm-Gj5UbrhJ.js": {
-    "file": "assets/esm-Gj5UbrhJ.js",
-    "name": "esm",
-    "imports": [
-      "_rolldown-runtime-QTnfLwEv.js",
-      "_trace-api-CcTouX4_.js",
-      "_esm-B7hPfCDH.js",
-      "_context-Da4RdN89.js",
-      "_esm-BMucfWXC.js"
     ]
   },
   "_jsx-runtime-By8HlURe.js": {
@@ -103,8 +77,17 @@
       "_rolldown-runtime-QTnfLwEv.js"
     ]
   },
-  "_react-CZI7_Jkm.js": {
-    "file": "assets/react-CZI7_Jkm.js",
+  "_propagation-api-BkqRQigM.js": {
+    "file": "assets/propagation-api-BkqRQigM.js",
+    "name": "propagation-api",
+    "imports": [
+      "_trace-api-DF_mBwwU.js",
+      "_diag-api-Brm6ZnUi.js",
+      "_context-Da4RdN89.js"
+    ]
+  },
+  "_react-7w4oHemq.js": {
+    "file": "assets/react-7w4oHemq.js",
     "name": "react",
     "imports": [
       "_rolldown-runtime-QTnfLwEv.js"
@@ -118,31 +101,40 @@
     "file": "assets/rolldown-runtime-QTnfLwEv.js",
     "name": "rolldown-runtime"
   },
-  "_trace-api-CcTouX4_.js": {
-    "file": "assets/trace-api-CcTouX4_.js",
+  "_time-CX4w7mqE.js": {
+    "file": "assets/time-CX4w7mqE.js",
+    "name": "time"
+  },
+  "_trace-api-DF_mBwwU.js": {
+    "file": "assets/trace-api-DF_mBwwU.js",
     "name": "trace-api",
     "imports": [
+      "_diag-api-Brm6ZnUi.js",
       "_context-Da4RdN89.js"
     ]
   },
-  "_useFacilities-mYiRJ2Yy.js": {
-    "file": "assets/useFacilities-mYiRJ2Yy.js",
+  "_url-CN_tefST.js": {
+    "file": "assets/url-CN_tefST.js",
+    "name": "url"
+  },
+  "_useFacilities-CHAClN0S.js": {
+    "file": "assets/useFacilities-CHAClN0S.js",
     "name": "useFacilities",
     "imports": [
       "_rolldown-runtime-QTnfLwEv.js",
       "index.html",
-      "_react-CZI7_Jkm.js"
+      "_react-7w4oHemq.js"
     ]
   },
   "index.html": {
-    "file": "assets/index-DLANPChB.js",
+    "file": "assets/index-CX0hS2qb.js",
     "name": "index",
     "src": "index.html",
     "isEntry": true,
     "imports": [
       "_rolldown-runtime-QTnfLwEv.js",
       "_jsx-runtime-By8HlURe.js",
-      "_react-CZI7_Jkm.js",
+      "_react-7w4oHemq.js",
       "_aedis-data-decisions-BUZpSSBG.js",
       "_roles-CUvJ6euu.js"
     ],
@@ -159,12 +151,12 @@
       "src/components/PhiBoundaryView.jsx",
       "src/components/SyntheticAdminPage.jsx",
       "src/components/ApVersusView.jsx",
-      "_esm-Gj5UbrhJ.js",
-      "_esm-BMucfWXC.js",
+      "node_modules/@opentelemetry/sdk-trace-web/build/esm/index.js",
+      "node_modules/@opentelemetry/sdk-trace-base/build/esm/index.js",
       "node_modules/@opentelemetry/exporter-trace-otlp-http/build/esm/index.js",
-      "_esm-BDOIkWhQ.js",
+      "_esm-DH3xrTmW.js",
       "_esm-B6mpqV9d.js",
-      "_esm-Dl-LtHvA.js",
+      "_esm-C7UP4wZO.js",
       "node_modules/@opentelemetry/instrumentation-fetch/build/esm/index.js",
       "node_modules/@opentelemetry/instrumentation-xml-http-request/build/esm/index.js",
       "node_modules/@opentelemetry/context-zone/build/esm/index.js"
@@ -183,55 +175,87 @@
     ]
   },
   "node_modules/@opentelemetry/exporter-trace-otlp-http/build/esm/index.js": {
-    "file": "assets/esm-PJDwqBqO.js",
+    "file": "assets/esm-BsrnqBCh.js",
     "name": "esm",
     "src": "node_modules/@opentelemetry/exporter-trace-otlp-http/build/esm/index.js",
     "isDynamicEntry": true,
     "imports": [
-      "_trace-api-CcTouX4_.js",
-      "_esm-B7hPfCDH.js"
+      "_diag-api-Brm6ZnUi.js",
+      "_time-CX4w7mqE.js"
     ]
   },
   "node_modules/@opentelemetry/instrumentation-fetch/build/esm/index.js": {
-    "file": "assets/esm-BKuu9H2G.js",
+    "file": "assets/esm-Brj-Lz-7.js",
     "name": "esm",
     "src": "node_modules/@opentelemetry/instrumentation-fetch/build/esm/index.js",
     "isDynamicEntry": true,
     "imports": [
-      "_esm-Dl-LtHvA.js",
-      "_trace-api-CcTouX4_.js",
-      "_esm-B7hPfCDH.js",
-      "_esm-BMucfWXC.js",
-      "_esm-Gj5UbrhJ.js",
+      "_esm-C7UP4wZO.js",
+      "_trace-api-DF_mBwwU.js",
+      "_diag-api-Brm6ZnUi.js",
+      "_propagation-api-BkqRQigM.js",
+      "_context-api-C0JGXBFP.js",
+      "_time-CX4w7mqE.js",
+      "_url-CN_tefST.js",
       "_esm-B6mpqV9d.js"
     ]
   },
   "node_modules/@opentelemetry/instrumentation-xml-http-request/build/esm/index.js": {
-    "file": "assets/esm-Dnoz82-7.js",
+    "file": "assets/esm-Cvzr3NcO.js",
     "name": "esm",
     "src": "node_modules/@opentelemetry/instrumentation-xml-http-request/build/esm/index.js",
     "isDynamicEntry": true,
     "imports": [
-      "_esm-Dl-LtHvA.js",
-      "_trace-api-CcTouX4_.js",
-      "_esm-B7hPfCDH.js",
-      "_esm-BMucfWXC.js",
-      "_esm-Gj5UbrhJ.js",
+      "_esm-C7UP4wZO.js",
+      "_trace-api-DF_mBwwU.js",
+      "_diag-api-Brm6ZnUi.js",
+      "_propagation-api-BkqRQigM.js",
+      "_context-api-C0JGXBFP.js",
+      "_time-CX4w7mqE.js",
+      "_url-CN_tefST.js",
       "_esm-B6mpqV9d.js"
     ]
   },
+  "node_modules/@opentelemetry/sdk-trace-base/build/esm/index.js": {
+    "file": "assets/esm-EvKUSxce.js",
+    "name": "esm",
+    "src": "node_modules/@opentelemetry/sdk-trace-base/build/esm/index.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_trace-api-DF_mBwwU.js",
+      "_diag-api-Brm6ZnUi.js",
+      "_context-api-C0JGXBFP.js",
+      "_context-Da4RdN89.js",
+      "_esm-DH3xrTmW.js",
+      "_esm-B6mpqV9d.js"
+    ]
+  },
+  "node_modules/@opentelemetry/sdk-trace-web/build/esm/index.js": {
+    "file": "assets/esm-BYTuF1Im.js",
+    "name": "esm",
+    "src": "node_modules/@opentelemetry/sdk-trace-web/build/esm/index.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_trace-api-DF_mBwwU.js",
+      "_diag-api-Brm6ZnUi.js",
+      "_propagation-api-BkqRQigM.js",
+      "_context-api-C0JGXBFP.js",
+      "_context-Da4RdN89.js",
+      "node_modules/@opentelemetry/sdk-trace-base/build/esm/index.js"
+    ]
+  },
   "node_modules/@sentry/react/build/esm/index.js": {
-    "file": "assets/esm-LAzb6e1j.js",
+    "file": "assets/esm-Bwo653Jv.js",
     "name": "esm",
     "src": "node_modules/@sentry/react/build/esm/index.js",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-QTnfLwEv.js",
-      "_react-CZI7_Jkm.js"
+      "_react-7w4oHemq.js"
     ]
   },
   "src/components/AgentDirectory.jsx": {
-    "file": "assets/AgentDirectory-BXrPqbsj.js",
+    "file": "assets/AgentDirectory-N9v0IcQM.js",
     "name": "AgentDirectory",
     "src": "src/components/AgentDirectory.jsx",
     "isDynamicEntry": true,
@@ -239,11 +263,11 @@
       "_rolldown-runtime-QTnfLwEv.js",
       "index.html",
       "_jsx-runtime-By8HlURe.js",
-      "_react-CZI7_Jkm.js"
+      "_react-7w4oHemq.js"
     ]
   },
   "src/components/AgentInspector.jsx": {
-    "file": "assets/AgentInspector-CSjf0EI1.js",
+    "file": "assets/AgentInspector-Bl1Q2IR_.js",
     "name": "AgentInspector",
     "src": "src/components/AgentInspector.jsx",
     "isDynamicEntry": true,
@@ -251,11 +275,11 @@
       "_rolldown-runtime-QTnfLwEv.js",
       "index.html",
       "_jsx-runtime-By8HlURe.js",
-      "_react-CZI7_Jkm.js"
+      "_react-7w4oHemq.js"
     ]
   },
   "src/components/AgentView.jsx": {
-    "file": "assets/AgentView-CX7vr52X.js",
+    "file": "assets/AgentView-DSDoM_iH.js",
     "name": "AgentView",
     "src": "src/components/AgentView.jsx",
     "isDynamicEntry": true,
@@ -263,7 +287,7 @@
       "_rolldown-runtime-QTnfLwEv.js",
       "index.html",
       "_jsx-runtime-By8HlURe.js",
-      "_react-CZI7_Jkm.js"
+      "_react-7w4oHemq.js"
     ],
     "dynamicImports": [
       "src/components/AgentDirectory.jsx",
@@ -273,21 +297,8 @@
       "src/components/PolicyConsole.jsx"
     ]
   },
-  "src/components/ApInvoiceApprovalsPage.jsx": {
-    "file": "assets/ApInvoiceApprovalsPage-BLBJVz3Y.js",
-    "name": "ApInvoiceApprovalsPage",
-    "src": "src/components/ApInvoiceApprovalsPage.jsx",
-    "isDynamicEntry": true,
-    "imports": [
-      "_rolldown-runtime-QTnfLwEv.js",
-      "index.html",
-      "_jsx-runtime-By8HlURe.js",
-      "_react-CZI7_Jkm.js",
-      "_apInvoices-CjSRsENj.js"
-    ]
-  },
   "src/components/ApVersusView.jsx": {
-    "file": "assets/ApVersusView-CxeOLyXL.js",
+    "file": "assets/ApVersusView-o6t0oIxe.js",
     "name": "ApVersusView",
     "src": "src/components/ApVersusView.jsx",
     "isDynamicEntry": true,
@@ -295,12 +306,12 @@
       "_rolldown-runtime-QTnfLwEv.js",
       "index.html",
       "_jsx-runtime-By8HlURe.js",
-      "_react-CZI7_Jkm.js",
-      "_apInvoices-CjSRsENj.js"
+      "_react-7w4oHemq.js",
+      "_apInvoices-DMWdT3Ce.js"
     ]
   },
   "src/components/AuditReplay.jsx": {
-    "file": "assets/AuditReplay-DZthGPez.js",
+    "file": "assets/AuditReplay-C1_Hj9Nq.js",
     "name": "AuditReplay",
     "src": "src/components/AuditReplay.jsx",
     "isDynamicEntry": true,
@@ -308,12 +319,12 @@
       "_rolldown-runtime-QTnfLwEv.js",
       "index.html",
       "_jsx-runtime-By8HlURe.js",
-      "_react-CZI7_Jkm.js",
+      "_react-7w4oHemq.js",
       "_audit-replay-CAkGjF0a.js"
     ]
   },
   "src/components/AuditTrail.jsx": {
-    "file": "assets/AuditTrail-D6zWUtas.js",
+    "file": "assets/AuditTrail-CggSGS7G.js",
     "name": "AuditTrail",
     "src": "src/components/AuditTrail.jsx",
     "isDynamicEntry": true,
@@ -321,11 +332,11 @@
       "_rolldown-runtime-QTnfLwEv.js",
       "index.html",
       "_jsx-runtime-By8HlURe.js",
-      "_react-CZI7_Jkm.js"
+      "_react-7w4oHemq.js"
     ]
   },
   "src/components/BriefingView.jsx": {
-    "file": "assets/BriefingView-CLx4yWW_.js",
+    "file": "assets/BriefingView-ByHMb85e.js",
     "name": "BriefingView",
     "src": "src/components/BriefingView.jsx",
     "isDynamicEntry": true,
@@ -333,13 +344,13 @@
       "_rolldown-runtime-QTnfLwEv.js",
       "index.html",
       "_jsx-runtime-By8HlURe.js",
-      "_react-CZI7_Jkm.js",
+      "_react-7w4oHemq.js",
       "_aedis-data-decisions-BUZpSSBG.js",
-      "_useFacilities-mYiRJ2Yy.js"
+      "_useFacilities-CHAClN0S.js"
     ]
   },
   "src/components/EscalationCard.jsx": {
-    "file": "assets/EscalationCard-Bn0kKFYE.js",
+    "file": "assets/EscalationCard-BQ3KJQq2.js",
     "name": "EscalationCard",
     "src": "src/components/EscalationCard.jsx",
     "isDynamicEntry": true,
@@ -347,11 +358,11 @@
       "_rolldown-runtime-QTnfLwEv.js",
       "index.html",
       "_jsx-runtime-By8HlURe.js",
-      "_react-CZI7_Jkm.js"
+      "_react-7w4oHemq.js"
     ]
   },
   "src/components/ImprovementView.jsx": {
-    "file": "assets/ImprovementView-CkEA6VDi.js",
+    "file": "assets/ImprovementView-BiTrfpxb.js",
     "name": "ImprovementView",
     "src": "src/components/ImprovementView.jsx",
     "isDynamicEntry": true,
@@ -359,7 +370,7 @@
       "_rolldown-runtime-QTnfLwEv.js",
       "index.html",
       "_jsx-runtime-By8HlURe.js",
-      "_react-CZI7_Jkm.js"
+      "_react-7w4oHemq.js"
     ],
     "dynamicImports": [
       "src/components/improvement/FindingsTab.jsx",
@@ -370,7 +381,7 @@
     ]
   },
   "src/components/PhiBoundaryView.jsx": {
-    "file": "assets/PhiBoundaryView-BwZLCKO7.js",
+    "file": "assets/PhiBoundaryView-60EBXQLv.js",
     "name": "PhiBoundaryView",
     "src": "src/components/PhiBoundaryView.jsx",
     "isDynamicEntry": true,
@@ -378,12 +389,12 @@
       "_rolldown-runtime-QTnfLwEv.js",
       "index.html",
       "_jsx-runtime-By8HlURe.js",
-      "_react-CZI7_Jkm.js",
+      "_react-7w4oHemq.js",
       "_audit-replay-CAkGjF0a.js"
     ]
   },
   "src/components/PolicyConsole.jsx": {
-    "file": "assets/PolicyConsole-DwuJfYuy.js",
+    "file": "assets/PolicyConsole-7rThW7Oh.js",
     "name": "PolicyConsole",
     "src": "src/components/PolicyConsole.jsx",
     "isDynamicEntry": true,
@@ -393,7 +404,7 @@
     ]
   },
   "src/components/ReviewerConsole.jsx": {
-    "file": "assets/ReviewerConsole-L9VZoBVn.js",
+    "file": "assets/ReviewerConsole-DLeKQifW.js",
     "name": "ReviewerConsole",
     "src": "src/components/ReviewerConsole.jsx",
     "isDynamicEntry": true,
@@ -401,12 +412,12 @@
       "_rolldown-runtime-QTnfLwEv.js",
       "index.html",
       "_jsx-runtime-By8HlURe.js",
-      "_react-CZI7_Jkm.js",
+      "_react-7w4oHemq.js",
       "_roles-CUvJ6euu.js"
     ]
   },
   "src/components/SettingsView.jsx": {
-    "file": "assets/SettingsView-DqLkcV8a.js",
+    "file": "assets/SettingsView-C83QmcJ4.js",
     "name": "SettingsView",
     "src": "src/components/SettingsView.jsx",
     "isDynamicEntry": true,
@@ -414,13 +425,13 @@
       "_rolldown-runtime-QTnfLwEv.js",
       "index.html",
       "_jsx-runtime-By8HlURe.js",
-      "_react-CZI7_Jkm.js",
+      "_react-7w4oHemq.js",
       "_roles-CUvJ6euu.js",
-      "_useFacilities-mYiRJ2Yy.js"
+      "_useFacilities-CHAClN0S.js"
     ]
   },
   "src/components/ShellView.jsx": {
-    "file": "assets/ShellView-BQ70E72c.js",
+    "file": "assets/ShellView-CDU_siuu.js",
     "name": "ShellView",
     "src": "src/components/ShellView.jsx",
     "isDynamicEntry": true,
@@ -428,20 +439,20 @@
       "_rolldown-runtime-QTnfLwEv.js",
       "index.html",
       "_jsx-runtime-By8HlURe.js",
-      "_react-CZI7_Jkm.js",
+      "_react-7w4oHemq.js",
       "_audit-replay-CAkGjF0a.js",
       "_aedis-data-decisions-BUZpSSBG.js",
       "_aedis-data-domains-DFxGm742.js",
       "_aedis-data-pages-oY4SScvC.js",
       "_roles-CUvJ6euu.js",
-      "_useFacilities-mYiRJ2Yy.js"
+      "_useFacilities-CHAClN0S.js"
     ],
     "dynamicImports": [
-      "src/components/ApInvoiceApprovalsPage.jsx"
+      "src/components/apworkspace/ApWorkspace.jsx"
     ]
   },
   "src/components/SyntheticAdminPage.jsx": {
-    "file": "assets/SyntheticAdminPage-BZNyV4Tc.js",
+    "file": "assets/SyntheticAdminPage-F1XOLs53.js",
     "name": "SyntheticAdminPage",
     "src": "src/components/SyntheticAdminPage.jsx",
     "isDynamicEntry": true,
@@ -449,11 +460,11 @@
       "_rolldown-runtime-QTnfLwEv.js",
       "index.html",
       "_jsx-runtime-By8HlURe.js",
-      "_react-CZI7_Jkm.js"
+      "_react-7w4oHemq.js"
     ]
   },
   "src/components/TeamChat.jsx": {
-    "file": "assets/TeamChat-D48PrKJI.js",
+    "file": "assets/TeamChat-BFZ0ybgK.js",
     "name": "TeamChat",
     "src": "src/components/TeamChat.jsx",
     "isDynamicEntry": true,
@@ -461,11 +472,24 @@
       "_rolldown-runtime-QTnfLwEv.js",
       "index.html",
       "_jsx-runtime-By8HlURe.js",
-      "_react-CZI7_Jkm.js"
+      "_react-7w4oHemq.js"
+    ]
+  },
+  "src/components/apworkspace/ApWorkspace.jsx": {
+    "file": "assets/ApWorkspace-xvu_hTT7.js",
+    "name": "ApWorkspace",
+    "src": "src/components/apworkspace/ApWorkspace.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-QTnfLwEv.js",
+      "index.html",
+      "_jsx-runtime-By8HlURe.js",
+      "_react-7w4oHemq.js",
+      "_apInvoices-DMWdT3Ce.js"
     ]
   },
   "src/components/improvement/FindingsTab.jsx": {
-    "file": "assets/FindingsTab-DlHRapJY.js",
+    "file": "assets/FindingsTab-Cp01HwoM.js",
     "name": "FindingsTab",
     "src": "src/components/improvement/FindingsTab.jsx",
     "isDynamicEntry": true,
@@ -473,12 +497,12 @@
       "_rolldown-runtime-QTnfLwEv.js",
       "index.html",
       "_jsx-runtime-By8HlURe.js",
-      "_react-CZI7_Jkm.js",
+      "_react-7w4oHemq.js",
       "_api-DedVCR6M.js"
     ]
   },
   "src/components/improvement/HistoryTab.jsx": {
-    "file": "assets/HistoryTab-fvwnaK-2.js",
+    "file": "assets/HistoryTab-D_VEHl2k.js",
     "name": "HistoryTab",
     "src": "src/components/improvement/HistoryTab.jsx",
     "isDynamicEntry": true,
@@ -486,13 +510,13 @@
       "_rolldown-runtime-QTnfLwEv.js",
       "index.html",
       "_jsx-runtime-By8HlURe.js",
-      "_react-CZI7_Jkm.js",
+      "_react-7w4oHemq.js",
       "_DiffView-D3-1aVh2.js",
       "_api-DedVCR6M.js"
     ]
   },
   "src/components/improvement/LiveCalibrationTab.jsx": {
-    "file": "assets/LiveCalibrationTab-BG-aQ-tR.js",
+    "file": "assets/LiveCalibrationTab-Beskw_Db.js",
     "name": "LiveCalibrationTab",
     "src": "src/components/improvement/LiveCalibrationTab.jsx",
     "isDynamicEntry": true,
@@ -500,12 +524,12 @@
       "_rolldown-runtime-QTnfLwEv.js",
       "index.html",
       "_jsx-runtime-By8HlURe.js",
-      "_react-CZI7_Jkm.js",
+      "_react-7w4oHemq.js",
       "_api-DedVCR6M.js"
     ]
   },
   "src/components/improvement/ProposalsTab.jsx": {
-    "file": "assets/ProposalsTab-DkyS6q8H.js",
+    "file": "assets/ProposalsTab-BTnQ92GX.js",
     "name": "ProposalsTab",
     "src": "src/components/improvement/ProposalsTab.jsx",
     "isDynamicEntry": true,
@@ -513,13 +537,13 @@
       "_rolldown-runtime-QTnfLwEv.js",
       "index.html",
       "_jsx-runtime-By8HlURe.js",
-      "_react-CZI7_Jkm.js",
+      "_react-7w4oHemq.js",
       "_DiffView-D3-1aVh2.js",
       "_api-DedVCR6M.js"
     ]
   },
   "src/components/improvement/ReportsTab.jsx": {
-    "file": "assets/ReportsTab-CBH5BipZ.js",
+    "file": "assets/ReportsTab-ByV_U841.js",
     "name": "ReportsTab",
     "src": "src/components/improvement/ReportsTab.jsx",
     "isDynamicEntry": true,
@@ -527,7 +551,7 @@
       "_rolldown-runtime-QTnfLwEv.js",
       "index.html",
       "_jsx-runtime-By8HlURe.js",
-      "_react-CZI7_Jkm.js",
+      "_react-7w4oHemq.js",
       "_api-DedVCR6M.js"
     ]
   }
