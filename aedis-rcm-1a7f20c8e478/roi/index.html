@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Aedis — Overhead Down, Efficiency Up: The Revenue-Cycle ROI Story</title>
+<style>
+/* ════════════════════════════════════════════════════════
+   AEDIS ROI — overhead-down / efficiency-up data-story
+   One self-contained file. Zero external dependencies.
+   Inherits the dark Apple-HIG palette the client liked,
+   then exceeds it with scroll-driven CSS + count-up motion.
+   ════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    /* ── inherited palette (the deck the client liked) ── */
+    --blue: #2563eb;
+    --blue-2: #3b82f6;
+    --blue-dark: #1e40af;
+    --dark: #0a0a0a;
+    --dark-2: #0a1628;
+    --dark-card: #141414;
+    --dark-card-2: #181818;
+    --dark-border: #262626;
+    --text-primary: #ffffff;
+    --text-secondary: #a1a1aa;
+    --text-dim: #71717a;
+    --red: #ef4444;
+    --red-dim: #991b1b;
+    --green: #22c55e;
+    --green-dim: #166534;
+    --amber: #f59e0b;
+    --amber-dim: #92400e;
+    --violet: #8b5cf6;
+
+    /* derived via color-mix — 2026 engines only */
+    --blue-glow: color-mix(in oklch, var(--blue) 35%, transparent);
+    --green-glow: color-mix(in oklch, var(--green) 30%, transparent);
+    --red-glow: color-mix(in oklch, var(--red) 28%, transparent);
+    --card-hover: color-mix(in oklch, var(--dark-card) 80%, var(--blue) 6%);
+
+    /* fluid type */
+    --h1: clamp(2.4rem, 7vw, 4.6rem);
+    --h2: clamp(1.7rem, 4.6vw, 2.7rem);
+    --hero-num: clamp(2.6rem, 9vw, 5.2rem);
+    --lead: clamp(1.02rem, 2.4vw, 1.32rem);
+}
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background: var(--dark);
+    color: var(--text-primary);
+    line-height: 1.5;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+p, li, h1, h2, h3, h4 { text-wrap: balance; }
+
+main { display: block; }
+
+section {
+    padding: clamp(56px, 11vh, 110px) clamp(20px, 6vw, 60px);
+    position: relative;
+}
+
+.container {
+    max-width: 1080px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* ─── Typography ─── */
+h1 { font-size: var(--h1); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 22px; }
+h2 { font-size: var(--h2); font-weight: 700; letter-spacing: -0.02em; line-height: 1.12; margin-bottom: 20px; }
+h3 { font-size: 1.25rem; font-weight: 600; line-height: 1.3; margin-bottom: 8px; }
+
+.eyebrow {
+    font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--blue); font-weight: 700; margin-bottom: 14px;
+    display: inline-flex; align-items: center; gap: 9px;
+}
+.eyebrow::before {
+    content: ""; width: 26px; height: 2px; background: var(--blue); display: inline-block;
+}
+
+.lead {
+    font-size: var(--lead); color: var(--text-secondary); font-weight: 400;
+    max-width: 800px; line-height: 1.5;
+}
+
+.accent { color: var(--blue); }
+.red { color: var(--red); }
+.green { color: var(--green); }
+.amber { color: var(--amber); }
+.dim { color: var(--text-dim); }
+.bold { font-weight: 700; color: var(--text-primary); }
+.mono { font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace; }
+
+/* ─── Reveal-on-scroll (scroll-driven where supported) ─── */
+.reveal {
+    opacity: 0; transform: translateY(26px);
+    transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1);
+    will-change: opacity, transform;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.s1 { transition-delay: 0.06s; } .s2 { transition-delay: 0.14s; }
+.s3 { transition-delay: 0.22s; } .s4 { transition-delay: 0.30s; }
+.s5 { transition-delay: 0.38s; } .s6 { transition-delay: 0.46s; }
+
+/* ═══════ HERO ═══════ */
+.hero {
+    min-height: 100svh; display: flex; flex-direction: column; justify-content: center;
+    background:
+      radial-gradient(1100px 600px at 78% 8%, color-mix(in oklch, var(--blue) 16%, transparent) 0%, transparent 60%),
+      radial-gradient(900px 500px at 12% 96%, color-mix(in oklch, var(--green) 10%, transparent) 0%, transparent 58%),
+      linear-gradient(180deg, var(--dark) 0%, var(--dark-2) 100%);
+    overflow: hidden;
+}
+.hero::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background-image:
+      linear-gradient(color-mix(in oklch, var(--blue) 7%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in oklch, var(--blue) 7%, transparent) 1px, transparent 1px);
+    background-size: 52px 52px;
+    mask-image: radial-gradient(circle at 70% 20%, black 0%, transparent 62%);
+    -webkit-mask-image: radial-gradient(circle at 70% 20%, black 0%, transparent 62%);
+    opacity: 0.5;
+}
+.hero .container { position: relative; z-index: 2; }
+.brandmark {
+    display: inline-flex; align-items: center; gap: 11px; margin-bottom: 34px;
+    font-weight: 700; letter-spacing: -0.01em; font-size: 1.05rem;
+}
+.brandmark .glyph {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--blue) 0%, var(--violet) 100%);
+    display: grid; place-items: center; font-size: 0.95rem; box-shadow: 0 6px 20px var(--blue-glow);
+}
+.brandmark small { color: var(--text-dim); font-weight: 500; font-size: 0.82rem; letter-spacing: 0; }
+
+.hero-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: clamp(34px, 6vh, 56px);
+}
+.hstat {
+    background: color-mix(in oklch, var(--dark-card) 70%, transparent);
+    border: 1px solid var(--dark-border); border-radius: 16px; padding: 22px 18px;
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    container-type: inline-size;
+}
+.hstat .num {
+    font-size: clamp(1.9rem, 5cqi + 1rem, 2.9rem); font-weight: 800; letter-spacing: -0.02em;
+    line-height: 1; font-variant-numeric: tabular-nums; color: var(--red);
+}
+.hstat.good .num { color: var(--green); }
+.hstat.blue .num { color: var(--blue-2); }
+.hstat .lbl { font-size: 0.8rem; color: var(--text-secondary); margin-top: 11px; line-height: 1.38; }
+.hstat .vs { font-size: 0.7rem; color: var(--text-dim); margin-top: 6px; }
+
+.scroll-cue {
+    margin-top: clamp(30px, 5vh, 48px); display: inline-flex; align-items: center; gap: 9px;
+    color: var(--text-dim); font-size: 0.78rem; letter-spacing: 0.04em;
+}
+.scroll-cue .chev { width: 18px; height: 18px; animation: bob 1.8s ease-in-out infinite; }
+@keyframes bob { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(5px);} }
+
+/* ═══════ SECTION SHELL ═══════ */
+.alt { background: linear-gradient(180deg, var(--dark) 0%, color-mix(in oklch, var(--dark-2) 60%, var(--dark)) 100%); }
+
+/* ─── cards ─── */
+.card {
+    background: var(--dark-card); border: 1px solid var(--dark-border); border-radius: 14px; padding: 20px;
+    transition: border-color 0.4s ease, background 0.4s ease, transform 0.4s ease;
+}
+.card:hover { border-color: color-mix(in oklch, var(--blue) 40%, var(--dark-border)); background: var(--card-hover); }
+.card h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 7px; line-height: 1.3; }
+.card p { font-size: 0.86rem; color: var(--text-secondary); line-height: 1.46; }
+
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* ═══════ BEFORE → AFTER overhead table ═══════ */
+.toggle-wrap { display: flex; align-items: center; gap: 14px; margin: 6px 0 26px; flex-wrap: wrap; }
+.seg {
+    display: inline-flex; background: var(--dark-card); border: 1px solid var(--dark-border);
+    border-radius: 12px; padding: 4px; gap: 4px;
+}
+.seg button {
+    appearance: none; border: none; cursor: pointer; font: inherit; font-weight: 700; font-size: 0.86rem;
+    padding: 9px 20px; border-radius: 9px; color: var(--text-secondary); background: transparent;
+    transition: color 0.3s ease, background 0.3s ease; letter-spacing: -0.01em;
+}
+.seg button[aria-pressed="true"].before { background: color-mix(in oklch, var(--red) 18%, var(--dark-card)); color: #fff; }
+.seg button[aria-pressed="true"].after { background: var(--blue); color: #fff; }
+.seg button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.seg-hint { font-size: 0.8rem; color: var(--text-dim); }
+
+.ov-table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    background: var(--dark-card); border: 1px solid var(--dark-border);
+    border-radius: 16px; overflow: hidden; font-size: 0.88rem;
+}
+.ov-table th {
+    text-align: left; padding: 14px 18px; font-size: 0.7rem; text-transform: uppercase;
+    letter-spacing: 0.07em; color: var(--text-dim); font-weight: 700;
+    border-bottom: 1px solid var(--dark-border); background: rgba(255,255,255,0.02);
+}
+.ov-table th.state { transition: color 0.4s ease; }
+.ov-table td { padding: 15px 18px; border-bottom: 1px solid var(--dark-border); vertical-align: top; line-height: 1.42; }
+.ov-table tr:last-child td { border-bottom: none; }
+.ov-table .line { color: var(--text-primary); font-weight: 600; width: 30%; }
+.ov-table .line small { display: block; color: var(--text-dim); font-weight: 400; font-size: 0.74rem; margin-top: 3px; }
+.ov-state {
+    width: 50%; color: var(--text-secondary); font-size: 0.85rem; position: relative;
+    transition: opacity 0.45s ease, transform 0.45s ease;
+}
+.ov-state .mk { font-weight: 800; margin-right: 7px; }
+.ov-row.is-before .mk { color: var(--red); }
+.ov-row.is-after .mk { color: var(--green); }
+.ov-delta {
+    width: 20%; text-align: right; font-weight: 800; white-space: nowrap;
+    font-variant-numeric: tabular-nums; transition: color 0.4s ease;
+}
+.ov-row.is-before .ov-delta { color: var(--red); }
+.ov-row.is-after .ov-delta { color: var(--green); }
+/* swap animation */
+.ov-state.swapping { opacity: 0; transform: translateY(6px); }
+
+/* ═══════ LEVER BARS ═══════ */
+.levers { display: flex; flex-direction: column; gap: 16px; }
+.lever {
+    background: var(--dark-card); border: 1px solid var(--dark-border); border-radius: 14px;
+    padding: 18px 20px; container-type: inline-size;
+}
+.lever-top { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 6px; flex-wrap: wrap; }
+.lever-name { font-weight: 700; font-size: 0.98rem; letter-spacing: -0.01em; }
+.lever-name .tag {
+    display: inline-block; font-size: 0.62rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--blue); background: color-mix(in oklch, var(--blue) 12%, transparent);
+    border: 1px solid color-mix(in oklch, var(--blue) 30%, transparent);
+    padding: 2px 8px; border-radius: 20px; margin-left: 8px; vertical-align: middle;
+}
+.lever-amt {
+    font-weight: 800; font-size: 1.15rem; color: var(--green); font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.lever-amt small { font-weight: 500; color: var(--text-dim); font-size: 0.74rem; }
+.lever-sub { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.45; margin-bottom: 13px; }
+.bar-track { height: 11px; border-radius: 7px; background: color-mix(in oklch, var(--dark-border) 70%, #000); overflow: hidden; }
+.bar-fill {
+    height: 100%; width: 0; border-radius: 7px;
+    background: linear-gradient(90deg, var(--blue-dark) 0%, var(--blue) 55%, var(--green) 100%);
+    transition: width 1.25s cubic-bezier(0.22,1,0.36,1);
+    box-shadow: 0 0 14px var(--blue-glow);
+}
+.lever.visible .bar-fill { width: var(--w); }
+
+/* ═══════ LIVE TOTAL ASSEMBLY ═══════ */
+.assemble {
+    background:
+      radial-gradient(700px 360px at 50% -10%, color-mix(in oklch, var(--green) 14%, transparent) 0%, transparent 60%),
+      var(--dark-card);
+    border: 1px solid color-mix(in oklch, var(--green) 35%, var(--dark-border));
+    border-radius: 22px; padding: clamp(28px, 5vw, 46px); text-align: center;
+    box-shadow: 0 30px 80px -40px var(--green-glow);
+}
+.assemble .kicker { font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--green); font-weight: 700; margin-bottom: 10px; }
+.assemble .total {
+    font-size: var(--hero-num); font-weight: 800; letter-spacing: -0.03em; line-height: 1;
+    font-variant-numeric: tabular-nums;
+    background: linear-gradient(135deg, #fff 0%, var(--green) 120%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.assemble .total-sub { font-size: 0.95rem; color: var(--text-secondary); margin-top: 12px; }
+.assemble .stack { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 22px; }
+.assemble .chip {
+    font-size: 0.74rem; font-weight: 600; padding: 6px 12px; border-radius: 20px;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--dark-border); color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+}
+.assemble .chip b { color: var(--green); }
+.roi-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 26px; }
+.roi-pill {
+    background: var(--dark-card); border: 1px solid var(--dark-border); border-radius: 14px;
+    padding: 16px 22px; min-width: 150px;
+}
+.roi-pill .rn { font-size: 1.9rem; font-weight: 800; color: var(--blue-2); font-variant-numeric: tabular-nums; line-height: 1; }
+.roi-pill .rl { font-size: 0.74rem; color: var(--text-dim); margin-top: 7px; }
+
+/* ═══════ EFFICIENCY KPI strip ═══════ */
+.kpi-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.kpi {
+    background: var(--dark-card); border: 1px solid var(--dark-border); border-radius: 14px;
+    padding: 18px 16px; text-align: center; container-type: inline-size;
+}
+.kpi .from { font-size: 0.74rem; color: var(--text-dim); text-decoration: line-through; }
+.kpi .to { font-size: clamp(1.5rem, 5cqi + 0.5rem, 2.1rem); font-weight: 800; color: var(--green); font-variant-numeric: tabular-nums; line-height: 1.05; margin-top: 2px; }
+.kpi .kl { font-size: 0.74rem; color: var(--text-secondary); margin-top: 9px; line-height: 1.3; }
+
+/* ─── underpayment proof tile ─── */
+.proof {
+    background: var(--dark-card); border: 1px solid var(--blue); border-radius: 14px;
+    padding: 18px 22px; font-family: 'SF Mono','Monaco',monospace; font-size: clamp(0.74rem, 2.4vw, 0.84rem);
+    line-height: 1.65; overflow-x: auto;
+}
+.proof .hl { color: #fff; font-weight: 700; }
+
+/* ─── source pills ─── */
+.sources { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 18px; }
+.src {
+    font-size: 0.7rem; padding: 5px 11px; border-radius: 20px; color: var(--text-dim);
+    border: 1px solid var(--dark-border); background: var(--dark-card);
+}
+
+/* ═══════ CLOSING ═══════ */
+.close {
+    min-height: 92svh; display: flex; flex-direction: column; justify-content: center;
+    background:
+      radial-gradient(900px 500px at 50% 110%, color-mix(in oklch, var(--blue) 18%, transparent) 0%, transparent 60%),
+      linear-gradient(180deg, var(--dark-2) 0%, var(--dark) 100%);
+    text-align: center;
+}
+.close .container { display: flex; flex-direction: column; align-items: center; }
+.close-cta {
+    margin-top: 30px; background: var(--dark-card); border: 2px solid var(--blue); border-radius: 18px;
+    padding: 26px 32px; max-width: 760px; width: 100%;
+}
+.close-cta .l { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--blue); font-weight: 700; margin-bottom: 10px; }
+.close-cta p { font-size: clamp(1.02rem, 2.6vw, 1.22rem); line-height: 1.55; font-weight: 600; }
+
+/* ═══════ progress + nav ═══════ */
+.progress { position: fixed; top: 0; left: 0; width: 100%; height: 3px; background: rgba(255,255,255,0.05); z-index: 1000; }
+.progress > span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--blue), var(--green)); }
+@supports (animation-timeline: scroll()) {
+    .progress > span { width: 100%; transform-origin: 0 50%; animation: prog linear; animation-timeline: scroll(root); }
+    @keyframes prog { from { transform: scaleX(0);} to { transform: scaleX(1);} }
+    .js-progress { display: none; }
+}
+
+footer { padding: 30px 24px 46px; text-align: center; color: var(--text-dim); font-size: 0.74rem; line-height: 1.6; }
+footer .mono { color: var(--text-secondary); }
+
+a { color: var(--blue-2); }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 4px; }
+.skip {
+    position: absolute; left: -999px; top: 0; background: var(--blue); color: #fff; padding: 10px 16px;
+    border-radius: 0 0 8px 0; z-index: 2000; font-weight: 700;
+}
+.skip:focus { left: 0; }
+
+/* ═══════ scroll-driven enhancements (2026 engines) ═══════ */
+@supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+        .reveal { animation: revealIn linear both; animation-timeline: view(); animation-range: entry 4% cover 26%; }
+        @keyframes revealIn { from { opacity: 0; transform: translateY(28px);} to { opacity: 1; transform: none;} }
+    }
+}
+
+/* ═══════ responsive ═══════ */
+@media (max-width: 860px) {
+    .hero-stats { grid-template-columns: 1fr 1fr; }
+    .grid-3, .grid-2 { grid-template-columns: 1fr; }
+    .kpi-strip { grid-template-columns: 1fr 1fr; }
+    .ov-table { font-size: 0.8rem; }
+    .ov-table .line { width: 38%; }
+    .ov-state { width: 40%; }
+    .ov-delta { width: 22%; }
+    .ov-table th:nth-child(2), .ov-table td.ov-altstate { display: none; }
+}
+@media (max-width: 520px) {
+    .kpi-strip { grid-template-columns: 1fr 1fr; }
+}
+
+/* ═══════ reduced motion ═══════ */
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; animation: none; }
+    .bar-fill { transition: none; }
+    .scroll-cue .chev { animation: none; }
+    .lever.visible .bar-fill { width: var(--w); }
+}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#overhead">Skip to the ROI table</a>
+<div class="progress" role="presentation"><span class="js-progress"></span></div>
+
+<main>
+
+<!-- ════════════ HERO ════════════ -->
+<header class="hero" id="top">
+    <div class="container">
+        <div class="brandmark reveal">
+            <span class="glyph" aria-hidden="true">▲</span>
+            <span>Aedis <small>· the agentic operating system for SNF revenue cycle</small></span>
+        </div>
+        <p class="eyebrow reveal s1">For the CFO &amp; VP of Revenue Cycle · a 330-facility SNF operator</p>
+        <h1 class="reveal s2">Overhead down.<br>Efficiency up.<br><span class="accent">Here&rsquo;s the number.</span></h1>
+        <p class="lead reveal s3" style="max-width: 840px;">
+            The operator runs its billing office on FTEs, a stacked license bill, and an outsourced CBO cut &mdash; and <span class="bold">still</span> leaks 12&ndash;15% to denials and $15K&ndash;$80K per facility per month to silent per-diem underpayments. Aedis collapses the FTE load, retires the license stack, and recovers the leakage &mdash; on the same PointClickCare data the operator already owns.
+        </p>
+
+        <div class="hero-stats reveal s4">
+            <div class="hstat">
+                <div class="num" data-count="15" data-suffix="%" data-prefix="12&ndash;">12&ndash;15%</div>
+                <div class="lbl">leaks to denials today</div>
+                <div class="vs">vs &lt;3% top performer</div>
+            </div>
+            <div class="hstat">
+                <div class="num" data-count="80" data-prefix="$15&ndash;" data-suffix="K">$15&ndash;80K</div>
+                <div class="lbl">/ facility / <span class="bold">month</span> silent underpayment</div>
+                <div class="vs">written off as &ldquo;contractual&rdquo;</div>
+            </div>
+            <div class="hstat">
+                <div class="num" data-count="18" data-suffix="%">18%</div>
+                <div class="lbl">of overturnable MA denials appealed</div>
+                <div class="vs">95% of appeals win</div>
+            </div>
+            <div class="hstat blue">
+                <div class="num" data-count="280" data-suffix="%">280%</div>
+                <div class="lbl">first-year ROI</div>
+                <div class="vs">payback &lt; 4 months</div>
+            </div>
+        </div>
+
+        <div class="scroll-cue reveal s5">
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            Scroll &mdash; the recovery number assembles as you go
+        </div>
+    </div>
+</header>
+
+
+<!-- ════════════ THE COST STACK TODAY ════════════ -->
+<section id="today" class="alt">
+    <div class="container">
+        <p class="eyebrow reveal">The Overhead Today</p>
+        <h2 class="reveal s1">What the billing office <span class="red">actually costs</span></h2>
+        <p class="lead reveal s2" style="margin-bottom: 30px;">
+            Three layers stacked on top of each other: people, licenses, and leakage. Every one of them is a database with a UI bolted on &mdash; and every one of them flags a problem, then hands the work back to a human.
+        </p>
+
+        <div class="grid-3 reveal s3">
+            <div class="card" style="border-color: var(--red-dim);">
+                <h4 class="red">The people layer</h4>
+                <p>Roughly <span class="bold">1 biller per 100&ndash;150 beds</span>, plus shared MDS-coordinator and business-office-manager time. MDS coordinators alone lose <span class="bold">2+ hours every day</span> to manual chart abstraction &mdash; the #1 driver of both under-capture and clawback.</p>
+            </div>
+            <div class="card" style="border-color: var(--amber-dim);">
+                <h4 class="amber">The license layer</h4>
+                <p>PCC EHR + a clearinghouse (Waystar/Availity) + a PDPM optimizer (Zimmet/SimpleAnalyzer) + an eligibility/auth point tool + <span class="bold">an outsourced CBO at 4&ndash;7% of collections</span>. Per-claim transaction fees layered on top of loaded biller labor.</p>
+            </div>
+            <div class="card" style="border-color: var(--red-dim);">
+                <h4 class="red">The leakage layer</h4>
+                <p>A <span class="bold">12&ndash;15% denial rate</span> (4&ndash;5&times; the &lt;3% target), only ~18% of overturnable MA denials ever appealed, and <span class="bold">$15K&ndash;$80K per facility per month</span> in silent per-diem underpayment booked as &ldquo;contractual.&rdquo; Days-in-AR running past 45&ndash;50.</p>
+            </div>
+        </div>
+
+        <p class="reveal s4 dim" style="text-align:center; font-size:0.88rem; margin-top:20px;">
+            The tools read the data. <span class="bold" style="color:var(--text-secondary);">Everything between them is people &mdash; and everything they miss is margin.</span>
+        </p>
+    </div>
+</section>
+
+
+<!-- ════════════ BEFORE → AFTER overhead table (interactive) ════════════ -->
+<section id="overhead">
+    <div class="container">
+        <p class="eyebrow reveal">Before &rarr; After · Same PCC Data</p>
+        <h2 class="reveal s1">Flip the switch on the overhead</h2>
+        <p class="lead reveal s2">
+            Today&rsquo;s FTE load, license stack, and leakage &mdash; line by line &mdash; against the Aedis-after state. <span class="bold">One agentic layer reading PCC SQL</span> replaces the per-stage tool stack; billers shift from per-claim keying to HITL exception-approval.
+        </p>
+
+        <div class="toggle-wrap reveal s3" role="group" aria-label="Toggle overhead view">
+            <div class="seg">
+                <button type="button" class="before" id="btn-before" aria-pressed="true">Overhead today</button>
+                <button type="button" class="after" id="btn-after" aria-pressed="false">After Aedis</button>
+            </div>
+            <span class="seg-hint" id="seg-hint">Showing today&rsquo;s state &mdash; tap &ldquo;After Aedis&rdquo; to flip every row.</span>
+        </div>
+
+        <div class="reveal s4" style="overflow-x:auto;">
+        <table class="ov-table" id="ovTable">
+            <caption class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">Overhead before and after Aedis, by cost line</caption>
+            <thead>
+                <tr>
+                    <th scope="col">Cost line</th>
+                    <th scope="col" class="state" id="th-state">Overhead today</th>
+                    <th scope="col" style="text-align:right;">Impact</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="ov-row is-before"
+                    data-before="1 biller / 100&ndash;150 beds; MDS coordinators lose 2+ hrs/day to manual chart abstraction"
+                    data-after="Billers shift to HITL exception-approval (GREEN one-tap, YELLOW guided, RED owned); 2+ hrs/day recovered per coordinator"
+                    data-db="&minus;FTE load" data-da="$45&ndash;65K/fac/yr">
+                    <td class="line">Billing-office labor<small>per-claim processing</small></td>
+                    <td class="ov-state"><span class="mk">&times;</span><span class="ov-text">1 biller / 100&ndash;150 beds; MDS coordinators lose 2+ hrs/day to manual chart abstraction</span></td>
+                    <td class="ov-delta">&minus;FTE load</td>
+                </tr>
+                <tr class="ov-row is-before"
+                    data-before="12&ndash;15% denial rate, worked reactively in a queue with no feedback loop back to the cause"
+                    data-after="Closed-loop upstream fixes drive the rate toward &lt;3%; 38% reduction already proven in 90 days"
+                    data-db="12&ndash;15%" data-da="&rarr; &lt;3%">
+                    <td class="line">Denial write-off<small>rework + lost claims</small></td>
+                    <td class="ov-state"><span class="mk">&times;</span><span class="ov-text">12&ndash;15% denial rate, worked reactively in a queue with no feedback loop back to the cause</span></td>
+                    <td class="ov-delta">12&ndash;15%</td>
+                </tr>
+                <tr class="ov-row is-before"
+                    data-before="~18% of overturnable MA denials appealed; the rest written off because no one can staff the labor"
+                    data-after="100% of overturnable MA denials auto-appealed against the 95% overturn rate &mdash; zero biller hours"
+                    data-db="18% appealed" data-da="&rarr; 100%">
+                    <td class="line">MA appeal coverage<small>recoverable, written off</small></td>
+                    <td class="ov-state"><span class="mk">&times;</span><span class="ov-text">~18% of overturnable MA denials appealed; the rest written off because no one can staff the labor</span></td>
+                    <td class="ov-delta">18% appealed</td>
+                </tr>
+                <tr class="ov-row is-before"
+                    data-before="$15K&ndash;$80K/fac/mo silently booked as &ldquo;contractual&rdquo; &mdash; the contract lives in a PDF, not the billing system"
+                    data-after="Detected at the 835 line: contracted vs actually-remitted per-diem compared and routed to recovery"
+                    data-db="$15&ndash;80K/mo" data-da="&rarr; recovered">
+                    <td class="line">Per-diem underpayment<small>the silent leak</small></td>
+                    <td class="ov-state"><span class="mk">&times;</span><span class="ov-text">$15K&ndash;$80K/fac/mo silently booked as &ldquo;contractual&rdquo; &mdash; the contract lives in a PDF, not the billing system</span></td>
+                    <td class="ov-delta">$15&ndash;80K/mo</td>
+                </tr>
+                <tr class="ov-row is-before"
+                    data-before="PDPM optimizer + SNF scrubber + eligibility/auth point tool + an outsourced CBO at 4&ndash;7% of collections"
+                    data-after="The point tools and the CBO % fold into one agentic platform on the data the operator already owns"
+                    data-db="4&ndash;7% CBO" data-da="&rarr; ~$0">
+                    <td class="line">License stack + CBO fee<small>4&ndash;7% of collections</small></td>
+                    <td class="ov-state"><span class="mk">&times;</span><span class="ov-text">PDPM optimizer + SNF scrubber + eligibility/auth point tool + an outsourced CBO at 4&ndash;7% of collections</span></td>
+                    <td class="ov-delta">4&ndash;7% CBO</td>
+                </tr>
+                <tr class="ov-row is-before"
+                    data-before="Days-in-AR running &gt;45&ndash;50 (a real cash-flow concern) worked manually by aging bucket"
+                    data-after="Continuous 276/277 status polling + auto-follow-up pulls days-in-AR toward &lt;30; the manual aging-bucket grind disappears"
+                    data-db="&gt;45&ndash;50 days" data-da="&rarr; &lt;30">
+                    <td class="line">Days-in-AR<small>cash velocity</small></td>
+                    <td class="ov-state"><span class="mk">&times;</span><span class="ov-text">Days-in-AR running &gt;45&ndash;50 (a real cash-flow concern) worked manually by aging bucket</span></td>
+                    <td class="ov-delta">&gt;45&ndash;50 days</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+        <p class="reveal s5 dim" style="text-align:center; font-size:0.86rem; margin-top:18px;">
+            No rip-and-replace. <span class="bold" style="color:var(--text-secondary);">Correctness moves to the front of the pipeline instead of the end.</span>
+        </p>
+    </div>
+</section>
+
+
+<!-- ════════════ EFFICIENCY KPIs (count-up) ════════════ -->
+<section id="efficiency" class="alt">
+    <div class="container">
+        <p class="eyebrow reveal">Efficiency Up</p>
+        <h2 class="reveal s1">The same office, <span class="accent">re-pointed at exceptions</span></h2>
+        <p class="lead reveal s2" style="margin-bottom:28px;">
+            When correctness is built in at the front of the pipeline, the operational metrics move together &mdash; not because anyone works harder, but because the rework stops being created.
+        </p>
+
+        <div class="kpi-strip reveal s3">
+            <div class="kpi">
+                <div class="from">75&ndash;85%</div>
+                <div class="to" data-count="98" data-suffix="%">98%</div>
+                <div class="kl">First-pass Part&nbsp;A acceptance</div>
+            </div>
+            <div class="kpi">
+                <div class="from">12&ndash;15%</div>
+                <div class="to" data-count="3" data-prefix="&lt;" data-suffix="%">&lt;3%</div>
+                <div class="kl">Denial rate</div>
+            </div>
+            <div class="kpi">
+                <div class="from">&gt;45&ndash;50</div>
+                <div class="to" data-count="30" data-prefix="&lt;">&lt;30</div>
+                <div class="kl">Days-in-AR</div>
+            </div>
+            <div class="kpi">
+                <div class="from">18%</div>
+                <div class="to" data-count="100" data-suffix="%">100%</div>
+                <div class="kl">MA appeal coverage</div>
+            </div>
+        </div>
+
+        <div class="grid-2 reveal s4" style="margin-top:18px;">
+            <div class="card">
+                <h4 class="accent">2+ hours / day, per MDS coordinator</h4>
+                <p>Recovered from manual chart abstraction &mdash; redirected to the exceptions only a human should touch. The labor constraint that capped appeal coverage at 18% simply goes away.</p>
+            </div>
+            <div class="card">
+                <h4 class="accent">15&ndash;25% rework load &rarr; collapses</h4>
+                <p>A quarter of claims reworked every month under the 75&ndash;85% clean-claim ceiling. Correct-by-construction billing removes the rework instead of clearing it faster.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════ THE SILENT LEAK proof ════════════ -->
+<section id="leak">
+    <div class="container">
+        <p class="eyebrow reveal">The Largest Single Line</p>
+        <h2 class="reveal s1">The <span class="red">$15K&ndash;$80K a month</span> no vendor catches</h2>
+        <p class="lead reveal s2" style="margin-bottom:24px;">
+            Horizontal RCM players have the AI muscle &mdash; but their contract engines model hospital DRG/case-rate logic, not SNF per-diem. SNF-native tools make you hand-enter contracts and only <span class="bold">track</span> them. Neither cluster auto-compares the contracted per-diem against the actually-remitted per-diem at the 835 line, wired to the EHR. That is the named industry white-space.
+        </p>
+        <div class="proof reveal s3" role="figure" aria-label="Underpayment detection example">
+            <span class="red bold">UNDERPAYMENT DETECTED</span> &middot; Resident <span class="hl">[RESIDENT_0203]</span><br>
+            Humana paid <span class="hl">$548/day</span>; loaded contract says <span class="hl">$612/day</span> for this acuity tier<br>
+            &rarr; <span class="amber">$64/day &times; 22 days = $1,408 underpaid</span>, booked as contractual.<br>
+            Pattern: Humana underpaid this tier on <span class="hl">31 claims this quarter</span> = <span class="red bold">$43,600</span>.<br>
+            <span class="dim">One-tap: open recovery + flag for renegotiation.</span>
+        </div>
+        <div class="sources reveal s4" aria-label="Sources">
+            <span class="src">HHS-OIG · June 2026 (19 MAOs, June 2024 data)</span>
+            <span class="src">CY2025 CERT improper-payment data</span>
+            <span class="src">ValueDX 90-day denial study</span>
+            <span class="src">SNF Metrics RCM benchmarks</span>
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════ SAVINGS LEVERS (animated bars) ════════════ -->
+<section id="levers" class="alt">
+    <div class="container">
+        <p class="eyebrow reveal">The Savings Levers</p>
+        <h2 class="reveal s1">Five levers. <span class="green">One recovery number.</span></h2>
+        <p class="lead reveal s2" style="margin-bottom:30px;">
+            Each bar is a documented, dollar-quantified lever. The bars fill as you scroll; the headline number is assembled live below.
+        </p>
+
+        <div class="levers">
+            <!-- bar widths are relative magnitude, capped for legibility -->
+            <div class="lever reveal" style="--w: 30%;">
+                <div class="lever-top">
+                    <span class="lever-name">Billing-office labor<span class="tag">overhead</span></span>
+                    <span class="lever-amt">$45&ndash;65K <small>/fac/yr</small></span>
+                </div>
+                <p class="lever-sub">Shift from per-claim processing to HITL exception-handling. Documented RCM labor savings, plus 2+ hrs/day recovered per MDS coordinator.</p>
+                <div class="bar-track"><div class="bar-fill"></div></div>
+            </div>
+
+            <div class="lever reveal" style="--w: 62%;">
+                <div class="lever-top">
+                    <span class="lever-name">Denial reduction<span class="tag">closed-loop</span></span>
+                    <span class="lever-amt">$300&ndash;600K <small>/fac/yr</small></span>
+                </div>
+                <p class="lever-sub">Closed-loop upstream fixes move the rate structurally from 12&ndash;15% toward &lt;3% on a 100-bed Medicare-A book. 38% reduction already proven in 90 days &mdash; before the upstream-fix loop.</p>
+                <div class="bar-track"><div class="bar-fill"></div></div>
+            </div>
+
+            <div class="lever reveal" style="--w: 78%;">
+                <div class="lever-top">
+                    <span class="lever-name">MA appeal coverage<span class="tag">18% &rarr; 100%</span></span>
+                    <span class="lever-amt">8 figures <small>@ 330 fac</small></span>
+                </div>
+                <p class="lever-sub">95% MA overturn rate on a denial book almost entirely written off today. At portfolio scale, closing the appeal gap is an eight-figure annual recovery.</p>
+                <div class="bar-track"><div class="bar-fill"></div></div>
+            </div>
+
+            <div class="lever reveal" style="--w: 100%;">
+                <div class="lever-top">
+                    <span class="lever-name">Per-diem underpayment recovery<span class="tag">largest line</span></span>
+                    <span class="lever-amt">$180&ndash;960K <small>/fac/yr</small></span>
+                </div>
+                <p class="lever-sub">$15K&ndash;$80K/facility/month detected at the 835 line and routed to recovery instead of booked as contractual &mdash; the single largest recoverable line in the model.</p>
+                <div class="bar-track"><div class="bar-fill"></div></div>
+            </div>
+
+            <div class="lever reveal" style="--w: 52%;">
+                <div class="lever-top">
+                    <span class="lever-name">License stack + CBO consolidation<span class="tag">retire</span></span>
+                    <span class="lever-amt">~$500K <small>CBO alone</small></span>
+                </div>
+                <p class="lever-sub">Retires the PDPM optimizer, SNF scrubber, eligibility/auth point tools, and the 4&ndash;7%-of-collections CBO fee &mdash; ~$500K/yr on a $10M-collections facility from the CBO cut alone.</p>
+                <div class="bar-track"><div class="bar-fill"></div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════ LIVE TOTAL ASSEMBLY ════════════ -->
+<section id="total">
+    <div class="container">
+        <p class="eyebrow reveal" style="justify-content:center; display:flex;">The Headline Number</p>
+        <h2 class="reveal s1" style="text-align:center;">Assembled live, on the levers above</h2>
+
+        <div class="assemble reveal s2" id="assembleBox" style="margin-top:24px;">
+            <p class="kicker">Annual recovery &amp; overhead reduction · per facility, mid-range</p>
+            <div class="total" id="grandTotal" aria-live="polite">$0</div>
+            <p class="total-sub">documented recoverable margin &mdash; <span class="bold" style="color:#fff;">per facility, per year</span>, at the mid-range of every lever</p>
+
+            <div class="stack" id="chipStack" aria-hidden="true">
+                <span class="chip">Labor <b>$55K</b></span>
+                <span class="chip">Denials <b>$450K</b></span>
+                <span class="chip">Underpayment <b>$570K</b></span>
+                <span class="chip">License + CBO <b>$300K</b></span>
+                <span class="chip">+ MA appeals (portfolio)</span>
+            </div>
+
+            <div class="roi-pills">
+                <div class="roi-pill"><div class="rn" data-count="280" data-suffix="%">280%</div><div class="rl">first-year ROI</div></div>
+                <div class="roi-pill"><div class="rn" data-count="4" data-prefix="&lt;" data-suffix="mo">&lt;4mo</div><div class="rl">payback period</div></div>
+                <div class="roi-pill"><div class="rn">8-fig</div><div class="rl">recovery @ 330 facilities</div></div>
+            </div>
+        </div>
+
+        <p class="reveal s3 dim" style="text-align:center; font-size:0.84rem; margin-top:20px; max-width:820px; margin-inline:auto;">
+            Figures are documented, case-study-anchored ranges &mdash; shown at the mid-point per facility. MA-appeal recovery is portfolio-scale and reported separately so the per-facility number stays conservative. Recover one quarter of the leakage and the engagement has already paid for itself.
+        </p>
+    </div>
+</section>
+
+
+<!-- ════════════ CLOSE ════════════ -->
+<section class="close">
+    <div class="container">
+        <p class="eyebrow reveal">The Proof</p>
+        <h2 class="reveal s1" style="max-width:900px;">Prove it on the operator&rsquo;s data.<br><span class="accent">Zero staff time.</span></h2>
+        <p class="lead reveal s2" style="max-width:780px; text-align:center;">
+            A read-only PCC-SQL sandbox of one facility &mdash; census, MDS, claims, remits, and the managed-care contracts. The claim-triage board runs in shadow mode against real claims. No write-back, no meetings. The team does nothing but read the scorecard of what we&rsquo;d have caught.
+        </p>
+
+        <div class="close-cta reveal s3">
+            <p class="l">Overhead down · Efficiency up</p>
+            <p>
+                One agentic layer on the PCC data the operator already owns &mdash; the FTE load and the license stack both collapse, and the leakage gets recovered. <span class="accent">A human at the wheel, an audit trail under every decision.</span>
+            </p>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer>
+    <p class="mono">Aedis &mdash; agentic SNF revenue cycle · overhead-down / efficiency-up ROI model</p>
+    <p>Genericized for a 330-facility SNF operator. PHI shown as tokens (e.g. [RESIDENT_0203]). Figures are documented industry ranges &amp; case-study anchors: HHS-OIG (June 2026), CY2025 CERT, ValueDX, SNF Metrics. Self-contained — no external dependencies.</p>
+</footer>
+
+
+<script>
+"use strict";
+(function () {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ── reveal-on-scroll (JS fallback; CSS scroll-timeline handles modern engines) ── */
+    const revealEls = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+        }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+        revealEls.forEach(el => io.observe(el));
+    } else {
+        revealEls.forEach(el => el.classList.add('visible'));
+    }
+
+    /* ── lever bars: add .visible to fire the CSS width transition ── */
+    if ('IntersectionObserver' in window) {
+        const lio = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); lio.unobserve(e.target); } });
+        }, { threshold: 0.35 });
+        document.querySelectorAll('.lever').forEach(el => lio.observe(el));
+    } else {
+        document.querySelectorAll('.lever').forEach(el => el.classList.add('visible'));
+    }
+
+    /* ── count-up on view ── */
+    function countUp(el) {
+        const target = parseFloat(el.dataset.count);
+        if (isNaN(target)) return;
+        const prefix = el.dataset.prefix || '';
+        const suffix = el.dataset.suffix || '';
+        if (reduceMotion) { el.innerHTML = prefix + target + suffix; return; }
+        const dur = 1300;
+        const start = performance.now();
+        function tick(now) {
+            const p = Math.min((now - start) / dur, 1);
+            const eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
+            const val = Math.round(target * eased);
+            el.innerHTML = prefix + val + suffix;
+            if (p < 1) requestAnimationFrame(tick);
+            else el.innerHTML = prefix + target + suffix;
+        }
+        requestAnimationFrame(tick);
+    }
+    const countEls = document.querySelectorAll('[data-count]');
+    if ('IntersectionObserver' in window) {
+        const cio = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { countUp(e.target); cio.unobserve(e.target); } });
+        }, { threshold: 0.6 });
+        countEls.forEach(el => cio.observe(el));
+    } else {
+        countEls.forEach(countUp);
+    }
+
+    /* ── grand-total assembly (count toward $1.375M mid-range per facility) ── */
+    const totalEl = document.getElementById('grandTotal');
+    const chips = document.querySelectorAll('#chipStack .chip');
+    const TOTAL = 1375000; // 55K labor + 450K denials + 570K underpayment + 300K license/CBO
+    function fmtMoney(n) {
+        if (n >= 1000000) return '$' + (n / 1000000).toFixed(2).replace(/\.?0+$/, '') + 'M';
+        return '$' + Math.round(n / 1000) + 'K';
+    }
+    function assemble() {
+        if (reduceMotion) { totalEl.textContent = '$1.38M'; chips.forEach(c => c.style.opacity = 1); return; }
+        const dur = 1700, start = performance.now();
+        function tick(now) {
+            const p = Math.min((now - start) / dur, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            totalEl.textContent = fmtMoney(TOTAL * eased);
+            // stagger the contributing chips in
+            chips.forEach((c, i) => { c.style.transition = 'opacity .5s ease'; c.style.opacity = (eased > (i / chips.length) * 0.9) ? 1 : 0.25; });
+            if (p < 1) requestAnimationFrame(tick);
+            else totalEl.textContent = '$1.38M';
+        }
+        chips.forEach(c => { c.style.opacity = 0.25; });
+        requestAnimationFrame(tick);
+    }
+    if ('IntersectionObserver' in window && totalEl) {
+        const tio = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { assemble(); tio.unobserve(e.target); } });
+        }, { threshold: 0.5 });
+        tio.observe(document.getElementById('assembleBox'));
+    } else if (totalEl) {
+        totalEl.textContent = '$1.38M';
+    }
+
+    /* ── BEFORE → AFTER overhead toggle ── */
+    const btnBefore = document.getElementById('btn-before');
+    const btnAfter  = document.getElementById('btn-after');
+    const thState   = document.getElementById('th-state');
+    const segHint   = document.getElementById('seg-hint');
+    const rows      = Array.from(document.querySelectorAll('.ov-row'));
+
+    function setState(state) {
+        const after = state === 'after';
+        btnBefore.setAttribute('aria-pressed', String(!after));
+        btnAfter.setAttribute('aria-pressed', String(after));
+        thState.textContent = after ? 'After Aedis' : 'Overhead today';
+        thState.style.color = after ? 'var(--blue)' : 'var(--text-dim)';
+        segHint.innerHTML = after
+            ? 'Showing the Aedis-after state &mdash; same PCC data, no rip-and-replace.'
+            : 'Showing today&rsquo;s state &mdash; tap &ldquo;After Aedis&rdquo; to flip every row.';
+
+        rows.forEach((row, i) => {
+            const stateCell = row.querySelector('.ov-state');
+            const textEl = row.querySelector('.ov-text');
+            const mk = row.querySelector('.mk');
+            const delta = row.querySelector('.ov-delta');
+            const apply = () => {
+                row.classList.toggle('is-after', after);
+                row.classList.toggle('is-before', !after);
+                textEl.innerHTML = after ? row.dataset.after : row.dataset.before;
+                mk.innerHTML = after ? '&checkmark;' : '&times;';
+                delta.innerHTML = after ? row.dataset.da : row.dataset.db;
+            };
+            if (reduceMotion) { apply(); return; }
+            stateCell.classList.add('swapping');
+            setTimeout(apply, 90 + i * 35);
+            setTimeout(() => stateCell.classList.remove('swapping'), 160 + i * 35);
+        });
+    }
+    if (btnBefore && btnAfter) {
+        btnBefore.addEventListener('click', () => setState('before'));
+        btnAfter.addEventListener('click', () => setState('after'));
+    }
+
+    /* ── JS progress fallback (engines without scroll-timeline) ── */
+    const progFill = document.querySelector('.js-progress');
+    if (progFill && !CSS.supports('animation-timeline', 'scroll()')) {
+        const onScroll = () => {
+            const h = document.documentElement.scrollHeight - window.innerHeight;
+            progFill.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+    }
+})();
+</script>
+
+</body>
+</html>

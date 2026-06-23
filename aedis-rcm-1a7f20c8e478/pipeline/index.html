@@ -1,0 +1,978 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Referral → Cash · The Seam Tax · Aedis</title>
+<meta name="description" content="The SNF revenue cycle is 38 jobs across 8 vendor silos. The value dies at every seam. Aedis collapses the stack into one agent on one graph." />
+<style>
+  :root {
+    --blue: #2563eb;
+    --blue-bright: #3b82f6;
+    --blue-dark: #1e40af;
+    --dark: #0a0a0a;
+    --dark-2: #0d0f14;
+    --dark-card: #141414;
+    --dark-card-2: #17191f;
+    --dark-border: #262626;
+    --dark-border-2: #303236;
+    --text-primary: #ffffff;
+    --text-secondary: #a1a1aa;
+    --text-dim: #8b8b93;
+    --text-faint: #71717a;
+    --red: #ef4444;
+    --red-fg: #f98a8a;
+    --red-dim: #991b1b;
+    --green: #22c55e;
+    --green-fg: #5ee08a;
+    --green-dim: #166534;
+    --amber: #f59e0b;
+    --amber-fg: #fbbf45;
+    --amber-dim: #92400e;
+    --violet: #a78bfa;
+
+    --maxw: 1200px;
+    --r-lg: 18px;
+    --r-md: 13px;
+    --r-sm: 9px;
+
+    --fs-hero: clamp(2.6rem, 7.5vw, 5.4rem);
+    --fs-h2: clamp(1.6rem, 4.2vw, 2.9rem);
+    --fs-h3: clamp(1.15rem, 2.6vw, 1.6rem);
+    --fs-body: clamp(0.95rem, 1.6vw, 1.08rem);
+    --fs-sm: clamp(0.8rem, 1.3vw, 0.9rem);
+
+    --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+            "Segoe UI", system-ui, Roboto, Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  body {
+    margin: 0;
+    background:
+      radial-gradient(1200px 700px at 80% -10%, rgba(37,99,235,0.10), transparent 60%),
+      radial-gradient(900px 600px at -10% 20%, rgba(167,139,250,0.05), transparent 55%),
+      var(--dark);
+    color: var(--text-primary);
+    font-family: var(--font);
+    font-size: var(--fs-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  a { color: var(--blue-bright); }
+  :focus-visible {
+    outline: 2px solid var(--blue-bright);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  .wrap { width: min(100% - 40px, var(--maxw)); margin-inline: auto; }
+  .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  .blue { color: var(--blue-bright); }
+  .red { color: var(--red-fg); }
+  .green { color: var(--green-fg); }
+  .amber { color: var(--amber-fg); }
+  .dim { color: var(--text-dim); }
+  .faint { color: var(--text-faint); }
+  .bold { font-weight: 700; color: var(--text-primary); }
+  .nowrap { white-space: nowrap; }
+
+  /* ---------- progress spine (top) ---------- */
+  .topbar {
+    position: fixed; inset: 0 0 auto 0; height: 3px; z-index: 90;
+    background: rgba(255,255,255,0.05);
+  }
+  .topbar > i {
+    display: block; height: 100%; width: 0%;
+    background: linear-gradient(90deg, var(--blue), var(--violet));
+    box-shadow: 0 0 12px rgba(59,130,246,0.6);
+    transition: width 0.15s linear;
+  }
+  .skip {
+    position: absolute; left: 12px; top: -60px; z-index: 200;
+    background: var(--blue); color: #fff; padding: 10px 16px;
+    border-radius: 8px; font-weight: 600; text-decoration: none;
+    transition: top 0.2s ease;
+  }
+  .skip:focus { top: 12px; }
+
+  /* ---------- reveal ---------- */
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+  .reveal.d1 { transition-delay: 0.08s; }
+  .reveal.d2 { transition-delay: 0.16s; }
+  .reveal.d3 { transition-delay: 0.24s; }
+  .reveal.d4 { transition-delay: 0.32s; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+  }
+
+  /* ---------- HERO ---------- */
+  header.hero {
+    min-height: 100svh; display: flex; flex-direction: column;
+    justify-content: center; padding: 90px 0 60px;
+    position: relative;
+  }
+  .eyebrow {
+    font-size: 0.78rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--blue-bright); font-weight: 700; margin-bottom: 22px;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .eyebrow::before {
+    content: ""; width: 30px; height: 1px; background: var(--blue-bright); opacity: 0.7;
+  }
+  h1.hero-h {
+    font-size: var(--fs-hero); line-height: 1.02; letter-spacing: -0.03em;
+    font-weight: 800; margin: 0 0 26px; max-width: 16ch;
+  }
+  h1.hero-h .grad {
+    background: linear-gradient(100deg, #fff 0%, var(--blue-bright) 55%, var(--violet) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero-sub {
+    font-size: clamp(1.05rem, 2.1vw, 1.4rem); color: var(--text-secondary);
+    max-width: 56ch; line-height: 1.5; margin: 0 0 40px;
+  }
+  .hero-sub b { color: var(--text-primary); font-weight: 650; }
+
+  .hero-stats {
+    display: grid; gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    max-width: 760px;
+  }
+  .hstat {
+    background: var(--dark-card); border: 1px solid var(--dark-border);
+    border-radius: var(--r-md); padding: 18px 16px;
+  }
+  .hstat .n {
+    font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; line-height: 1;
+    font-variant-numeric: tabular-nums; letter-spacing: -0.02em;
+  }
+  .hstat.bad .n { color: var(--red-fg); }
+  .hstat.good .n { color: var(--green-fg); }
+  .hstat .l { font-size: 0.78rem; color: var(--text-dim); margin-top: 9px; line-height: 1.35; }
+
+  .scrollcue {
+    margin-top: 52px; font-size: 0.8rem; color: var(--text-faint);
+    display: inline-flex; align-items: center; gap: 9px; letter-spacing: 0.04em;
+  }
+  .scrollcue .arr { animation: bob 1.8s ease-in-out infinite; }
+  @keyframes bob { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(5px);} }
+  @media (prefers-reduced-motion: reduce){ .scrollcue .arr { animation: none; } }
+
+  /* ---------- section heading ---------- */
+  .sec-label {
+    font-size: 0.74rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--blue-bright); font-weight: 700; margin-bottom: 14px;
+  }
+  h2.sec-h {
+    font-size: var(--fs-h2); line-height: 1.06; letter-spacing: -0.025em;
+    font-weight: 800; margin: 0 0 18px; max-width: 22ch;
+  }
+  .sec-lede { color: var(--text-secondary); max-width: 60ch; font-size: var(--fs-body); }
+  .sec-lede b { color: var(--text-primary); }
+
+  section { padding: clamp(70px, 10vh, 130px) 0; }
+  .divider-soft { border: 0; border-top: 1px solid var(--dark-border); margin: 0; opacity: 0.6; }
+
+  /* ---------- SCROLLYTELLING ---------- */
+  .scrolly { position: relative; padding-top: 30px; }
+  .scrolly-grid { display: grid; grid-template-columns: 1fr; gap: 0; }
+
+  /* pinned panel */
+  .pin {
+    position: sticky; top: 0; height: 100svh;
+    display: flex; align-items: center; pointer-events: none; z-index: 1;
+  }
+  .pin-inner {
+    width: 100%; pointer-events: auto;
+  }
+
+  .stepcard {
+    background:
+      linear-gradient(180deg, rgba(37,99,235,0.05), transparent 40%),
+      var(--dark-card);
+    border: 1px solid var(--dark-border-2);
+    border-radius: var(--r-lg);
+    padding: clamp(18px, 2.6vw, 30px);
+    box-shadow: 0 30px 80px -40px rgba(0,0,0,0.9);
+    position: relative; overflow: hidden;
+    container-type: inline-size;
+  }
+  .stepcard::before {
+    content: ""; position: absolute; inset: 0 auto 0 0; width: 4px;
+    background: linear-gradient(180deg, var(--blue), var(--violet));
+    transition: opacity 0.4s ease;
+  }
+  .step-top {
+    display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+  .step-idx {
+    font-family: var(--mono); font-size: 0.82rem; color: var(--blue-bright);
+    font-weight: 700; letter-spacing: 0.05em;
+  }
+  .step-phase {
+    font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--text-faint); font-weight: 700;
+    border: 1px solid var(--dark-border-2); border-radius: 999px;
+    padding: 3px 10px;
+  }
+  .step-title {
+    font-size: var(--fs-h3); font-weight: 750; letter-spacing: -0.02em;
+    line-height: 1.12; margin: 8px 0 18px;
+  }
+
+  .rows { display: grid; gap: 14px; }
+  @container (min-width: 620px) {
+    .rows.split { grid-template-columns: 1fr 1fr; }
+    .rows.split .row.full { grid-column: 1 / -1; }
+  }
+
+  .row {
+    border: 1px solid var(--dark-border); border-radius: var(--r-md);
+    padding: 14px 15px; background: rgba(255,255,255,0.014);
+  }
+  .row .rk {
+    font-size: 0.64rem; letter-spacing: 0.15em; text-transform: uppercase;
+    font-weight: 700; margin-bottom: 9px; display: flex; align-items: center; gap: 7px;
+  }
+  .row .rk .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+  .row .rv { font-size: 0.88rem; line-height: 1.5; color: var(--text-secondary); }
+  .row .rv b { color: var(--text-primary); font-weight: 650; }
+
+  .row.tools .rk { color: var(--text-dim); }
+  .row.tools .rk .dot { background: var(--text-faint); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    font-family: var(--mono); font-size: 0.72rem; color: var(--text-secondary);
+    background: var(--dark-card-2); border: 1px solid var(--dark-border);
+    border-radius: 7px; padding: 4px 9px; line-height: 1.2;
+  }
+
+  .row.seam {
+    border-color: rgba(239,68,68,0.32);
+    background: linear-gradient(160deg, rgba(239,68,68,0.06), transparent 70%);
+  }
+  .row.seam .rk { color: var(--red-fg); }
+  .row.seam .rk .dot { background: var(--red); box-shadow: 0 0 8px rgba(239,68,68,0.6); }
+
+  .row.agent {
+    border-color: rgba(37,99,235,0.4);
+    background: linear-gradient(160deg, rgba(37,99,235,0.08), transparent 72%);
+  }
+  .row.agent .rk { color: var(--blue-bright); }
+  .row.agent .rk .dot { background: var(--blue); box-shadow: 0 0 8px rgba(37,99,235,0.7); }
+  .row.agent .rv .agent-name { color: var(--text-primary); font-weight: 750; }
+
+  /* rekey meter */
+  .rekey {
+    display: flex; align-items: center; gap: 10px; margin-top: 16px;
+    font-size: 0.76rem; color: var(--text-dim);
+  }
+  .rekey .pips { display: flex; gap: 5px; }
+  .rekey .pip {
+    width: 11px; height: 11px; border-radius: 3px;
+    border: 1px solid var(--dark-border-2); background: transparent;
+  }
+  .rekey .pip.on { background: var(--red); border-color: var(--red); box-shadow: 0 0 7px rgba(239,68,68,0.5); }
+
+  /* scroll text triggers (the prose column that drives the pin) */
+  .steps-track { position: relative; z-index: 2; }
+  .step-trigger {
+    min-height: 86svh; display: flex; align-items: center;
+    padding: 18px 0; pointer-events: none;
+  }
+  .step-trigger .ghost {
+    font-family: var(--mono); font-size: 0.8rem; color: var(--text-faint);
+    border-left: 2px solid var(--dark-border); padding-left: 14px;
+    opacity: 0; transform: translateX(-6px); transition: opacity .4s, transform .4s;
+  }
+  .step-trigger.active .ghost { opacity: 1; transform: none; color: var(--text-dim); }
+  @media (prefers-reduced-motion: reduce){ .step-trigger .ghost { opacity:1; transform:none; } }
+
+  /* mini-spine SVG */
+  .spine-rail {
+    position: fixed; left: max(14px, calc((100vw - var(--maxw))/2 - 26px));
+    top: 50%; transform: translateY(-50%);
+    z-index: 40; display: none;
+  }
+  @media (min-width: 1080px) { .spine-rail { display: block; } }
+  .spine-rail .seg { transition: fill 0.3s ease, opacity 0.3s ease; }
+
+  /* ---------- COLLAPSE FINALE ---------- */
+  .collapse-stage {
+    position: relative; padding: clamp(70px,10vh,120px) 0;
+  }
+  .collapse-pin {
+    position: sticky; top: 0; min-height: 100svh;
+    display: flex; align-items: center; overflow: hidden;
+  }
+  .collapse-svg-wrap { width: 100%; }
+  .collapse-svg { width: 100%; height: auto; display: block; max-height: 78svh; }
+
+  .silo { transition: transform 1s cubic-bezier(.6,.05,.2,1), opacity 0.8s ease; }
+  .silo-label { font-family: var(--mono); font-size: 11px; fill: var(--text-dim); }
+  .core-pulse { transform-box: fill-box; transform-origin: center; }
+  .collapse-pin.collapsed .silo { opacity: 0; }
+  .collapse-pin.collapsed .core-glow { opacity: 1 !important; }
+  .collapse-pin.collapsed .core-pulse { animation: pulse 2.6s ease-in-out infinite; }
+  .collapse-pin.collapsed .merge-line { stroke-dashoffset: 0 !important; opacity: 0.5 !important; }
+  @keyframes pulse { 0%,100%{ transform: scale(1);} 50%{ transform: scale(1.05);} }
+  @media (prefers-reduced-motion: reduce){
+    .collapse-pin.collapsed .core-pulse { animation: none; }
+    .silo { transition: none; }
+  }
+  .collapse-caption {
+    position: absolute; left: 0; right: 0; bottom: 4svh; text-align: center;
+    pointer-events: none;
+  }
+  .collapse-caption .big {
+    font-size: clamp(1.3rem, 3.4vw, 2.2rem); font-weight: 800; letter-spacing: -0.02em;
+  }
+  .collapse-caption .sub { color: var(--text-dim); font-size: var(--fs-sm); margin-top: 6px; }
+
+  /* ---------- ROI ---------- */
+  .lever-grid {
+    display: grid; gap: 16px; margin-top: 36px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+  .lever {
+    background: var(--dark-card); border: 1px solid var(--dark-border);
+    border-radius: var(--r-md); padding: 20px 18px; border-left: 3px solid var(--blue);
+  }
+  .lever h4 { margin: 0 0 9px; font-size: 1rem; font-weight: 700; }
+  .lever p { margin: 0; font-size: 0.86rem; color: var(--text-secondary); line-height: 1.5; }
+  .lever .save { display: block; margin-top: 11px; color: var(--green-fg); font-weight: 700; font-size: 0.9rem; }
+
+  .bignums { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); margin-top: 40px; }
+  .bignum {
+    text-align: center; background: var(--dark-card); border: 1px solid var(--dark-border);
+    border-radius: var(--r-md); padding: 26px 16px;
+  }
+  .bignum .n { font-size: clamp(2.1rem, 5vw, 3.1rem); font-weight: 800; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .bignum .l { color: var(--text-dim); font-size: 0.8rem; margin-top: 12px; line-height: 1.35; }
+
+  /* ---------- CLOSER ---------- */
+  .closer { text-align: center; padding: clamp(90px,14vh,170px) 0; }
+  .closer h2 { font-size: var(--fs-h2); letter-spacing: -0.03em; font-weight: 800; max-width: 20ch; margin: 0 auto 22px; line-height: 1.08; }
+  .closer .grad {
+    background: linear-gradient(100deg, #fff, var(--blue-bright) 60%, var(--violet));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .closer p { color: var(--text-secondary); max-width: 56ch; margin: 0 auto; font-size: var(--fs-body); }
+
+  footer { padding: 40px 0 60px; border-top: 1px solid var(--dark-border); }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; align-items: center; color: var(--text-faint); font-size: 0.8rem; }
+  footer .logo { font-weight: 800; letter-spacing: -0.02em; color: var(--text-secondary); }
+  footer .logo b { color: var(--blue-bright); }
+
+  @media (max-width: 560px) {
+    .wrap { width: calc(100% - 32px); }
+    .step-trigger { min-height: 80svh; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#pipeline">Skip to the pipeline</a>
+<div class="topbar" aria-hidden="true"><i id="topfill"></i></div>
+
+<!-- mini SVG spine -->
+<div class="spine-rail" aria-hidden="true">
+  <svg id="spine" width="22" height="420" viewBox="0 0 22 420" fill="none">
+    <line x1="11" y1="6" x2="11" y2="414" stroke="#262626" stroke-width="2"/>
+    <line id="spineFill" x1="11" y1="6" x2="11" y2="6" stroke="url(#sg)" stroke-width="2"/>
+    <defs>
+      <linearGradient id="sg" x1="0" y1="0" x2="0" y2="420" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#2563eb"/><stop offset="1" stop-color="#a78bfa"/>
+      </linearGradient>
+    </defs>
+    <g id="spineDots"></g>
+  </svg>
+</div>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow reveal">Referral → Cash · the SNF revenue cycle</span>
+    <h1 class="hero-h reveal d1">
+      38 jobs. 8 vendor silos.<br>
+      <span class="grad">The value dies at every seam.</span>
+    </h1>
+    <p class="hero-sub reveal d2">
+      The skilled-nursing revenue cycle isn't one job — it's a chain strung across a referral network the hospital owns, an eligibility portal, a different prior-auth portal for <b>every</b> payer, the EHR, a separate therapy system, a clearinghouse, a DDE green-screen, and a contract that lives as a PDF in someone's inbox. Each tool flags a problem and hands the work back to a human. <b>That handoff is the product.</b>
+    </p>
+
+    <div class="hero-stats reveal d3">
+      <div class="hstat bad"><div class="n" data-count="3" data-suffix="×">0×</div><div class="l">demographics re-keyed: referral, eligibility, registration</div></div>
+      <div class="hstat bad"><div class="n" data-count="14" data-suffix="%">0%</div><div class="l">denial rate — 4–5× the &lt;3% top-performer target</div></div>
+      <div class="hstat bad"><div class="n" data-count="18" data-suffix="%">0%</div><div class="l">of overturnable MA denials ever appealed</div></div>
+      <div class="hstat bad"><div class="n" data-count="95" data-suffix="%">0%</div><div class="l">of those appeals overturn — money left on the table</div></div>
+    </div>
+
+    <div class="scrollcue reveal d4"><span class="arr">↓</span> Scroll the chain, step by step</div>
+  </div>
+</header>
+
+<hr class="divider-soft" />
+
+<!-- ============ THE SEAM TAX intro ============ -->
+<section id="pipeline">
+  <div class="wrap">
+    <p class="sec-label reveal">The seam tax</p>
+    <h2 class="sec-h reveal d1">Every box is a different vendor.<br>None of them writes into the next.</h2>
+    <p class="sec-lede reveal d2">
+      Below, the full chain — <b>REFERRAL at the top, CASH at the bottom</b>. For each step: what it does, the named tools that do it today, the <span class="red">seam</span> where the work falls back on a human, and the single <span class="blue">Aedis agent</span> that replaces it. Watch the re-key meter: three full re-keyings before a claim even exists — Aedis drives them to <span class="green nowrap">zero</span>.
+    </p>
+  </div>
+</section>
+
+<!-- ============ SCROLLYTELLING ============ -->
+<div class="scrolly wrap">
+  <div class="scrolly-grid">
+    <!-- pinned panel -->
+    <div class="pin">
+      <div class="pin-inner">
+        <article class="stepcard" id="stepcard" aria-live="polite">
+          <div class="step-top">
+            <span class="step-idx" id="sIdx">STEP 01 / 19</span>
+            <span class="step-phase" id="sPhase">INTAKE</span>
+          </div>
+          <h3 class="step-title" id="sTitle">Referral intake &amp; acceptance</h3>
+          <div class="rows split">
+            <div class="row tools full">
+              <div class="rk"><span class="dot"></span>Tools doing this today</div>
+              <div class="chips" id="sChips"></div>
+            </div>
+            <div class="row seam full">
+              <div class="rk"><span class="dot"></span>The seam · manual rework</div>
+              <div class="rv" id="sSeam"></div>
+            </div>
+            <div class="row agent full">
+              <div class="rk"><span class="dot"></span>The Aedis agent that replaces it</div>
+              <div class="rv" id="sAgent"></div>
+            </div>
+          </div>
+          <div class="rekey" id="sRekey">
+            <span class="pips" aria-hidden="true"></span>
+            <span class="lbl"></span>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <!-- scroll triggers -->
+    <div class="steps-track" id="track"><!-- triggers injected --></div>
+  </div>
+</div>
+
+<hr class="divider-soft" />
+
+<!-- ============ COLLAPSE THE STACK ============ -->
+<section class="collapse-stage" id="collapse" style="padding-bottom:0;">
+  <div class="wrap">
+    <p class="sec-label reveal">The move</p>
+    <h2 class="sec-h reveal d1">Collapse the stack.</h2>
+    <p class="sec-lede reveal d2" style="margin-bottom:8px;">
+      Aedis isn't a ninth tool you log into. It's an agentic layer that reads the operator's EHR data directly and holds the whole referral-to-cash chain as <b>one connected provenance graph</b>. Scroll — and watch eight silos fold into one.
+    </p>
+  </div>
+  <div style="height:60vh" aria-hidden="true"></div>
+  <div class="collapse-pin" id="collapsePin">
+    <div class="collapse-svg-wrap wrap">
+      <svg class="collapse-svg" viewBox="0 0 1000 560" role="img"
+           aria-label="Animation: eight vendor silos — referral network, eligibility, prior-auth, EHR, therapy, clearinghouse, denials, contract PDF — collapse into a single Aedis agent at the center.">
+        <defs>
+          <radialGradient id="coreG" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#3b82f6"/>
+            <stop offset="60%" stop-color="#2563eb"/>
+            <stop offset="100%" stop-color="#1e40af"/>
+          </radialGradient>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="14" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- merge lines -->
+        <g id="mergeLines" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="6 7" opacity="0"></g>
+
+        <!-- center core -->
+        <g class="core" filter="url(#glow)">
+          <circle class="core-glow" cx="500" cy="280" r="86" fill="url(#coreG)" opacity="0.18"/>
+          <circle class="core-pulse" cx="500" cy="280" r="62" fill="url(#coreG)"/>
+          <text x="500" y="274" text-anchor="middle" fill="#fff" font-size="20" font-weight="800" font-family="var(--font)">Aedis</text>
+          <text x="500" y="298" text-anchor="middle" fill="#dbeafe" font-size="11" font-family="var(--mono)">one agent · one graph</text>
+        </g>
+
+        <!-- silos injected by JS -->
+        <g id="silos"></g>
+      </svg>
+    </div>
+    <div class="collapse-caption">
+      <div class="big" id="collapseBig">8 vendor silos</div>
+      <div class="sub" id="collapseSub">a human running between them — the integration tax is the product</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider-soft" />
+
+<!-- ============ ZERO RE-KEYINGS ============ -->
+<section>
+  <div class="wrap">
+    <p class="sec-label reveal">Correct by construction</p>
+    <h2 class="sec-h reveal d1">Three re-keyings collapse to zero.</h2>
+    <p class="sec-lede reveal d2">
+      One wrong policy digit, re-typed at referral, becomes a denial six weeks later. Today the same demographics are entered <b>three times</b> by hand. On one graph, the referral packet, the 271, the auth, the registration, the MDS, the HIPPS, the charges, the claim and the remit are <b>one record</b> — typed once, validated everywhere.
+    </p>
+    <div class="bignums">
+      <div class="bignum reveal"><div class="n red" data-count="3" data-suffix="×">0×</div><div class="l">re-keyings today<br>referral · eligibility · registration</div></div>
+      <div class="bignum reveal d1"><div class="n green" data-count="0">0</div><div class="l">re-keyings with Aedis<br>typed once, on the graph</div></div>
+      <div class="bignum reveal d2"><div class="n blue" data-count="98" data-suffix="%">0%</div><div class="l">first-pass Part A acceptance target<br>vs 15–25% rework today</div></div>
+      <div class="bignum reveal d3"><div class="n green" data-count="100" data-suffix="%">0%</div><div class="l">of overturnable MA denials auto-appealed<br>vs 18% today</div></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider-soft" />
+
+<!-- ============ ROI ============ -->
+<section>
+  <div class="wrap">
+    <p class="sec-label reveal">The seam tax, in dollars</p>
+    <h2 class="sec-h reveal d1">Overhead down. Recovery up.<br>On the same data they already own.</h2>
+    <p class="sec-lede reveal d2">
+      A 330-facility operator runs its billing office on FTEs, a stacked license bill, and an outsourced collections cut — and still leaks 12–15% to denials and <b class="red">$15K–$80K per facility per month</b> to silent per-diem underpayments booked as "contractual." Each lever below is one seam, eliminated.
+    </p>
+
+    <div class="lever-grid">
+      <div class="lever reveal">
+        <h4>Billing-office labor</h4>
+        <p>Shift from per-claim keying to HITL exception-handling — GREEN one-tap, YELLOW guided, RED owned.</p>
+        <span class="save">$45K–$65K/facility/yr · ~280% first-year ROI · payback &lt;4 mo</span>
+      </div>
+      <div class="lever reveal d1">
+        <h4>Denial reduction</h4>
+        <p>Closed-loop upstream fixes feed every denial's root cause back so the same denial stops recurring.</p>
+        <span class="save">12–15% → &lt;3% · ~$300K–$600K/facility/yr recovered</span>
+      </div>
+      <div class="lever reveal d2">
+        <h4>MA appeal coverage</h4>
+        <p>Auto-assemble and submit 100% of overturnable MA denials, not 18%. 95% overturn rate.</p>
+        <span class="save">Eight-figure annual recovery at portfolio scale</span>
+      </div>
+      <div class="lever reveal">
+        <h4>Per-diem underpayment recovery</h4>
+        <p>Detected at the 835 line against loaded contract terms — recovered, not written off. The single largest line.</p>
+        <span class="save">$180K–$960K/facility/yr</span>
+      </div>
+      <div class="lever reveal d1">
+        <h4>License-stack + CBO consolidation</h4>
+        <p>Retires the PDPM optimizer, the SNF scrubber, the eligibility/auth point tools, and the 4–7%-of-collections CBO fee.</p>
+        <span class="save">~$500K/yr on a $10M-collections facility (CBO alone)</span>
+      </div>
+      <div class="lever reveal d2">
+        <h4>Admissions conversion</h4>
+        <p>The eligibility/auth agent that prevents downstream denials also wins more admissions at the front door.</p>
+        <span class="save">+$438K/facility/yr · conversion 38% → 57% · occupancy 83% → 92%</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider-soft" />
+
+<!-- ============ CLOSER ============ -->
+<section class="closer">
+  <div class="wrap">
+    <h2 class="reveal">The stack you pay for manages seams.<br><span class="grad">Aedis eliminates them.</span></h2>
+    <p class="reveal d1">
+      Agentic where it removes labor. Human where it requires judgment. Every score rolls up to chart citations; every action is human-in-the-loop; every claim carries its audit defense by construction. One agent, on one graph, from <b class="blue">[REFERRAL]</b> to <b class="green">[CASH]</b>.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span class="logo"><b>Aedis</b> · the Agentic Operating System for Healthcare</span>
+    <span>Referral → Cash · figures are illustrative, case-study-anchored · PHI shown as tokens, e.g. [RESIDENT_0042]</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var RM = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------------- DATA ---------------- */
+  var STEPS = [
+    { idx:"00", phase:"START", title:"[REFERRAL] arrives",
+      tools:["hospital case-management","CarePort network","inbound fax / RightFax"],
+      seam:"The journey begins outside your walls. A referral for [RESIDENT_0042] lands in a hospital-owned network that does <b>not</b> write into your EHR. From here, every step risks a re-key.",
+      agent:"<span class='agent-name'>The chain starts as one record.</span> Aedis ingests the referral the instant it lands and never lets the data leave the graph.",
+      rekey:0 },
+
+    { idx:"01", phase:"INTAKE", title:"Referral intake & acceptance",
+      tools:["CarePort (WellSky)","naviHealth / nH Coordinate","Aidin","Repisodic (Trella)","PCC Referral Advisor","inbound fax / RightFax"],
+      seam:"Referral lands in a hospital-owned network that doesn't write into the SNF EHR. The liaison re-keys demographics / dx / payer into the EHR by eye, watching 3–5 inboxes, scoring acuity manually against bed and staffing capacity.",
+      agent:"<span class='agent-name'>Referral Intake Agent</span> — ingests every network + fax inbox at once, OCR/parses the packet, structures demographics / dx / payer, scores clinical fit vs live census, surfaces an accept/decline DecisionCard in seconds with <b>zero re-keying</b>.",
+      rekey:1 },
+
+    { idx:"02", phase:"ELIGIBILITY", title:"Eligibility verification (270/271)",
+      tools:["Availity","Waystar","Optum / Change","Experian eCare NEXT","CMS HETS / HIQA","MAC portals"],
+      seam:"Biller logs into multiple portals one patient at a time, reads remaining Part A days + MA enrollment off a screen, transcribes into the EHR — then re-checks it at admit because referral-time data goes stale.",
+      agent:"<span class='agent-name'>Eligibility Agent</span> — fires the 270 across HETS + every commercial payer at referral, parses the 271, detects MA enrollment, computes remaining Part A days, confirms the 3-day qualifying stay, continuously re-verified, <b>no portal logins</b>.",
+      rekey:2 },
+
+    { idx:"03", phase:"PRIOR-AUTH", title:"MA benefit check & prior authorization",
+      tools:["naviHealth nH Predict","Availity auth","Cohere Health","Myndshft","Humata Health","payer portals","auth spreadsheets"],
+      seam:"The highest-friction, highest-denial step. Each MA payer = a different portal, different criteria, different concurrent cadence. Staff fax clinicals, wait on hold, track authorized days in spreadsheets. A missed re-auth = denied days already delivered.",
+      agent:"<span class='agent-name'>Authorization Agent</span> — assembles the clinical packet to the payer's exact criteria, submits the auth, tracks the authorized-day countdown, auto-triggers concurrent reviews <b>before</b> expiry, and escalates threatened day-cuts with documentation.",
+      rekey:2 },
+
+    { idx:"04", phase:"DECISIONING", title:"Payer-mix & admit decisioning",
+      tools:["PCC Insights","Real Time Medical Systems","Excel / Smartsheet trackers","naviHealth rate sheets"],
+      seam:"Payer-mix optimization lives in spreadsheets and tribal knowledge. Expected per-diem vs contracted rate vs care cost is rarely modeled per-patient. Each decentralized facility decides differently with no enterprise visibility.",
+      agent:"<span class='agent-name'>Admit Decisioning Agent</span> — computes expected net reimbursement per candidate (contracted rate × predicted LOS − projected care cost) against bed scarcity, recommends admit/decline + room placement with a <b>dollar-quantified</b> rationale, enterprise-visible.",
+      rekey:2 },
+
+    { idx:"05", phase:"REGISTRATION", title:"Registration & payer setup",
+      tools:["PCC Admissions / Census / Trust","MatrixCare","WellSky LTC","Netsmart myUnity","American HealthTech"],
+      seam:"Demographics + payer data re-keyed a <b>third</b> time. One wrong policy-# / benefit-period / payer-rank digit causes a denial weeks later. Auth numbers copied by hand. No validation that registration matches the verified 271.",
+      agent:"<span class='agent-name'>Registration Agent</span> — populates the entire registration from the already-structured referral + 271 + auth, validates payer ranking / policy format against eligibility, flags any mismatch <b>before</b> it can cause a denial. Single source of truth.",
+      rekey:3 },
+
+    { idx:"06", phase:"MDS · ARD", title:"MDS / ARD scheduling",
+      tools:["PCC Assessment Mgmt","MatrixCare MDS","Netsmart / SimpleLTC","manual MDS calendars"],
+      seam:"ARD selection is a manual judgment call balancing acuity-capture windows vs compliance deadlines. Missed ARDs trigger default-rate penalties. Scheduling lives apart from the documentation it depends on.",
+      agent:"<span class='agent-name'>MDS Coordinator Agent</span> (scheduling) — monitors admit date + clinical events, recommends the optimal compliant ARD to legitimately capture acuity, auto-schedules the assessment battery, alarms on any approaching window.",
+      rekey:3 },
+
+    { idx:"07", phase:"CLINICAL", title:"Census / ADT + clinical assessment capture",
+      tools:["PCC Census / POC / eMAR","MatrixCare","Net Health / Casamba (therapy)","Real Time Medical Systems"],
+      seam:"ADT / LOA / bed-holds entered manually and mis-tracked. Documentation fragmented across EHR + separate therapy + dietary / social. The MDS coordinator chart-mines across all of them; gaps between done-vs-documented = unsupported MDS items.",
+      agent:"<span class='agent-name'>Clinical Documentation Agent</span> — maintains a live census from nursing events, auto-reconciles billed days vs documented days + benefit counters, reads across EHR + therapy + ancillary systems, flags documentation gaps in <b>real time</b>.",
+      rekey:3 },
+
+    { idx:"08", phase:"CODING", title:"MDS 3.0 coding + ICD-10 (PDPM primary dx)",
+      tools:["PCC MDS","MatrixCare MDS","3M / Solventum 360 Encompass","Optum EncoderPro","SimpleAnalyzer","Zimmet PDPM-Connect"],
+      seam:"Largely manual chart abstraction — <b>2+ hrs/day per coordinator</b> — and the #1 driver of both under-capture (lost revenue) and over-capture (clawback). The primary dx must map to an allowed PDPM category or the claim is returned to provider.",
+      agent:"<span class='agent-name'>MDS Coordinator Agent</span> (coding) — pre-populates MDS items from source documentation <b>with chart citations</b>, validates the primary dx against the current CMS PDPM mapping, flags unsupported items, hands a verify-and-sign packet.",
+      rekey:3 },
+
+    { idx:"09", phase:"PDPM", title:"Therapy minutes + NTA / comorbidity + GG scoring",
+      tools:["Net Health (Rehab Optima)","Casamba","PCC PDPM tools","Zimmet / Broad River","GG reconciliation worksheets"],
+      seam:"Therapy lives in a separate vendor system. NTA points — highest-weighted, 3.0× on days 1–3 — are the most-missed revenue, buried in hospital meds / labs / wound notes. GG requires reconciling nursing's and therapy's <b>disagreeing</b> observations inside a 3-day window.",
+      agent:"<span class='agent-name'>PDPM Optimizer Agent</span> — reads the therapy system + meds / labs / wound notes against the full 50-condition NTA list, surfaces every supportable NTA point with citation, reconciles GG under the usual-performance rule, proposes a defensible score.",
+      rekey:3 },
+
+    { idx:"10", phase:"GROUPING", title:"PDPM grouping → HIPPS + variable per-diem",
+      tools:["PCC grouper","MatrixCare","CMS jRAVEN / iQIES","ABILITY CAREWATCH","Zimmet analyzers"],
+      seam:"Grouper output is trusted but rarely re-validated — an MDS error silently produces the wrong HIPPS + wrong per-diem. MDS HIPPS must equal UB-04 HIPPS (a top rejection reason). The optional IPA is judgment-based, so facilities miss rate-raising IPAs or trigger them wrong.",
+      agent:"<span class='agent-name'>PDPM Optimizer Agent</span> (grouping) — independently re-runs the grouper, validates HIPPS against source MDS items, <b>guarantees MDS HIPPS == claim HIPPS</b>, tracks the day-by-day per-diem taper, and models whether an IPA changes the rate with the dollar delta.",
+      rekey:3 },
+
+    { idx:"11", phase:"CHARGES", title:"Charge capture (ancillary, meds, CDM)",
+      tools:["PCC charge capture","Omnicare / PharMerica feeds","lab / radiology interfaces","third-party CDM review"],
+      seam:"SNF consolidated billing is the #1 complexity trap — staff must know which ancillaries are bundled vs separately billable. Pharmacy reconciliation is manual file-matching. The CDM is updated infrequently, so stale HCPCS / revenue-code mappings silently cause rejections.",
+      agent:"<span class='agent-name'>Billing Specialist Agent</span> (charge capture) — applies the CMS consolidated-billing exclusion list to every charge, reconciles pharmacy invoices vs eMAR <b>line-by-line</b>, links high-cost meds back to NTA capture, keeps the CDM synced to current CMS fee schedules.",
+      rekey:3 },
+
+    { idx:"12", phase:"TRIPLE-CHECK", title:"Triple-Check pre-bill review",
+      tools:["manual triple-check spreadsheets","PCC pre-bill reports","Inovalon Triple Check","Richter / Zimmet templates"],
+      seam:"A monthly cross-functional <b>meeting</b> reconciling the MDS report vs census report vs auth log vs UB-04 proof by eye. Time-intensive, and it still misses mismatches that resurface as denials weeks later.",
+      agent:"<span class='agent-name'>Triple-Check Agent</span> — runs a <b>continuous</b> automated triple-check across MDS, census, auth, charges, and the draft UB-04, asserts every cross-reference (HIPPS==HIPPS, days==auth, dx supported), and surfaces only genuine exceptions for human sign-off.",
+      rekey:3 },
+
+    { idx:"13", phase:"CLAIM BUILD", title:"Scrubbing + medical-necessity + 837I creation",
+      tools:["Waystar","Availity","Experian ClaimSource","Inovalon ABILITY","InterQual / MCG","PCC RCM"],
+      seam:"Scrubber edits surface as worklists a biller clears one by one. Generic scrubbers under-serve SNF-specific edits. Physician certs / recerts tracked on paper logs and frequently late = automatic denial. The claim is built from 6+ upstream systems where <b>any</b> mismatch becomes a denial.",
+      agent:"<span class='agent-name'>Billing Specialist Agent</span> (claim build) — applies a continuously-updated SNF-specific edit set, auto-corrects deterministic errors, verifies skilled-need + tracks cert / recert deadlines, drafts the medical-necessity narrative, generates the 837I <b>correct-by-construction</b>.",
+      rekey:3 },
+
+    { idx:"14", phase:"SUBMIT · POST", title:"Submission + status (276/277) + ERA/835 posting",
+      tools:["Waystar","Availity","Optum / Change","MAC DDE / FISS green-screen","Inovalon ABILITY"],
+      seam:"Multiple submission paths. 999 / 277CA acks must be downloaded and read. Status is checked by logging into each MAC / payer portal per-claim. 835s arrive in many formats; partials, takebacks, and paper EOBs are keyed by hand.",
+      agent:"<span class='agent-name'>Billing Specialist Agent</span> (submit/post) — routes each claim to the correct path incl. driving MAC DDE / FISS, ingests 999 / 277CA + parses rejections to root cause, polls 276 / 277 for a live status board, and auto-posts every 835 — <b>OCRs paper EOBs</b> — matched to the bank deposit.",
+      rekey:3 },
+
+    { idx:"15", phase:"DENIALS", title:"Contractual adjustment + denial management",
+      tools:["Waystar denial + appeal","Experian AI Advantage","PCC denial worklists","SNF Metrics","spreadsheet rate sheets"],
+      seam:"MA contracted rates often aren't loaded, so underpayments are silently written off as 'contractual'. Denials hit weeks after the upstream error with no feedback loop. The per-diem underpayment gap is the single largest unaddressed leak — <b class='red'>$15K–$80K/facility/mo</b>.",
+      agent:"<span class='agent-name'>Revenue Cycle Agent</span> — loads every payer contract's rate logic, distinguishes true write-offs from hidden underpayments, triages every denial to root cause, auto-corrects + resubmits the fixable ones, <b>and feeds the cause back upstream</b> so the same denial stops recurring.",
+      rekey:3 },
+
+    { idx:"16", phase:"APPEALS", title:"ADR response + appeals (multi-level)",
+      tools:["CMS esMD","MAC appeal portals","Waystar appeals","manual records pulls + fax","Richter / Zimmet"],
+      seam:"ADRs are deadline-driven and assembled by hand across fragmented systems. Only <b>~18%</b> of MA denials are appealed yet <b>~95% are overturned</b> — SNFs write off the overwhelming majority of recoverable dollars because appeals exceed biller bandwidth.",
+      agent:"<span class='agent-name'>Appeals Agent</span> — detects the ADR, auto-assembles the complete supporting packet from every source system and submits via esMD <b>before the deadline</b>, drafts the appeal letter with cited evidence, tracks every level + the 120 / 180 / 60 / 60-day windows.",
+      rekey:3 },
+
+    { idx:"17", phase:"AUDIT", title:"TPE / RAC / UPIC / CMS Validation response",
+      tools:["CMS / MAC audit portals","PCC + manual records","compliance / consulting firms","audit-tracking spreadsheets"],
+      seam:"Audits target exactly the manually-coded judgment steps — MDS / GG / NTA / medical necessity — where errors accumulate. The new CMS SNF Validation Program (1,500 SNFs/yr, 45-day clock) means reconstructing a defense from fragmented records months later.",
+      agent:"<span class='agent-name'>Medicare Audit Agent</span> — because each claim was coded <b>with chart citations from the start</b>, the defense is pre-assembled; auto-builds the validation / ADR packet matching MDS data elements to source docs, and its consistent coding shrinks the error rate that triggers escalation.",
+      rekey:3 },
+
+    { idx:"18", phase:"AR · CLOSE", title:"Aged AR, secondary billing, bad-debt, rev-rec, cost report",
+      tools:["PCC AR / Trust","Waystar","outsourced CBO (4–7%)","Workday / Sage Intacct","HFS cost-report","SNF Metrics"],
+      seam:"AR worked manually by aging bucket; many SNFs pay an outsourced CBO a % of collections. The Medicare bad-debt log is a hand-kept spreadsheet. Month-end accruals are computed in spreadsheets. Managed-care terms live in PDFs, so systemic underpayments go undetected.",
+      agent:"<span class='agent-name'>Accounting / Revenue Cycle Agent</span> — works the entire AR continuously by recoverability, auto-generates secondary / patient claims, maintains the audit-ready bad-debt log, books net revenue to the ERP, keeps cost-report inputs live, and reconciles every MA payment vs loaded contract terms <b>at portfolio scale</b>.",
+      rekey:3 },
+
+    { idx:"19", phase:"CASH", title:"[CASH] posted",
+      tools:["bank deposit","ERP general ledger"],
+      seam:"Today: 45–50 days in AR, 12–15% of the book reworked, and the underpayments quietly written off before the money ever lands.",
+      agent:"<span class='agent-name'>One graph, end to end.</span> Days-in-AR pulled toward &lt;30, first-pass acceptance ≥98%, every recoverable dollar chased. <b>Referral typed once — cash posted clean.</b>",
+      rekey:0 },
+  ];
+
+  var TOTAL = STEPS.length;
+
+  /* ---------------- build triggers ---------------- */
+  var track = document.getElementById("track");
+  var frag = document.createDocumentFragment();
+  STEPS.forEach(function(s, i){
+    var t = document.createElement("div");
+    t.className = "step-trigger";
+    t.setAttribute("data-i", i);
+    t.innerHTML = '<div class="ghost">' + (i+1) + ' / ' + TOTAL + ' · ' + s.phase + '<br><b style="color:var(--text-secondary)">' + s.title.replace(/\[|\]/g,'') + '</b></div>';
+    frag.appendChild(t);
+  });
+  track.appendChild(frag);
+
+  /* ---------------- pinned-panel updater ---------------- */
+  var el = {
+    idx: document.getElementById("sIdx"),
+    phase: document.getElementById("sPhase"),
+    title: document.getElementById("sTitle"),
+    chips: document.getElementById("sChips"),
+    seam: document.getElementById("sSeam"),
+    agent: document.getElementById("sAgent"),
+    rekey: document.getElementById("sRekey"),
+    card: document.getElementById("stepcard")
+  };
+  var rekeyPips = el.rekey.querySelector(".pips");
+  var rekeyLbl = el.rekey.querySelector(".lbl");
+  for (var p=0;p<3;p++){ var d=document.createElement("span"); d.className="pip"; rekeyPips.appendChild(d); }
+  var pipEls = rekeyPips.querySelectorAll(".pip");
+
+  var current = -1;
+  function render(i){
+    if (i === current) return;
+    current = i;
+    var s = STEPS[i];
+    el.idx.textContent = "STEP " + s.idx + " / " + STEPS[TOTAL-1].idx;
+    el.phase.textContent = s.phase;
+    el.title.innerHTML = s.title
+      .replace("[REFERRAL]", '<span class="blue">REFERRAL</span>')
+      .replace("[CASH]", '<span class="green">CASH</span>');
+    el.chips.innerHTML = s.tools.map(function(t){ return '<span class="chip">'+t+'</span>'; }).join("");
+    el.seam.innerHTML = s.seam;
+    el.agent.innerHTML = s.agent;
+    // rekey meter
+    for (var k=0;k<3;k++){ pipEls[k].classList.toggle("on", k < s.rekey); }
+    if (s.rekey === 0){
+      rekeyLbl.innerHTML = i===0
+        ? '<span class="green">0 re-keyings — the chain hasn\'t started losing data yet</span>'
+        : '<span class="green">0 re-keyings — typed once, on the graph</span>';
+    } else {
+      rekeyLbl.innerHTML = '<span class="red">' + s.rekey + ' re-key' + (s.rekey>1?'ings':'ing') + ' of the same demographics — by hand</span>';
+    }
+    updateSpine(i);
+  }
+  render(0);
+
+  /* ---------------- IntersectionObserver drives active step ---------------- */
+  var triggers = Array.prototype.slice.call(document.querySelectorAll(".step-trigger"));
+  if ("IntersectionObserver" in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){
+          var i = +e.target.getAttribute("data-i");
+          triggers.forEach(function(t){ t.classList.toggle("active", t===e.target); });
+          render(i);
+        }
+      });
+    }, { rootMargin: "-45% 0px -45% 0px", threshold: 0 });
+    triggers.forEach(function(t){ io.observe(t); });
+  } else {
+    triggers.forEach(function(t){ t.classList.add("active"); });
+  }
+
+  /* ---------------- mini SVG spine ---------------- */
+  var spineFill = document.getElementById("spineFill");
+  var spineDots = document.getElementById("spineDots");
+  var dotY = [];
+  (function(){
+    var n = TOTAL, top=10, bot=410;
+    for (var i=0;i<n;i++){
+      var y = top + (bot-top) * (i/(n-1));
+      dotY.push(y);
+      var c = document.createElementNS("http://www.w3.org/2000/svg","circle");
+      c.setAttribute("cx","11"); c.setAttribute("cy", y.toFixed(1));
+      c.setAttribute("r","2.4"); c.setAttribute("fill","#3a3a3a");
+      c.className.baseVal = "seg"; spineDots.appendChild(c);
+    }
+  })();
+  function updateSpine(i){
+    var y = dotY[i] || 10;
+    spineFill.setAttribute("y2", y.toFixed(1));
+    var dots = spineDots.querySelectorAll("circle");
+    dots.forEach(function(c, k){
+      c.setAttribute("fill", k<=i ? "#3b82f6" : "#3a3a3a");
+      c.setAttribute("r", k===i ? "4" : "2.4");
+    });
+  }
+
+  /* ---------------- top progress bar ---------------- */
+  var topfill = document.getElementById("topfill");
+  function onScroll(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max>0 ? (h.scrollTop / max) * 100 : 0;
+    topfill.style.width = pct.toFixed(2) + "%";
+  }
+  window.addEventListener("scroll", onScroll, { passive:true });
+  onScroll();
+
+  /* ---------------- reveal-on-scroll ---------------- */
+  if ("IntersectionObserver" in window && !RM){
+    var ro = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); ro.unobserve(e.target); } });
+    }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+    document.querySelectorAll(".reveal").forEach(function(n){ ro.observe(n); });
+  } else {
+    document.querySelectorAll(".reveal").forEach(function(n){ n.classList.add("in"); });
+  }
+
+  /* ---------------- count-up stats ---------------- */
+  function countUp(node){
+    var target = parseFloat(node.getAttribute("data-count"));
+    var suffix = node.getAttribute("data-suffix") || "";
+    if (RM){ node.textContent = target + suffix; return; }
+    var dur = 1100, start = null;
+    function tick(ts){
+      if (start===null) start = ts;
+      var t = Math.min(1, (ts-start)/dur);
+      var eased = 1 - Math.pow(1-t, 3);
+      var val = Math.round(target * eased);
+      node.textContent = val + suffix;
+      if (t<1) requestAnimationFrame(tick);
+      else node.textContent = target + suffix;
+    }
+    requestAnimationFrame(tick);
+  }
+  if ("IntersectionObserver" in window){
+    var co = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ countUp(e.target); co.unobserve(e.target); } });
+    }, { threshold: 0.5 });
+    document.querySelectorAll("[data-count]").forEach(function(n){ co.observe(n); });
+  } else {
+    document.querySelectorAll("[data-count]").forEach(countUp);
+  }
+
+  /* ---------------- COLLAPSE THE STACK ---------------- */
+  var SILOS = [
+    {name:"Referral network", x:170, y:90},
+    {name:"Eligibility portal", x:500, y:60},
+    {name:"Prior-auth portals", x:830, y:90},
+    {name:"The EHR", x:120, y:280},
+    {name:"Therapy system", x:880, y:280},
+    {name:"Clearinghouse", x:170, y:470},
+    {name:"Denials spreadsheet", x:500, y:500},
+    {name:"Contract PDF", x:830, y:470},
+  ];
+  var silosG = document.getElementById("silos");
+  var mergeG = document.getElementById("mergeLines");
+  var CX=500, CY=280;
+  SILOS.forEach(function(s, i){
+    // merge line to core
+    var ln = document.createElementNS("http://www.w3.org/2000/svg","line");
+    ln.setAttribute("x1", s.x); ln.setAttribute("y1", s.y);
+    ln.setAttribute("x2", CX); ln.setAttribute("y2", CY);
+    ln.className.baseVal = "merge-line";
+    var len = Math.hypot(s.x-CX, s.y-CY);
+    ln.style.strokeDasharray = len; ln.style.strokeDashoffset = len; ln.style.opacity = "0";
+    ln.style.transition = "stroke-dashoffset 0.9s ease "+(i*0.06)+"s, opacity 0.6s ease";
+    mergeG.appendChild(ln);
+
+    var g = document.createElementNS("http://www.w3.org/2000/svg","g");
+    g.className.baseVal = "silo";
+    g.style.transitionDelay = (i*0.05)+"s";
+    g.setAttribute("data-x", s.x); g.setAttribute("data-y", s.y);
+
+    var w=158, h=58;
+    var rect = document.createElementNS("http://www.w3.org/2000/svg","rect");
+    rect.setAttribute("x", s.x-w/2); rect.setAttribute("y", s.y-h/2);
+    rect.setAttribute("width", w); rect.setAttribute("height", h);
+    rect.setAttribute("rx","11");
+    rect.setAttribute("fill","#141414");
+    rect.setAttribute("stroke","#303236"); rect.setAttribute("stroke-width","1.2");
+    g.appendChild(rect);
+
+    var ic = document.createElementNS("http://www.w3.org/2000/svg","circle");
+    ic.setAttribute("cx", s.x-w/2+22); ic.setAttribute("cy", s.y);
+    ic.setAttribute("r","6"); ic.setAttribute("fill","#ef4444"); ic.setAttribute("opacity","0.85");
+    g.appendChild(ic);
+
+    var tx = document.createElementNS("http://www.w3.org/2000/svg","text");
+    tx.setAttribute("x", s.x-w/2+38); tx.setAttribute("y", s.y+4);
+    tx.className.baseVal = "silo-label";
+    tx.setAttribute("fill","#cfcfd4");
+    tx.textContent = s.name;
+    g.appendChild(tx);
+
+    silosG.appendChild(g);
+  });
+
+  var collapsePin = document.getElementById("collapsePin");
+  var collapseBig = document.getElementById("collapseBig");
+  var collapseSub = document.getElementById("collapseSub");
+  var collapsedState = false;
+  function setCollapsed(on){
+    if (on === collapsedState) return;
+    collapsedState = on;
+    var siloNodes = silosG.querySelectorAll(".silo");
+    if (on){
+      collapsePin.classList.add("collapsed");
+      siloNodes.forEach(function(g){
+        var x=+g.getAttribute("data-x"), y=+g.getAttribute("data-y");
+        g.style.transform = "translate("+(CX-x)+"px,"+(CY-y)+"px) scale(0.15)";
+        g.style.opacity = "0";
+      });
+      mergeG.querySelectorAll(".merge-line").forEach(function(l){ l.style.strokeDashoffset="0"; l.style.opacity="0.45"; });
+      mergeG.style.opacity = "1";
+      collapseBig.innerHTML = '<span class="blue">1 agent · 1 graph</span>';
+      collapseSub.textContent = "referral → cash as one connected provenance record — no seams left to tax";
+    } else {
+      collapsePin.classList.remove("collapsed");
+      siloNodes.forEach(function(g){ g.style.transform=""; g.style.opacity=""; });
+      mergeG.querySelectorAll(".merge-line").forEach(function(l){ var len=l.getAttribute("x1"); l.style.strokeDashoffset=Math.hypot(+l.getAttribute("x1")-CX,+l.getAttribute("y1")-CY); l.style.opacity="0"; });
+      collapseBig.textContent = "8 vendor silos";
+      collapseSub.textContent = "a human running between them — the integration tax is the product";
+    }
+  }
+  if ("IntersectionObserver" in window){
+    var sentinel = document.querySelector("#collapse > div[aria-hidden]");
+    // drive collapse when the pinned section is centered
+    var collapseIO = new IntersectionObserver(function(es){
+      es.forEach(function(e){ setCollapsed(e.isIntersecting); });
+    }, { rootMargin: "-30% 0px -45% 0px", threshold: 0 });
+    collapseIO.observe(collapsePin);
+  } else {
+    setCollapsed(true);
+  }
+  if (RM){ setCollapsed(true); }
+})();
+</script>
+</body>
+</html>

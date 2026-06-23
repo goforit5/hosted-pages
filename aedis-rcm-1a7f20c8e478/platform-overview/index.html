@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Aedis — The Agentic Operating System for SNF Revenue</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   AEDIS — Platform Overview. One self-contained file.
+   Palette + type inherited from the client-liked deck, then exceeded.
+   ═══════════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* — inherited core palette — */
+  --blue: #2563eb;
+  --blue-bright: #3b82f6;
+  --blue-dark: #1e40af;
+  --dark: #07090f;
+  --dark-2: #0a0f1c;
+  --dark-card: #11151f;
+  --dark-card-2: #141a26;
+  --dark-border: #232a38;
+  --text-primary: #ffffff;
+  --text-secondary: #b6bccb;
+  --text-dim: #7c8499;
+  --text-dimmer: #5b6273;
+
+  --red: #f15858;
+  --red-bg: rgba(241, 88, 88, 0.10);
+  --red-border: rgba(241, 88, 88, 0.40);
+  --green: #34d27b;
+  --green-bg: rgba(52, 210, 123, 0.10);
+  --green-border: rgba(52, 210, 123, 0.42);
+  --amber: #f5b840;
+  --amber-bg: rgba(245, 184, 64, 0.10);
+  --amber-border: rgba(245, 184, 64, 0.42);
+  --violet: #a78bfa;
+
+  /* domain hues for the agent roster */
+  --finance: #34d27b;
+  --admissions: #38bdf8;
+  --legal: #a78bfa;
+
+  /* fluid type scale */
+  --t-hero: clamp(2.6rem, 8.5vw, 6rem);
+  --t-h2: clamp(1.9rem, 5vw, 3.4rem);
+  --t-h3: clamp(1.05rem, 2.6vw, 1.35rem);
+  --t-lead: clamp(1.05rem, 2.7vw, 1.45rem);
+  --t-body: clamp(0.92rem, 2.1vw, 1rem);
+  --t-small: clamp(0.78rem, 1.8vw, 0.86rem);
+  --t-mono: clamp(0.72rem, 1.7vw, 0.82rem);
+
+  --maxw: 1120px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  background: var(--dark);
+  color: var(--text-primary);
+  line-height: 1.55;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+p, li, h1, h2, h3, h4 { text-wrap: pretty; }
+h1, h2, h3 { text-wrap: balance; }
+
+::selection { background: var(--blue); color: #fff; }
+
+a { color: inherit; }
+:focus-visible {
+  outline: 2px solid var(--blue-bright);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* skip link */
+.skip {
+  position: absolute; left: -999px; top: 0; z-index: 9999;
+  background: var(--blue); color: #fff; padding: 10px 16px; border-radius: 0 0 8px 0;
+  font-weight: 600; font-size: 0.85rem;
+}
+.skip:focus { left: 0; }
+
+/* ─────────────────── progress + chrome ─────────────────── */
+.progress { position: fixed; top: 0; left: 0; width: 100%; height: 3px; z-index: 1000; background: rgba(255,255,255,0.05); }
+.progress > i {
+  display: block; height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--blue), var(--blue-bright), var(--green));
+  transform-origin: left; transition: width 0.1s linear;
+}
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .progress > i { width: 100%; transform: scaleX(0); animation: grow linear; animation-timeline: scroll(root); }
+    @keyframes grow { to { transform: scaleX(1); } }
+  }
+}
+
+.brandmark {
+  position: fixed; top: 16px; left: 20px; z-index: 200;
+  display: flex; align-items: center; gap: 9px;
+  font-weight: 700; letter-spacing: -0.01em; font-size: 0.95rem;
+  mix-blend-mode: difference;
+}
+.brandmark .flame {
+  width: 18px; height: 18px; border-radius: 5px;
+  background: linear-gradient(155deg, var(--blue-bright), var(--green));
+  box-shadow: 0 0 16px rgba(59,130,246,0.5);
+}
+
+/* ─────────────────── layout primitives ─────────────────── */
+section {
+  position: relative;
+  padding: clamp(56px, 11vh, 120px) clamp(20px, 6vw, 64px);
+  scroll-margin-top: 0;
+}
+.act { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; scroll-snap-align: start; }
+@media (prefers-reduced-motion: reduce) { html { scroll-snap-type: none; } }
+
+.wrap { max-width: var(--maxw); margin: 0 auto; width: 100%; }
+.narrow { max-width: 860px; }
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: var(--t-small); text-transform: uppercase; letter-spacing: 0.14em;
+  color: var(--blue-bright); font-weight: 700; margin-bottom: 18px;
+}
+.eyebrow::before { content: ""; width: 26px; height: 2px; background: var(--blue-bright); border-radius: 2px; }
+
+h1 { font-size: var(--t-hero); font-weight: 800; letter-spacing: -0.035em; line-height: 1.02; }
+h2 { font-size: var(--t-h2); font-weight: 800; letter-spacing: -0.028em; line-height: 1.08; }
+h3 { font-size: var(--t-h3); font-weight: 700; letter-spacing: -0.01em; line-height: 1.25; }
+
+.lead { font-size: var(--t-lead); color: var(--text-secondary); font-weight: 400; line-height: 1.5; max-width: 820px; }
+.body { font-size: var(--t-body); color: var(--text-secondary); line-height: 1.6; }
+.small { font-size: var(--t-small); color: var(--text-dim); }
+
+.accent { color: var(--blue-bright); }
+.g { color: var(--green); }
+.r { color: var(--red); }
+.a { color: var(--amber); }
+.v { color: var(--violet); }
+.dim { color: var(--text-dim); }
+.b { font-weight: 700; color: var(--text-primary); }
+.mono { font-family: 'SF Mono', 'JetBrains Mono', 'Menlo', monospace; }
+.tok { font-family: 'SF Mono','Menlo',monospace; color: #fff; font-weight: 600; letter-spacing: -0.02em; }
+
+/* ─────────────────── reveal-on-scroll (JS + native fallback) ─────────────────── */
+.r-up { opacity: 0; transform: translateY(26px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+.r-up.in { opacity: 1; transform: none; }
+.d1 { transition-delay: 0.08s; } .d2 { transition-delay: 0.16s; } .d3 { transition-delay: 0.24s; }
+.d4 { transition-delay: 0.32s; } .d5 { transition-delay: 0.40s; } .d6 { transition-delay: 0.48s; }
+@media (prefers-reduced-motion: reduce) { .r-up { opacity: 1 !important; transform: none !important; transition: none; } }
+
+/* ════════════════════ ACT 0 · HERO ════════════════════ */
+#hero {
+  background:
+    radial-gradient(120% 90% at 50% -10%, rgba(37,99,235,0.22), transparent 60%),
+    radial-gradient(80% 60% at 85% 110%, rgba(52,210,123,0.12), transparent 60%),
+    linear-gradient(180deg, var(--dark) 0%, var(--dark-2) 100%);
+  text-align: center; align-items: center; overflow: hidden;
+}
+#hero .wrap { display: flex; flex-direction: column; align-items: center; }
+.hero-kicker {
+  font-size: var(--t-small); text-transform: uppercase; letter-spacing: 0.2em;
+  color: var(--text-dim); font-weight: 600; margin-bottom: 26px;
+}
+#hero h1 { max-width: 14ch; }
+.hero-sub { margin-top: 26px; max-width: 760px; }
+.hero-flux {
+  margin-top: 40px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+}
+.flux-chip {
+  font-size: var(--t-small); font-weight: 600; padding: 8px 15px; border-radius: 999px;
+  border: 1px solid var(--dark-border); background: rgba(255,255,255,0.025);
+  color: var(--text-secondary); backdrop-filter: blur(8px);
+}
+.flux-chip .g, .flux-chip .a, .flux-chip .r { font-weight: 800; }
+.scroll-cue {
+  margin-top: 52px; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--text-dimmer); display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+.scroll-cue .arr { width: 1px; height: 34px; background: linear-gradient(var(--blue-bright), transparent); }
+@media (prefers-reduced-motion: no-preference) {
+  .scroll-cue .arr { animation: pulse 2s var(--ease) infinite; }
+  @keyframes pulse { 0%,100%{ opacity:0.3; transform: scaleY(0.7);} 50%{ opacity:1; transform: scaleY(1);} }
+}
+
+/* ════════════════════ ACT · INVERSION (sticky stack) ════════════════════ */
+.invert-grid { display: grid; gap: 16px; margin-top: 34px; }
+@container (min-width: 720px) { .invert-grid { grid-template-columns: 1fr 1fr; } }
+.invert-grid { container-type: inline-size; }
+.invert-wrap { container-type: inline-size; }
+
+.col-card {
+  border-radius: 18px; padding: clamp(20px, 3vw, 30px); border: 1px solid var(--dark-border);
+  background: var(--dark-card);
+}
+.col-card.bad { border-color: var(--red-border); background: linear-gradient(160deg, var(--red-bg), var(--dark-card) 70%); }
+.col-card.good { border-color: var(--green-border); background: linear-gradient(160deg, var(--green-bg), var(--dark-card) 70%); }
+.col-card h3 { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--dark-border); }
+.col-card .tag { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; padding: 4px 9px; border-radius: 999px; font-weight: 800; }
+.col-card.bad .tag { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+.col-card.good .tag { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.col-card ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+.col-card li { font-size: var(--t-small); color: var(--text-secondary); line-height: 1.45; padding-left: 26px; position: relative; }
+.col-card.bad li::before { content: "✕"; position: absolute; left: 0; top: 0; color: var(--red); font-weight: 800; }
+.col-card.good li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--green); font-weight: 800; }
+.verb { font-family: 'SF Mono','Menlo',monospace; color: #fff; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 5px; font-size: 0.9em; }
+
+.inversion-punch {
+  margin-top: 30px; text-align: center; font-size: var(--t-h3); font-weight: 700;
+  color: var(--text-primary); max-width: 760px; margin-left: auto; margin-right: auto;
+}
+
+/* ════════════════════ ACT · FOUR COST CENTERS (sticky scrollytelling) ════════════════════ */
+.scrolly { position: relative; }
+.scrolly-grid { display: grid; gap: clamp(24px, 5vw, 60px); align-items: start; }
+@media (min-width: 940px) { .scrolly-grid { grid-template-columns: 0.92fr 1.08fr; } }
+
+.sticky-viz { position: sticky; top: 0; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; }
+@media (max-width: 939px) { .sticky-viz { position: sticky; top: 0; min-height: 56svh; padding-top: 20px; background: linear-gradient(180deg, var(--dark) 70%, transparent); z-index: 5; } }
+
+.viz-frame {
+  border: 1px solid var(--dark-border); border-radius: 22px; padding: clamp(16px, 2.5vw, 26px);
+  background: radial-gradient(120% 120% at 50% 0%, rgba(37,99,235,0.08), var(--dark-card) 70%);
+  box-shadow: 0 30px 80px -40px rgba(0,0,0,0.8);
+}
+.viz-title { font-size: var(--t-small); text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-dim); font-weight: 700; margin-bottom: 4px; }
+.viz-sub { font-size: 0.78rem; color: var(--text-dimmer); margin-bottom: 18px; }
+
+/* the one-app diagram: SVG center hub + 4 quadrants filling in */
+.diagram { width: 100%; height: auto; display: block; }
+.quad { transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
+.quad:not(.lit) { opacity: 0.22; }
+.quad.lit { opacity: 1; }
+@media (prefers-reduced-motion: reduce){ .quad { opacity: 1 !important; } }
+
+.steps { display: flex; flex-direction: column; gap: clamp(40px, 14vh, 130px); padding: 20vh 0; }
+.step {
+  border-radius: 18px; padding: clamp(22px, 3.4vw, 36px);
+  border: 1px solid var(--dark-border); background: var(--dark-card);
+  transition: border-color 0.5s var(--ease), background 0.5s var(--ease), transform 0.5s var(--ease);
+}
+.step.active { transform: translateY(-2px); }
+.step[data-quad="collections"].active { border-color: var(--green-border); background: linear-gradient(150deg, var(--green-bg), var(--dark-card) 75%); }
+.step[data-quad="denials"].active   { border-color: var(--blue);        background: linear-gradient(150deg, rgba(37,99,235,0.12), var(--dark-card) 75%); }
+.step[data-quad="auth"].active       { border-color: var(--admissions);  background: linear-gradient(150deg, rgba(56,189,248,0.12), var(--dark-card) 75%); }
+.step[data-quad="legal"].active      { border-color: var(--legal);       background: linear-gradient(150deg, rgba(167,139,250,0.13), var(--dark-card) 75%); }
+.step .step-no { font-family:'SF Mono','Menlo',monospace; font-size: 0.78rem; color: var(--text-dim); letter-spacing: 0.08em; }
+.step h3 { margin: 6px 0 12px; }
+.step .verbline { font-size: var(--t-small); color: var(--text-dim); margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--dark-border); }
+.step .verbline .b { color: var(--text-secondary); }
+.step .stat { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; margin-top: 10px; line-height: 1; }
+
+/* ════════════════════ ACT · HITL R/Y/G interactive ════════════════════ */
+.hitl-tabs { display: flex; gap: 8px; margin: 26px 0 22px; flex-wrap: wrap; }
+.hitl-tab {
+  flex: 1 1 0; min-width: 150px; cursor: pointer; text-align: left;
+  border: 1px solid var(--dark-border); background: var(--dark-card); color: var(--text-secondary);
+  border-radius: 14px; padding: 16px 18px; font: inherit; transition: all 0.4s var(--ease);
+}
+.hitl-tab .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 9px; vertical-align: middle; }
+.hitl-tab .lbl { font-weight: 800; font-size: 1rem; letter-spacing: 0.02em; vertical-align: middle; }
+.hitl-tab .effort { display: block; font-size: 0.74rem; color: var(--text-dim); margin-top: 7px; }
+.hitl-tab[data-t="green"]  .dot { background: var(--green);  box-shadow: 0 0 12px var(--green); }
+.hitl-tab[data-t="yellow"] .dot { background: var(--amber);  box-shadow: 0 0 12px var(--amber); }
+.hitl-tab[data-t="red"]    .dot { background: var(--red);    box-shadow: 0 0 12px var(--red); }
+.hitl-tab[aria-selected="true"][data-t="green"]  { border-color: var(--green-border); background: var(--green-bg); }
+.hitl-tab[aria-selected="true"][data-t="yellow"] { border-color: var(--amber-border); background: var(--amber-bg); }
+.hitl-tab[aria-selected="true"][data-t="red"]    { border-color: var(--red-border); background: var(--red-bg); }
+
+.hitl-panel {
+  border: 1px solid var(--dark-border); border-radius: 18px; overflow: hidden;
+  background: var(--dark-card); display: grid; gap: 0;
+}
+@media (min-width: 760px) { .hitl-panel { grid-template-columns: 0.85fr 1.15fr; } }
+.hitl-meaning { padding: clamp(20px, 3vw, 30px); border-bottom: 1px solid var(--dark-border); }
+@media (min-width: 760px) { .hitl-meaning { border-bottom: none; border-right: 1px solid var(--dark-border); } }
+.hitl-meaning .conf { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 800; }
+.hitl-meaning h3 { margin: 8px 0 10px; }
+.hitl-card-zone { padding: clamp(20px, 3vw, 30px); background: rgba(0,0,0,0.25); }
+
+/* a faux DecisionCard */
+.dcard { border: 1px solid var(--dark-border); border-radius: 14px; background: var(--dark-card-2); padding: 18px; box-shadow: 0 16px 40px -28px rgba(0,0,0,0.9); }
+.dcard-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.dcard-agent { font-size: 0.74rem; color: var(--text-dim); font-weight: 600; }
+.dcard-state { font-size: 0.66rem; font-weight: 800; padding: 4px 9px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.06em; }
+.dcard-title { font-size: var(--t-body); font-weight: 700; line-height: 1.3; margin-bottom: 10px; }
+.dcard-body { font-size: var(--t-small); color: var(--text-secondary); line-height: 1.5; }
+.dcard-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+.dcard-meta span { font-size: 0.72rem; font-weight: 600; padding: 5px 10px; border-radius: 8px; background: rgba(255,255,255,0.04); border: 1px solid var(--dark-border); color: var(--text-secondary); }
+.dcard-cta { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 13px; border-top: 1px solid var(--dark-border); }
+.tap { display: inline-block; padding: 9px 16px; border-radius: 10px; font-weight: 800; font-size: 0.82rem; }
+.tap.green { background: var(--green); color: #052012; }
+.tap.yellow { background: var(--amber); color: #2a1c00; }
+.tap.red { background: var(--red); color: #2a0606; }
+.sla { font-size: 0.72rem; color: var(--text-dim); font-variant-numeric: tabular-nums; }
+
+/* ════════════════════ ACT · AGENT ROSTER ════════════════════ */
+.roster-domain { margin-top: 34px; }
+.roster-domain-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.roster-domain-head .swatch { width: 11px; height: 11px; border-radius: 3px; }
+.roster-domain-head h3 { font-size: 1.05rem; }
+.roster-domain-head .count { font-size: 0.74rem; color: var(--text-dim); margin-left: auto; font-variant-numeric: tabular-nums; }
+
+.agent-grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+@media (min-width: 620px) { .agent-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 980px) { .agent-grid { grid-template-columns: 1fr 1fr 1fr; } }
+
+.agent {
+  position: relative; border: 1px solid var(--dark-border); border-radius: 14px;
+  padding: 16px 17px; background: var(--dark-card); overflow: hidden;
+  transition: transform 0.4s var(--ease), border-color 0.4s var(--ease);
+}
+.agent::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--c, var(--blue)); }
+.agent:hover { transform: translateY(-3px); border-color: color-mix(in oklab, var(--c, var(--blue)) 55%, var(--dark-border)); }
+.agent .ah { display: flex; align-items: center; gap: 9px; margin-bottom: 9px; }
+.agent .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--c, var(--blue)); flex-shrink: 0; box-shadow: 0 0 0 0 var(--c, var(--blue)); }
+@media (prefers-reduced-motion: no-preference) { .agent .pulse { animation: live 2.6s var(--ease) infinite; } }
+@keyframes live { 0%{ box-shadow: 0 0 0 0 color-mix(in srgb, var(--c) 60%, transparent);} 70%{ box-shadow: 0 0 0 7px transparent;} 100%{ box-shadow:0 0 0 0 transparent;} }
+.agent h4 { font-size: 0.92rem; font-weight: 700; line-height: 1.2; }
+.agent p { font-size: 0.78rem; color: var(--text-dim); line-height: 1.5; }
+.agent .does { color: var(--text-secondary); }
+
+/* ════════════════════ ACT · STATS ════════════════════ */
+.stat-grid { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; margin-top: 30px; }
+@media (min-width: 760px) { .stat-grid { grid-template-columns: repeat(4, 1fr); } }
+.stat-cell { border: 1px solid var(--dark-border); border-radius: 16px; padding: 22px 18px; background: var(--dark-card); text-align: center; }
+.stat-cell .num { font-size: clamp(2.1rem, 6vw, 3rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+.stat-cell .num.bad { color: var(--red); } .stat-cell .num.good { color: var(--green); } .stat-cell .num.blu { color: var(--blue-bright); }
+.stat-cell .lbl { font-size: 0.78rem; color: var(--text-secondary); margin-top: 11px; line-height: 1.35; }
+.stat-cell .foot { font-size: 0.68rem; color: var(--text-dimmer); margin-top: 6px; }
+
+/* ════════════════════ ACT · CLOSE ════════════════════ */
+#close {
+  background:
+    radial-gradient(100% 80% at 50% 120%, rgba(52,210,123,0.14), transparent 60%),
+    radial-gradient(90% 70% at 50% -20%, rgba(37,99,235,0.20), transparent 60%),
+    var(--dark);
+  text-align: center; align-items: center;
+}
+.fax {
+  margin: 28px auto 0; max-width: 760px; font-size: var(--t-lead); color: var(--text-secondary); line-height: 1.55;
+}
+.os-line { font-size: clamp(1.3rem, 4vw, 2rem); font-weight: 800; letter-spacing: -0.02em; margin-top: 26px; }
+
+/* ════════════════════ divider rules ════════════════════ */
+.rule { height: 1px; background: linear-gradient(90deg, transparent, var(--dark-border) 20%, var(--dark-border) 80%, transparent); margin: 0 auto; max-width: var(--maxw); }
+
+footer { padding: 36px 20px 56px; text-align: center; }
+footer .small { max-width: 720px; margin: 0 auto; }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="progress" aria-hidden="true"><i></i></div>
+<div class="brandmark" aria-hidden="true"><span class="flame"></span>Aedis</div>
+
+<main id="main">
+
+<!-- ═══════════ ACT 0 · HERO ═══════════ -->
+<section class="act" id="hero" aria-labelledby="hero-h">
+  <div class="wrap">
+    <p class="hero-kicker r-up">The Agentic Operating System for SNF Revenue</p>
+    <h1 class="r-up d1" id="hero-h">The incumbents automate a <span class="accent">verb</span>.<br>Aedis automates the <span class="g">worker</span>.</h1>
+    <p class="lead hero-sub r-up d2">
+      Every revenue tool a skilled-nursing operator pays for does <span class="b">one step</span> and hands the human everything else. Aedis runs the whole job end-to-end &mdash; four cost centers, twelve agents, one app &mdash; and the operator&rsquo;s entire role collapses to a <span class="b">tiered one-tap approval</span>.
+    </p>
+    <div class="hero-flux r-up d3" role="list" aria-label="Approval tiers">
+      <span class="flux-chip" role="listitem"><span class="g">GREEN</span> &middot; one-tap acknowledge</span>
+      <span class="flux-chip" role="listitem"><span class="a">YELLOW</span> &middot; guided fix &amp; approve</span>
+      <span class="flux-chip" role="listitem"><span class="r">RED</span> &middot; evidence-backed call</span>
+    </div>
+    <div class="scroll-cue r-up d4" aria-hidden="true"><span>Scroll</span><span class="arr"></span></div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- ═══════════ ACT 1 · THE AGENTIC INVERSION ═══════════ -->
+<section class="act" aria-labelledby="inv-h">
+  <div class="wrap invert-wrap">
+    <p class="eyebrow r-up">The Agentic Inversion</p>
+    <h2 class="r-up d1" id="inv-h">Same data. <span class="accent">Opposite design.</span></h2>
+    <p class="lead r-up d2" style="margin-top:18px;">
+      A SNF&rsquo;s revenue cycle isn&rsquo;t a judgment problem &mdash; it&rsquo;s a <span class="b">labor problem disguised as complexity</span>. The work is knowable from the chart, the contract, the clock, and payer history. The market loses by default not because the work is hard, but because doing it is manual, deadline-driven, and prohibitively staffed.
+    </p>
+
+    <div class="invert-grid r-up d3">
+      <div class="col-card bad">
+        <h3><span class="tag">Incumbent</span> One verb, then the human</h3>
+        <ul>
+          <li>Clearinghouses <span class="verb">submit</span> faster &mdash; a biller still clears every edit</li>
+          <li>Scrubbers <span class="verb">score</span> denial risk &mdash; a coordinator still codes and sends</li>
+          <li>Legal copilots <span class="verb">draft</span> a letter &mdash; and can&rsquo;t even read the chart</li>
+          <li>Contract tools <span class="verb">store</span> per-diems &mdash; they tell you you were underpaid later</li>
+          <li>Auth bots <span class="verb">transmit</span> a 278 &mdash; the nurse already spent 45 min deciding the LOC</li>
+          <li>BPOs <span class="verb">sell labor</span> by the hour at 4&ndash;7% of collections</li>
+          <li>Payer UM tools (naviHealth, Cohere) are built to <span class="verb">deny</span> the provider</li>
+        </ul>
+      </div>
+      <div class="col-card good">
+        <h3><span class="tag">Aedis</span> The agent does the work</h3>
+        <ul>
+          <li>Reads the PointClickCare chart and <span class="b">determines</span> the level of care itself</li>
+          <li>Root-causes a denial to the exact MDS element &mdash; then <span class="b">patches the upstream rule</span></li>
+          <li>Pulls the complete PCC/Workday/M365 record and <span class="b">builds the chronology</span></li>
+          <li>Compares contracted vs remitted per-diem at the 835 line and <span class="b">recovers</span> it</li>
+          <li>Negotiates a payment plan inside a hard <span class="b">policy envelope</span>, then executes</li>
+          <li>Owns the whole referral&rarr;cash relay &mdash; <span class="b">no human anchor leg</span></li>
+          <li>Provider-side counterweight: pre-builds the proof and the appeal <span class="b">before</span> the denial</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="inversion-punch r-up d4">
+      Even fully stacked, the incumbents are a relay race with a human running the anchor leg between every product. <span class="accent">Aedis runs the whole race.</span>
+    </p>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- ═══════════ ACT 2 · FOUR COST CENTERS COLLAPSE (sticky scrollytelling) ═══════════ -->
+<section aria-labelledby="cc-h" style="padding-bottom:0;">
+  <div class="wrap">
+    <p class="eyebrow r-up">The Collapse</p>
+    <h2 class="r-up d1" id="cc-h">Four cost centers that bleed an operator &mdash;<br><span class="accent">into one app.</span></h2>
+    <p class="lead r-up d2" style="margin-top:16px; max-width:880px;">
+      Collections. Denials, ADR &amp; appeals. Authorization &amp; level-of-care. Litigation defense. Each is its own silo, its own vendor stack, its own headcount today. Watch them fill into a single agentic surface as you scroll.
+    </p>
+  </div>
+</section>
+
+<section class="scrolly" aria-hidden="false" style="padding-top:0;">
+  <div class="wrap">
+    <div class="scrolly-grid">
+      <!-- STICKY DIAGRAM -->
+      <div class="sticky-viz">
+        <div class="viz-frame">
+          <p class="viz-title">One app &middot; four cost centers</p>
+          <p class="viz-sub">Each quadrant lights as its agents come online.</p>
+          <svg class="diagram" viewBox="0 0 360 360" role="img" aria-label="Diagram of one app with four cost-center quadrants: Collections, Denials and Appeals, Authorization and Level of Care, and Legal Defense, all feeding a central agent core.">
+            <defs>
+              <radialGradient id="core" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#3b82f6"/>
+                <stop offset="100%" stop-color="#1e40af"/>
+              </radialGradient>
+            </defs>
+            <!-- connectors -->
+            <g stroke="#232a38" stroke-width="1.5">
+              <line x1="180" y1="180" x2="92"  y2="92"/>
+              <line x1="180" y1="180" x2="268" y2="92"/>
+              <line x1="180" y1="180" x2="92"  y2="268"/>
+              <line x1="180" y1="180" x2="268" y2="268"/>
+            </g>
+
+            <!-- Q: Collections (top-left, green) -->
+            <g class="quad" data-quad="collections">
+              <rect x="22" y="22" width="140" height="140" rx="18" fill="rgba(52,210,123,0.10)" stroke="#34d27b" stroke-width="1.5"/>
+              <text x="92" y="74" text-anchor="middle" fill="#34d27b" font-size="13" font-weight="700" font-family="-apple-system,sans-serif">Collections</text>
+              <text x="92" y="94" text-anchor="middle" fill="#b6bccb" font-size="9" font-family="-apple-system,sans-serif">Patient-pay &amp; trust</text>
+              <text x="92" y="120" text-anchor="middle" fill="#7c8499" font-size="8" font-family="-apple-system,sans-serif">4 agents</text>
+            </g>
+            <!-- Q: Denials (top-right, blue) -->
+            <g class="quad" data-quad="denials">
+              <rect x="198" y="22" width="140" height="140" rx="18" fill="rgba(37,99,235,0.10)" stroke="#3b82f6" stroke-width="1.5"/>
+              <text x="268" y="74" text-anchor="middle" fill="#3b82f6" font-size="13" font-weight="700" font-family="-apple-system,sans-serif">Denials</text>
+              <text x="268" y="94" text-anchor="middle" fill="#b6bccb" font-size="9" font-family="-apple-system,sans-serif">ADR &amp; appeals</text>
+              <text x="268" y="120" text-anchor="middle" fill="#7c8499" font-size="8" font-family="-apple-system,sans-serif">3 agents</text>
+            </g>
+            <!-- Q: Auth (bottom-left, cyan) -->
+            <g class="quad" data-quad="auth">
+              <rect x="22" y="198" width="140" height="140" rx="18" fill="rgba(56,189,248,0.10)" stroke="#38bdf8" stroke-width="1.5"/>
+              <text x="92" y="250" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700" font-family="-apple-system,sans-serif">Authorization</text>
+              <text x="92" y="270" text-anchor="middle" fill="#b6bccb" font-size="9" font-family="-apple-system,sans-serif">Level-of-care</text>
+              <text x="92" y="296" text-anchor="middle" fill="#7c8499" font-size="8" font-family="-apple-system,sans-serif">2 agents</text>
+            </g>
+            <!-- Q: Legal (bottom-right, violet) -->
+            <g class="quad" data-quad="legal">
+              <rect x="198" y="198" width="140" height="140" rx="18" fill="rgba(167,139,250,0.11)" stroke="#a78bfa" stroke-width="1.5"/>
+              <text x="268" y="250" text-anchor="middle" fill="#a78bfa" font-size="13" font-weight="700" font-family="-apple-system,sans-serif">Legal</text>
+              <text x="268" y="270" text-anchor="middle" fill="#b6bccb" font-size="9" font-family="-apple-system,sans-serif">Defense</text>
+              <text x="268" y="296" text-anchor="middle" fill="#7c8499" font-size="8" font-family="-apple-system,sans-serif">3 agents</text>
+            </g>
+
+            <!-- center core -->
+            <circle cx="180" cy="180" r="40" fill="url(#core)" stroke="#3b82f6" stroke-width="2"/>
+            <text x="180" y="176" text-anchor="middle" fill="#fff" font-size="12" font-weight="800" font-family="-apple-system,sans-serif">Aedis</text>
+            <text x="180" y="192" text-anchor="middle" fill="#cfe0ff" font-size="8" font-family="-apple-system,sans-serif">agent core</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- SCROLLING STEPS -->
+      <div class="steps">
+        <article class="step" data-quad="collections">
+          <div class="step-no">01 / COLLECTIONS &amp; PATIENT-PAY</div>
+          <h3>The agent runs the whole private-pay book.</h3>
+          <p class="body">It derives the <span class="b">legal</span> responsible party &mdash; resident/POA-on-resident-funds, never the illegal third-party guarantor the CFPB is enforcing against &mdash; fires a Text2Pay link at the propensity window, negotiates the plan inside a policy envelope, watches the Medicaid-pending clock to convert at approval, and manages the resident trust as a fiduciary under 42 CFR 483.10(f).</p>
+          <div class="stat g">$15K&ndash;$80K<span style="font-size:0.5em;color:var(--text-dim);font-weight:600;"> /facility/mo recoverable</span></div>
+          <p class="verbline"><span class="b">Incumbents:</span> Waystar / Cedar / InstaMed automate the <span class="verb">channel</span>. Aedis automates the <span class="g">worker</span>.</p>
+        </article>
+
+        <article class="step" data-quad="denials">
+          <div class="step-no">02 / DENIALS, ADR &amp; APPEALS</div>
+          <h3>The agent closes the loop to the upstream cause.</h3>
+          <p class="body">It ingests the 835 CARC/RARC, the esMD ADR letter, and the MA concurrent-review notice <span class="b">at the source</span> &mdash; no human upload &mdash; root-causes each through the provenance graph to the exact MDS element, files the level-correct appeal against every statutory clock, and <span class="b">patches the upstream rule</span> so the cohort never re-denies.</p>
+          <div class="stat accent">97%<span style="font-size:0.5em;color:var(--text-dim);font-weight:600;"> of appealed MA denials overturned (OIG)</span></div>
+          <p class="verbline"><span class="b">The gap:</span> SNFs appeal only 18% &mdash; the bottleneck is labor, not knowledge. The agent removes the labor.</p>
+        </article>
+
+        <article class="step" data-quad="auth">
+          <div class="step-no">03 / AUTHORIZATION &amp; LEVEL-OF-CARE</div>
+          <h3>The agent reads the chart and decides the LOC.</h3>
+          <p class="body">It fires 270/271 eligibility, auto-scores InterQual + MCG to determine Skilled / Sub-acute / Custodial, matches the determination to the contract per-diem tier &mdash; catching the payer portal silently pre-filling Skilled when the chart supports Sub-acute &mdash; submits the 278, and owns the 3/5/7-day concurrent-review marathon. The UR nurse never logs into a portal.</p>
+          <div class="stat" style="color:var(--admissions);">~70%<span style="font-size:0.5em;color:var(--text-dim);font-weight:600;"> of census is managed care &mdash; the margin leak</span></div>
+          <p class="verbline"><span class="b">Incumbents:</span> auth bots <span class="verb">submit</span> the form. Aedis does the 50-min chart-read and the decision.</p>
+        </article>
+
+        <article class="step" data-quad="legal">
+          <div class="step-no">04 / LITIGATION &amp; SURVEY DEFENSE</div>
+          <h3>One chronology defends the suit and the survey.</h3>
+          <p class="body">On a served complaint or F-tag, the agent pulls the complete eMAR / MDS / care-plan / incident / PBJ-staffing record from PCC, builds one source-anchored chronology, scores defensibility event-by-event, and hands a single <span class="b">settle-vs-defend</span> card with a reserve number. The same evidence build powers the F-689 dispute <span class="b">and</span> the wrongful-death defense.</p>
+          <div class="stat v">$275&ndash;$500<span style="font-size:0.5em;color:var(--text-dim);font-weight:600;"> /hr LNC chronology factory &mdash; deleted</span></div>
+          <p class="verbline"><span class="b">Incumbents:</span> Harvey / EvenUp can&rsquo;t touch PCC. Aedis owns the clinical record <span class="b">and</span> the workflow.</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- ═══════════ ACT 3 · HITL INTERACTIVE ═══════════ -->
+<section class="act" aria-labelledby="hitl-h">
+  <div class="wrap">
+    <p class="eyebrow r-up">Always Human-in-the-Loop</p>
+    <h2 class="r-up d1" id="hitl-h">The work is the agent&rsquo;s. <span class="accent">The decision is yours.</span></h2>
+    <p class="lead r-up d2" style="margin-top:16px;">
+      Every action is human-in-the-loop, always &mdash; but the approval effort is <span class="b">tiered to the risk</span>, not to the agent&rsquo;s convenience. Tap a tier. The score is never a black box: it rolls up to chart citations, with an SLA timer so nothing ages silently.
+    </p>
+
+    <div class="hitl-tabs r-up d3" role="tablist" aria-label="HITL approval tiers">
+      <button class="hitl-tab" data-t="green" role="tab" aria-selected="true" aria-controls="hitl-panel" id="tab-green">
+        <span><span class="dot"></span><span class="lbl g">GREEN</span></span>
+        <span class="effort">One-tap acknowledge &middot; &ge;95% confidence</span>
+      </button>
+      <button class="hitl-tab" data-t="yellow" role="tab" aria-selected="false" aria-controls="hitl-panel" id="tab-yellow" tabindex="-1">
+        <span><span class="dot"></span><span class="lbl a">YELLOW</span></span>
+        <span class="effort">Guided one-screen fix &middot; 80&ndash;94%</span>
+      </button>
+      <button class="hitl-tab" data-t="red" role="tab" aria-selected="false" aria-controls="hitl-panel" id="tab-red" tabindex="-1">
+        <span><span class="dot"></span><span class="lbl r">RED</span></span>
+        <span class="effort">Evidence-backed call &middot; &lt;80%</span>
+      </button>
+    </div>
+
+    <div class="hitl-panel r-up d4" id="hitl-panel" role="tabpanel" aria-labelledby="tab-green">
+      <div class="hitl-meaning">
+        <p class="conf" id="hitl-conf">GREEN &middot; autonomous</p>
+        <h3 id="hitl-head">All clear &mdash; just acknowledge.</h3>
+        <p class="body" id="hitl-desc">All checks clean and in-policy: clinically supported, insurance verified, admin correct-by-construction. The agent already executed; the human taps once to acknowledge. No approval required.</p>
+      </div>
+      <div class="hitl-card-zone">
+        <div class="dcard" id="hitl-card">
+          <div class="dcard-top">
+            <span class="dcard-agent" id="dc-agent">Collections &amp; Patient-Pay Agent</span>
+            <span class="dcard-state" id="dc-state" style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);">GREEN</span>
+          </div>
+          <p class="dcard-title" id="dc-title"><span class="tok">[RESIDENT_0214]</span> private-pay autopay enrolled</p>
+          <p class="dcard-body" id="dc-body">Verified the daughter as durable POA acting on resident funds (CFPB-compliant), generated the itemized statement, fired a Stripe Text2Pay SMS link &mdash; the party enrolled ACH autopay on a 12-month / $200-down / 0% in-policy plan. Full SMS delivery + open + pay audit trail attached.</p>
+          <div class="dcard-meta" id="dc-meta">
+            <span>$1,842 recovered</span><span>~0.9 staff-hrs saved</span><span>In-policy</span>
+          </div>
+          <div class="dcard-cta">
+            <span class="tap green" id="dc-cta">Acknowledge &middot; Enter</span>
+            <span class="sla" id="dc-sla">SLA &lt; 10s</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="small r-up d5" style="margin-top:18px; text-align:center;">
+      GREEN is one tap or a standing rule with a daily digest. YELLOW is a guided one-screen fix. RED is an evidence-backed briefing the human owns &mdash; <span class="b">every citation inline, never open another app.</span>
+    </p>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- ═══════════ ACT 4 · LIVING AGENT ROSTER ═══════════ -->
+<section class="act" aria-labelledby="roster-h">
+  <div class="wrap">
+    <p class="eyebrow r-up">The Roster</p>
+    <h2 class="r-up d1" id="roster-h">Twelve agents. <span class="accent">One operating system.</span></h2>
+    <p class="lead r-up d2" style="margin-top:16px;">
+      Each agent owns its lane end-to-end and shares one provenance graph &mdash; so the chart that defends the claim defends the survey, and the denial&rsquo;s root cause edits the rule that prevents the next one.
+    </p>
+
+    <!-- FINANCE -->
+    <div class="roster-domain r-up d2">
+      <div class="roster-domain-head">
+        <span class="swatch" style="background:var(--finance);"></span>
+        <h3>Finance &mdash; Collections, Denials, ADR &amp; Appeals</h3>
+        <span class="count">8 agents</span>
+      </div>
+      <div class="agent-grid" style="--c:var(--finance);">
+        <div class="agent" style="--c:var(--finance);"><div class="ah"><span class="pulse"></span><h4>Collections &amp; Patient-Pay</h4></div><p class="does">Derives the legal responsible party, fires Text2Pay, negotiates plans in a policy envelope, runs the CFPB/FDCPA-compliant dunning cadence.</p></div>
+        <div class="agent" style="--c:var(--finance);"><div class="ah"><span class="pulse"></span><h4>Medicaid-Pending &amp; Conversion</h4></div><p class="does">Watches the 45/90-day clock, collects share-of-cost only, converts to Medicaid at approval, bills the retro period, refunds over-collected pay.</p></div>
+        <div class="agent" style="--c:var(--finance);"><div class="ah"><span class="pulse"></span><h4>Resident Trust / PNA Fiduciary</h4></div><p class="does">Runs the trust ledger per 42 CFR 483.10(f): segregates funds, auto-moves &gt;$100 to interest-bearing, quarterly statements, spend-down alerts.</p></div>
+        <div class="agent" style="--c:var(--finance);"><div class="ah"><span class="pulse"></span><h4>Bad-Debt &amp; Estate-Claim Gate</h4></div><p class="does">Assembles the full account briefing and pre-drafts the placement file, write-off JE, and CMS-2540 Medicare bad-debt cost-report entry.</p></div>
+        <div class="agent" style="--c:var(--finance);"><div class="ah"><span class="pulse"></span><h4>Denials Orchestrator</h4></div><p class="does">Ingests 835 / esMD / MA notices at the source, root-causes via the provenance graph, and patches the upstream rule so the cohort never re-denies.</p></div>
+        <div class="agent" style="--c:var(--finance);"><div class="ah"><span class="pulse"></span><h4>ADR Response Center</h4></div><p class="does">Auto-assembles the esMD evidence packet from PCC, maps every MDS element to its source page, submits portfolio-wide against the 45-day clock.</p></div>
+        <div class="agent" style="--c:var(--finance);"><div class="ah"><span class="pulse"></span><h4>Appeal Ladder</h4></div><p class="does">Files the level-correct appeal (redetermination&rarr;ALJ&rarr;Council, or MA recon/P2P), runs every statutory clock, pre-drafts the next level.</p></div>
+        <div class="agent" style="--c:var(--finance);"><div class="ah"><span class="pulse"></span><h4>Underpayment Reconciliation</h4></div><p class="does">Compares every 835 paid per-diem against the contracted LOC tier, bulk-reprices the cohort, flags chronically-underpaying tiers for renegotiation.</p></div>
+      </div>
+    </div>
+
+    <!-- ADMISSIONS -->
+    <div class="roster-domain r-up d3">
+      <div class="roster-domain-head">
+        <span class="swatch" style="background:var(--admissions);"></span>
+        <h3>Admissions &mdash; Authorization &amp; Level-of-Care</h3>
+        <span class="count">1 agent</span>
+      </div>
+      <div class="agent-grid">
+        <div class="agent" style="--c:var(--admissions);"><div class="ah"><span class="pulse"></span><h4>Authorization &amp; Level-of-Care</h4></div><p class="does">Replaces the UR/MDS nurse at the payer portal: 270/271 eligibility, auto-scores InterQual + MCG, matches LOC to the contract per-diem (silent-downgrade guard), submits the auth, and owns the concurrent-review marathon.</p></div>
+      </div>
+    </div>
+
+    <!-- LEGAL -->
+    <div class="roster-domain r-up d4">
+      <div class="roster-domain-head">
+        <span class="swatch" style="background:var(--legal);"></span>
+        <h3>Legal &mdash; Litigation &amp; Survey Defense</h3>
+        <span class="count">3 agents</span>
+      </div>
+      <div class="agent-grid">
+        <div class="agent" style="--c:var(--legal);"><div class="ah"><span class="pulse"></span><h4>Litigation Investigator</h4></div><p class="does">On a served complaint or F-tag, parses the document, matches plaintiff&rarr;resident, computes the deadline ladder, and pulls the complete responsive record from PCC/Workday/M365 with a privilege log.</p></div>
+        <div class="agent" style="--c:var(--legal);"><div class="ah"><span class="pulse"></span><h4>Chronology &amp; Standard-of-Care</h4></div><p class="does">Builds the source-anchored chronology, reconciles conflicting timestamps, surfaces gaps (e.g. a 9-hour repositioning gap), and runs the standard-of-care research.</p></div>
+        <div class="agent" style="--c:var(--legal);"><div class="ah"><span class="pulse"></span><h4>Defensibility &amp; Strategy</h4></div><p class="does">Scores defensibility 0&ndash;100 event-by-event, attributes causation, runs venue-verdict analysis, and drafts the settle-vs-defend memo with a reserve number.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- ═══════════ ACT 5 · THE NUMBERS ═══════════ -->
+<section class="act" aria-labelledby="num-h">
+  <div class="wrap">
+    <p class="eyebrow r-up">What It&rsquo;s Worth</p>
+    <h2 class="r-up d1" id="num-h">The money is on the table, <span class="accent">overturnable, written off.</span></h2>
+    <p class="lead r-up d2" style="margin-top:16px;">
+      Across a 330-facility operator, the same four leaks repeat at every site &mdash; each one a labor constraint, not a knowledge gap. Remove the labor and the recovery is structural.
+    </p>
+    <div class="stat-grid r-up d3" role="list">
+      <div class="stat-cell" role="listitem">
+        <div class="num bad" data-count="40" data-suffix="%">0%</div>
+        <div class="lbl">of SNF admissions denied by MA plans</div>
+        <div class="foot">HHS-OIG, Jan 2026</div>
+      </div>
+      <div class="stat-cell" role="listitem">
+        <div class="num good" data-count="97" data-suffix="%">0%</div>
+        <div class="lbl">of appealed MA denials overturned</div>
+        <div class="foot">naviHealth pattern &middot; OIG</div>
+      </div>
+      <div class="stat-cell" role="listitem">
+        <div class="num bad" data-count="18" data-suffix="%">0%</div>
+        <div class="lbl">of overturnable denials ever appealed</div>
+        <div class="foot">the labor constraint</div>
+      </div>
+      <div class="stat-cell" role="listitem">
+        <div class="num blu" data-count="1" data-suffix="">0</div>
+        <div class="lbl">app where the human&rsquo;s job is one-tap approval</div>
+        <div class="foot">12 agents, 4 cost centers</div>
+      </div>
+    </div>
+    <p class="small r-up d4" style="margin-top:22px; text-align:center;">
+      Sources: HHS-OIG (Jan 2026, MA SNF prior-auth denials &amp; overturns) &middot; CMS CERT improper-payment data (SNF Part A 17.2%, 79.1% insufficient documentation) &middot; 42 CFR 483.10(f) / CFPB nursing-home debt enforcement. Figures are industry/portfolio benchmarks, not a single named operator.
+    </p>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- ═══════════ ACT 6 · CLOSE ═══════════ -->
+<section class="act" id="close" aria-labelledby="close-h">
+  <div class="wrap narrow">
+    <p class="eyebrow r-up" style="justify-content:center;">The Line</p>
+    <h2 class="r-up d1" id="close-h">A point product flags the problem.<br><span class="g">An operating system does the job.</span></h2>
+    <p class="fax r-up d2">
+      The compliance walls &mdash; CFPB/FDCPA, the resident-trust fiduciary rules, Medicaid-pending mechanics, InterQual/MCG criteria, the esMD and appeal clocks &mdash; aren&rsquo;t prose a human must remember. They&rsquo;re <span class="b">policy-as-code</span>, running as deterministic guards inside the agent loop, every action immutably audit-logged for survey and FDCPA defensibility.
+    </p>
+    <p class="os-line r-up d3">
+      Every existing product, individually and combined, starts to look like a <span class="accent">fax machine.</span>
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p class="small">Aedis &mdash; the Agentic Operating System for skilled-nursing revenue. Generic platform overview; no operator names, all resident references tokenized (e.g. <span class="tok">[RESIDENT_0042]</span>). PHI never leaves the VPC.</p>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- reveal-on-scroll ---------- */
+  var ups = document.querySelectorAll('.r-up');
+  if ('IntersectionObserver' in window && !reduce) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    ups.forEach(function (el) { io.observe(el); });
+  } else {
+    ups.forEach(function (el) { el.classList.add('in'); });
+  }
+
+  /* ---------- progress bar fallback (when no scroll-timeline) ---------- */
+  var hasTimeline = CSS && CSS.supports && CSS.supports('animation-timeline: scroll()');
+  var bar = document.querySelector('.progress > i');
+  if (!hasTimeline && bar) {
+    var onScroll = function () {
+      var h = document.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      var p = max > 0 ? (h.scrollTop / max) * 100 : 0;
+      bar.style.width = p + '%';
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  /* ---------- scrollytelling: light quadrant + activate step ---------- */
+  var steps = document.querySelectorAll('.step[data-quad]');
+  var quads = {};
+  document.querySelectorAll('.quad[data-quad]').forEach(function (q) { quads[q.getAttribute('data-quad')] = q; });
+
+  function lightUpTo(activeKey) {
+    var order = ['collections', 'denials', 'auth', 'legal'];
+    var reached = false;
+    // cumulative fill: every quad up to and including active lights
+    var activeIdx = order.indexOf(activeKey);
+    order.forEach(function (k, i) {
+      if (quads[k]) quads[k].classList.toggle('lit', i <= activeIdx);
+    });
+    steps.forEach(function (s) { s.classList.toggle('active', s.getAttribute('data-quad') === activeKey); });
+  }
+
+  if ('IntersectionObserver' in window && steps.length) {
+    var sio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { lightUpTo(e.target.getAttribute('data-quad')); }
+      });
+    }, { threshold: 0.55, rootMargin: '-20% 0px -30% 0px' });
+    steps.forEach(function (s) { sio.observe(s); });
+    // initial
+    lightUpTo('collections');
+  } else {
+    Object.keys(quads).forEach(function (k) { quads[k].classList.add('lit'); });
+  }
+
+  /* ---------- HITL tabs ---------- */
+  var HITL = {
+    green: {
+      conf: 'GREEN · autonomous',
+      head: 'All clear — just acknowledge.',
+      desc: 'All checks clean and in-policy: clinically supported, insurance verified, admin correct-by-construction. The agent already executed; the human taps once to acknowledge. No approval required.',
+      agent: 'Collections &amp; Patient-Pay Agent',
+      state: 'GREEN', stateColor: ['var(--green-bg)', 'var(--green)', 'var(--green-border)'],
+      title: '<span class="tok">[RESIDENT_0214]</span> private-pay autopay enrolled',
+      body: 'Verified the daughter as durable POA acting on resident funds (CFPB-compliant), generated the itemized statement, fired a Stripe Text2Pay SMS link — the party enrolled ACH autopay on a 12-month / $200-down / 0% in-policy plan. Full SMS delivery + open + pay audit trail attached.',
+      meta: ['$1,842 recovered', '~0.9 staff-hrs saved', 'In-policy'],
+      cta: 'Acknowledge · Enter', ctaCls: 'green', sla: 'SLA < 10s'
+    },
+    yellow: {
+      conf: 'YELLOW · one fixable exception',
+      head: 'One guided fix, then approve.',
+      desc: 'A single recoverable exception — a missing modifier, a stale mapping, an uncaptured-but-supportable point. The correction is pre-staged with its chart citation. The human reviews one screen and approves.',
+      agent: 'Denials Orchestrator',
+      state: 'YELLOW', stateColor: ['var(--amber-bg)', 'var(--amber)', 'var(--amber-border)'],
+      title: '<span class="tok">[RESIDENT_0091]</span> uncaptured NTA point — accept fix',
+      body: 'An IV-antibiotic NTA point in the pharmacy feed was never abstracted to MDS — <span class="a">+$2,100 supportable</span>. Correction pre-staged with the pharmacy-to-MDS source citation; applying it also fixes the upstream rule for the next 11 IV-antibiotic residents.',
+      meta: ['+$2,100 supportable', 'Blast radius: 11 residents', 'Citation attached'],
+      cta: 'Accept fix &amp; approve', ctaCls: 'yellow', sla: 'SLA < 2 min'
+    },
+    red: {
+      conf: 'RED · human judgment',
+      head: 'An evidence-backed call you own.',
+      desc: 'Material risk requiring judgment — an unsupported necessity, a threatened MA day-cut, money leaving the books. The card is a complete briefing: the dollars, the probability, the citations, and the pre-drafted filing. You decide.',
+      agent: 'Appeal Ladder Agent',
+      state: 'RED', stateColor: ['var(--red-bg)', 'var(--red)', 'var(--red-border)'],
+      title: '<span class="tok">[RESIDENT_0117]</span> naviHealth MA denial — file appeal',
+      body: 'UnitedHealthcare / naviHealth issued a day-9 concurrent-review skilled-need denial: 18 days @ $612 = <span class="r">$11,016 at risk</span>. Overturn probability <span class="g">95%</span> on this payer/denial-type. Packet assembled: H&amp;P, skilled-need narrative, GG scores, MD cert. Deadline in 9 days.',
+      meta: ['$11,016 at risk', '95% historical overturn', 'Deadline: 9 days'],
+      cta: 'Review &amp; file appeal', ctaCls: 'red', sla: 'Triage < 15 min'
+    }
+  };
+
+  var tabs = document.querySelectorAll('.hitl-tab');
+  var elConf = document.getElementById('hitl-conf');
+  var elHead = document.getElementById('hitl-head');
+  var elDesc = document.getElementById('hitl-desc');
+  var elPanel = document.getElementById('hitl-panel');
+  var dcAgent = document.getElementById('dc-agent');
+  var dcState = document.getElementById('dc-state');
+  var dcTitle = document.getElementById('dc-title');
+  var dcBody = document.getElementById('dc-body');
+  var dcMeta = document.getElementById('dc-meta');
+  var dcCta = document.getElementById('dc-cta');
+  var dcSla = document.getElementById('dc-sla');
+  var card = document.getElementById('hitl-card');
+
+  function applyTier(key) {
+    var d = HITL[key];
+    if (!d) return;
+    elConf.textContent = d.conf;
+    elConf.className = 'conf ' + (key === 'green' ? 'g' : key === 'yellow' ? 'a' : 'r');
+    elHead.textContent = d.head;
+    elDesc.textContent = d.desc;
+    dcAgent.innerHTML = d.agent;
+    dcState.textContent = d.state;
+    dcState.style.background = d.stateColor[0];
+    dcState.style.color = d.stateColor[1];
+    dcState.style.border = '1px solid ' + d.stateColor[2];
+    dcTitle.innerHTML = d.title;
+    dcBody.innerHTML = d.body;
+    dcMeta.innerHTML = d.meta.map(function (m) { return '<span>' + m + '</span>'; }).join('');
+    dcCta.innerHTML = d.cta;
+    dcCta.className = 'tap ' + d.ctaCls;
+    dcSla.textContent = d.sla;
+    elPanel.setAttribute('aria-labelledby', 'tab-' + key);
+    if (!reduce && card && card.animate) {
+      card.animate([{ opacity: 0.35, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: 'cubic-bezier(0.16,1,0.3,1)' });
+    }
+  }
+
+  function selectTab(tab) {
+    tabs.forEach(function (t) { t.setAttribute('aria-selected', 'false'); t.tabIndex = -1; });
+    tab.setAttribute('aria-selected', 'true'); tab.tabIndex = 0;
+    applyTier(tab.getAttribute('data-t'));
+  }
+
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () { selectTab(tab); });
+    tab.addEventListener('keydown', function (e) {
+      var idx = i;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { idx = (i + 1) % tabs.length; e.preventDefault(); }
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { idx = (i - 1 + tabs.length) % tabs.length; e.preventDefault(); }
+      else return;
+      selectTab(tabs[idx]); tabs[idx].focus();
+    });
+  });
+
+  /* ---------- count-up stats ---------- */
+  var nums = document.querySelectorAll('.num[data-count]');
+  function countUp(el) {
+    var target = parseFloat(el.getAttribute('data-count'));
+    var suffix = el.getAttribute('data-suffix') || '';
+    if (reduce) { el.textContent = target + suffix; return; }
+    var start = null, dur = 1100;
+    function frame(ts) {
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased) + suffix;
+      if (p < 1) requestAnimationFrame(frame);
+      else el.textContent = target + suffix;
+    }
+    requestAnimationFrame(frame);
+  }
+  if ('IntersectionObserver' in window) {
+    var nio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { countUp(e.target); nio.unobserve(e.target); } });
+    }, { threshold: 0.6 });
+    nums.forEach(function (n) { nio.observe(n); });
+  } else {
+    nums.forEach(function (n) { n.textContent = n.getAttribute('data-count') + (n.getAttribute('data-suffix') || ''); });
+  }
+})();
+</script>
+</body>
+</html>
