@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Solstice HQ — Your whole business, handled</title>
+<meta name="description" content="A simple assistant that answers every call, books the job, and gets you paid — built just for Solstice Heating &amp; Air." />
+<style>
+  :root{
+    --ink:#0b1a2b;
+    --ink-soft:#4a5b6d;
+    --line:#e7ecf1;
+    --bg:#ffffff;
+    --bg-soft:#f6f8fb;
+    --heat:#ff7a2f;      /* warm — heat */
+    --heat-deep:#e85d10;
+    --air:#1f8fff;       /* cool — air */
+    --air-deep:#0a6fd6;
+    --good:#12b76a;
+    --shadow:0 20px 50px -24px rgba(11,26,43,.28);
+    --shadow-soft:0 10px 30px -18px rgba(11,26,43,.22);
+    --r:22px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    background:var(--bg);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  .wrap{max-width:1060px;margin:0 auto;padding:0 22px}
+  h1,h2,h3{letter-spacing:-.02em;line-height:1.08;font-weight:700}
+  h1{font-size:clamp(2.5rem,6vw,4.4rem)}
+  h2{font-size:clamp(1.9rem,4vw,3rem);margin-bottom:.5em}
+  h3{font-size:1.28rem}
+  p{font-size:1.12rem;color:var(--ink-soft)}
+  .big{font-size:clamp(1.15rem,2.2vw,1.4rem)}
+  section{padding:clamp(64px,9vw,120px) 0}
+
+  /* ---------- top nav ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(255,255,255,.72);
+    backdrop-filter:saturate(180%) blur(20px);
+    -webkit-backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.06rem;letter-spacing:-.01em}
+  .logo{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--heat),var(--air));box-shadow:var(--shadow-soft)}
+  .navlinks{display:flex;gap:26px;align-items:center}
+  .navlinks a{color:var(--ink-soft);text-decoration:none;font-size:.98rem;font-weight:500;transition:color .2s}
+  .navlinks a:hover{color:var(--ink)}
+  .nav-cta{background:var(--ink);color:#fff !important;padding:9px 16px;border-radius:999px;font-weight:600}
+  @media(max-width:720px){.navlinks a:not(.nav-cta){display:none}}
+
+  /* ---------- buttons ---------- */
+  .btn{display:inline-block;padding:16px 30px;border-radius:999px;font-weight:600;font-size:1.06rem;text-decoration:none;transition:transform .15s ease,box-shadow .2s ease;cursor:pointer;border:none}
+  .btn-primary{background:linear-gradient(135deg,var(--heat),var(--heat-deep));color:#fff;box-shadow:0 14px 30px -12px rgba(232,93,16,.6)}
+  .btn-primary:hover{transform:translateY(-2px)}
+  .btn-ghost{background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow-soft)}
+  .btn-ghost:hover{transform:translateY(-2px)}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;overflow:hidden;padding-top:clamp(56px,8vw,96px)}
+  .hero:before{content:"";position:absolute;inset:0;z-index:-1;
+    background:
+      radial-gradient(60% 55% at 82% 8%,rgba(255,122,47,.16),transparent 60%),
+      radial-gradient(55% 50% at 12% 25%,rgba(31,143,255,.14),transparent 60%);
+  }
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);padding:7px 14px;border-radius:999px;font-weight:600;font-size:.9rem;color:var(--ink);box-shadow:var(--shadow-soft);margin-bottom:26px}
+  .eyebrow .dot{width:8px;height:8px;border-radius:50%;background:var(--good);box-shadow:0 0 0 4px rgba(18,183,106,.18)}
+  .hero h1 span{background:linear-gradient(120deg,var(--heat-deep),var(--air-deep));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero .big{max-width:620px;margin:24px 0 34px}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+  .hero-note{margin-top:20px;font-size:.98rem;color:var(--ink-soft)}
+  .hero-note b{color:var(--ink)}
+
+  /* ---------- trust strip ---------- */
+  .strip{background:var(--ink);color:#fff}
+  .strip .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding-top:40px;padding-bottom:40px}
+  .strip .stat{text-align:center}
+  .strip .num{font-size:clamp(2rem,4vw,2.9rem);font-weight:700;letter-spacing:-.02em;background:linear-gradient(120deg,#ffb37a,#7cc0ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .strip .lbl{color:#b9c6d6;font-size:1rem;margin-top:4px}
+  @media(max-width:640px){.strip .wrap{grid-template-columns:1fr;gap:26px}}
+
+  /* ---------- section heading ---------- */
+  .head{max-width:680px;margin-bottom:52px}
+  .kicker{font-weight:700;color:var(--heat-deep);text-transform:uppercase;letter-spacing:.08em;font-size:.85rem;margin-bottom:14px}
+  .head.center{margin-left:auto;margin-right:auto;text-align:center}
+
+  /* ---------- pain cards ---------- */
+  .soft{background:var(--bg-soft)}
+  .grid{display:grid;gap:22px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:820px){.g2,.g3{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:30px;box-shadow:var(--shadow-soft);transition:transform .2s ease,box-shadow .2s ease}
+  .card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+  .card .ic{width:50px;height:50px;border-radius:14px;display:grid;place-items:center;font-size:1.5rem;margin-bottom:18px;background:linear-gradient(135deg,#fff1e8,#ffe1cf)}
+  .card.air .ic{background:linear-gradient(135deg,#e8f3ff,#d3e8ff)}
+  .card h3{margin-bottom:8px}
+  .card p{font-size:1.02rem}
+  .pain-old{color:#9aa7b4;font-size:.96rem;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
+  .pain-old b{color:var(--heat-deep)}
+
+  /* ---------- how it works ---------- */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;counter-reset:s}
+  @media(max-width:820px){.steps{grid-template-columns:1fr}}
+  .step{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:32px 28px;position:relative;box-shadow:var(--shadow-soft)}
+  .step:before{counter-increment:s;content:counter(s);position:absolute;top:-18px;left:28px;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--air),var(--air-deep));color:#fff;display:grid;place-items:center;font-weight:700;font-size:1.1rem;box-shadow:0 10px 20px -8px rgba(10,111,214,.6)}
+  .step h3{margin:12px 0 8px}
+  .step p{font-size:1.02rem}
+
+  /* ---------- feature rows ---------- */
+  .feature{display:grid;grid-template-columns:1.05fr 1fr;gap:44px;align-items:center;padding:26px 0}
+  .feature.flip .fx{order:2}
+  @media(max-width:820px){.feature{grid-template-columns:1fr;gap:24px}.feature.flip .fx{order:0}}
+  .feature h3{font-size:1.7rem;margin-bottom:12px;letter-spacing:-.02em}
+  .feature p{font-size:1.1rem}
+  .tag{display:inline-block;font-weight:700;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--air-deep);margin-bottom:12px}
+  .feature.warm .tag{color:var(--heat-deep)}
+  /* example bubble */
+  .demo{background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--r);padding:26px;box-shadow:var(--shadow-soft)}
+  .phone{max-width:330px;margin:0 auto}
+  .msg{display:flex;margin-bottom:12px}
+  .msg .b{padding:12px 16px;border-radius:18px;font-size:1rem;max-width:82%;line-height:1.4}
+  .msg.them .b{background:#fff;border:1px solid var(--line);border-bottom-left-radius:5px;color:var(--ink)}
+  .msg.you{justify-content:flex-end}
+  .msg.you .b{background:linear-gradient(135deg,var(--air),var(--air-deep));color:#fff;border-bottom-right-radius:5px}
+  .msg small{display:block;font-size:.72rem;opacity:.6;margin-top:4px;font-weight:600}
+  .receipt{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px}
+  .receipt .row{display:flex;justify-content:space-between;padding:9px 0;font-size:1rem;color:var(--ink-soft)}
+  .receipt .row.total{border-top:1px solid var(--line);margin-top:6px;padding-top:14px;font-weight:700;color:var(--ink);font-size:1.15rem}
+  .receipt .paid{margin-top:16px;text-align:center;background:#e7f8ef;color:#0a7a48;font-weight:700;padding:11px;border-radius:12px;letter-spacing:.02em}
+  .cal .day{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;background:#fff;border:1px solid var(--line);margin-bottom:10px}
+  .cal .time{font-weight:700;color:var(--ink);min-width:74px;font-size:.95rem}
+  .cal .who{font-size:.95rem;color:var(--ink-soft)}
+  .cal .pill{margin-left:auto;font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:999px;background:#e8f3ff;color:var(--air-deep)}
+  .cal .pill.done{background:#e7f8ef;color:#0a7a48}
+
+  /* ---------- compare ---------- */
+  .compare{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-soft)}
+  .compare .r{display:grid;grid-template-columns:1.3fr 1fr 1fr}
+  .compare .r>div{padding:18px 22px;border-bottom:1px solid var(--line)}
+  .compare .r:last-child>div{border-bottom:none}
+  .compare .h{background:var(--bg-soft);font-weight:700;color:var(--ink);font-size:.95rem}
+  .compare .h .sub{display:block;font-weight:500;color:var(--ink-soft);font-size:.82rem}
+  .compare .them{color:var(--ink-soft)}
+  .compare .us{background:linear-gradient(180deg,#fff8f3,#fff);font-weight:600;color:var(--ink)}
+  .compare .lab{font-weight:600;color:var(--ink);font-size:1rem}
+  .compare .yes{color:var(--good);font-weight:700}
+  .compare .no{color:#c2432b;font-weight:700}
+  @media(max-width:640px){
+    .compare .r{grid-template-columns:1fr}
+    .compare .r>div{border-bottom:none;padding:8px 18px}
+    .compare .lab{padding-top:16px;border-top:1px solid var(--line)}
+    .compare .h.hide{display:none}
+  }
+
+  /* ---------- week plan ---------- */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  @media(max-width:820px){.split{grid-template-columns:1fr}}
+  .panel{border-radius:var(--r);padding:34px;border:1px solid var(--line)}
+  .panel.need{background:var(--bg-soft)}
+  .panel.get{background:linear-gradient(160deg,#0b1a2b,#12314f);color:#fff;border:none;box-shadow:var(--shadow)}
+  .panel h3{font-size:1.4rem;margin-bottom:6px}
+  .panel.get h3{color:#fff}
+  .panel .sub{font-size:.98rem;margin-bottom:20px}
+  .panel.get .sub{color:#a9bdd4}
+  ul.check{list-style:none;display:flex;flex-direction:column;gap:14px}
+  ul.check li{display:flex;gap:12px;font-size:1.05rem;color:var(--ink-soft);align-items:flex-start}
+  .panel.get ul.check li{color:#dbe6f1}
+  ul.check li:before{content:"✓";color:var(--good);font-weight:800;flex:0 0 auto;margin-top:1px}
+  .panel.get ul.check li:before{content:"→";color:#7cc0ff}
+
+  /* ---------- final cta ---------- */
+  .final{background:linear-gradient(135deg,var(--heat),var(--air-deep));color:#fff;text-align:center;border-radius:0}
+  .final h2{color:#fff;max-width:760px;margin:0 auto .5em}
+  .final p{color:rgba(255,255,255,.9);max-width:560px;margin:0 auto 32px}
+  .final .btn-primary{background:#fff;color:var(--ink);box-shadow:0 14px 30px -12px rgba(0,0,0,.4)}
+
+  /* ---------- who ---------- */
+  .who{display:flex;gap:18px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:26px}
+  .who .p{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 18px 8px 8px;box-shadow:var(--shadow-soft)}
+  .who .av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--heat),var(--air));display:grid;place-items:center;color:#fff;font-weight:700}
+  .who .p b{color:var(--ink);font-size:1rem}
+  .who .p span{display:block;color:var(--ink-soft);font-size:.85rem}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--line);padding:34px 0;text-align:center;color:var(--ink-soft);font-size:.92rem}
+  footer .brand{justify-content:center;margin-bottom:10px}
+
+  /* reveal on scroll */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header>
+  <div class="wrap nav">
+    <div class="brand"><span class="logo"></span> Solstice HQ</div>
+    <nav class="navlinks">
+      <a href="#problem">The problem</a>
+      <a href="#features">What it does</a>
+      <a href="#compare">Why it's better</a>
+      <a href="#start" class="nav-cta">See your week</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow reveal"><span class="dot"></span> Built just for Solstice Heating &amp; Air</span>
+    <h1 class="reveal">Your whole business,<br><span>handled for you.</span></h1>
+    <p class="big reveal">One simple assistant answers every call, books the job, sends the invoice, and gets you paid — day or night. You just show up and do great work.</p>
+    <div class="hero-cta reveal">
+      <a href="#start" class="btn btn-primary">See what your week looks like</a>
+      <a href="#features" class="btn btn-ghost">Show me what it does</a>
+    </div>
+    <p class="hero-note reveal"><b>No new habits to learn.</b> No big software. It works the way you already run jobs — just without the dropped balls.</p>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<div class="strip">
+  <div class="wrap">
+    <div class="stat reveal"><div class="num">Half</div><div class="lbl">of all calls come in after you've closed. Right now, those are lost.</div></div>
+    <div class="stat reveal"><div class="num">$41,800</div><div class="lbl">a shop your size booked in one month — just by answering after hours.</div></div>
+    <div class="stat reveal"><div class="num">5 min</div><div class="lbl">is all it takes for a caller to give up and call the next guy.</div></div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="kicker">Sound familiar?</div>
+      <h2>Right now, good money slips through the cracks.</h2>
+      <p class="big">Not because you're doing anything wrong. There's just no system holding it all together. Here's where jobs and dollars quietly leak out.</p>
+    </div>
+    <div class="grid g2">
+      <div class="card reveal"><div class="ic">📞</div><h3>Calls you never hear about</h3><p>You're up on a roof or under a house. The phone rings, goes to voicemail, and that customer calls someone else.</p><div class="pain-old"><b>Today:</b> a missed call is a missed job. Gone for good.</div></div>
+      <div class="card air reveal"><div class="ic">🧾</div><h3>Money you're still waiting on</h3><p>The job's done, the invoice is somewhere, and you're too busy to chase it. Weeks go by before you get paid.</p><div class="pain-old"><b>Today:</b> paper invoices and "I'll pay you later" pile up.</div></div>
+      <div class="card reveal"><div class="ic">🗒️</div><h3>Everything lives in your head</h3><p>Which customer has which unit? When was it put in? Is it still under warranty? It's all memory and scattered notes.</p><div class="pain-old"><b>Today:</b> no record means you start every job blind.</div></div>
+      <div class="card air reveal"><div class="ic">📆</div><h3>Two jobs, same time slot</h3><p>You booked it in your head last week. Now you're double-booked and someone's waiting on you, upset.</p><div class="pain-old"><b>Today:</b> no shared schedule means mix-ups and no-shows.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="soft" id="how">
+  <div class="wrap">
+    <div class="head center reveal">
+      <div class="kicker">How it works</div>
+      <h2>Three simple parts. That's it.</h2>
+      <p class="big">You don't run software. You run your business — and this runs quietly in the background.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><h3>Your assistant answers</h3><p>Customers call or text your same number. Your assistant picks up every time — even at 2 a.m. — and books the job.</p></div>
+      <div class="step reveal"><h3>Everything gets written down</h3><p>The customer, the address, the gate code, the unit, the notes, the price. All saved automatically, all in one place.</p></div>
+      <div class="step reveal"><h3>You get paid</h3><p>The invoice goes out the second the job's done. The customer pays from their phone. Reminders go out on their own.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="wrap">
+    <div class="head center reveal">
+      <div class="kicker">What it does for you</div>
+      <h2>Every job, start to finish — covered.</h2>
+      <p class="big">Here's what changes the day it turns on. Real moments, not tech talk.</p>
+    </div>
+
+    <!-- F1 never miss a call -->
+    <div class="feature warm reveal">
+      <div>
+        <span class="tag">Never miss a call</span>
+        <h3>Your phone is answered 24/7</h3>
+        <p>More than half of all heating and cooling calls come in after hours. Your assistant answers every one, asks the right questions, and books the appointment — while you're asleep or on another job. You wake up to a full schedule, not a full voicemail.</p>
+      </div>
+      <div class="fx">
+        <div class="demo phone">
+          <div class="msg them"><div class="b">Hi, my AC just quit and it's 90 degrees in here 😩<small>Caller · 9:48 PM</small></div></div>
+          <div class="msg you"><div class="b">So sorry! I can get a Solstice tech to you tomorrow between 8–10 AM. Want me to lock it in?<small>Your assistant · answered instantly</small></div></div>
+          <div class="msg them"><div class="b">Yes please!<small>Caller · 9:49 PM</small></div></div>
+          <div class="msg you"><div class="b">Done ✅ You're booked. John will text when he's on the way.<small>Booked while you slept</small></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F2 get paid -->
+    <div class="feature flip reveal">
+      <div class="fx">
+        <div class="demo">
+          <div class="receipt phone">
+            <div class="row"><span>AC repair — capacitor</span><span>$180</span></div>
+            <div class="row"><span>Service call</span><span>$89</span></div>
+            <div class="row total"><span>Total</span><span>$269</span></div>
+            <div class="paid">✓ Paid by card · on the spot</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <span class="tag">Get paid faster</span>
+        <h3>The invoice sends itself</h3>
+        <p>The moment a job is done, the bill goes to the customer's phone. They tap and pay right there. If they forget, friendly reminders go out on their own — at 1 week, then 2. You stop chasing checks, and the money comes in days sooner.</p>
+      </div>
+    </div>
+
+    <!-- F3 schedule -->
+    <div class="feature warm reveal">
+      <div>
+        <span class="tag">One clear schedule</span>
+        <h3>No more double-booking</h3>
+        <p>Everyone sees the same calendar. New jobs drop right in. The customer gets a text that says who's coming and when. No mix-ups, no two-jobs-at-once, no angry "where are you?" calls.</p>
+      </div>
+      <div class="fx">
+        <div class="demo phone cal">
+          <div class="day"><span class="time">8–10 AM</span><span class="who">Maria G. · No cooling</span><span class="pill">On the way</span></div>
+          <div class="day"><span class="time">11–1 PM</span><span class="who">Rivera install · new unit</span><span class="pill">Booked</span></div>
+          <div class="day"><span class="time">2–3 PM</span><span class="who">Tune-up · Oak St.</span><span class="pill done">Paid</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F4 remembers -->
+    <div class="feature flip reveal">
+      <div class="fx">
+        <div class="demo">
+          <div class="card air" style="box-shadow:none;margin:0">
+            <div class="ic">🏠</div>
+            <h3 style="font-size:1.15rem">Maria Garcia · 14 Vista Way</h3>
+            <p style="font-size:.98rem">Carrier AC · put in June 2021 · <b>still under warranty</b><br>Gate code: 4417 · Dog in yard 🐕<br>Last visit: filter + coil clean, Apr 2026</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <span class="tag">Nothing forgotten</span>
+        <h3>It remembers every customer and unit</h3>
+        <p>Every home, every unit, every visit — saved for good. Walk in already knowing the model, the age, the warranty, the gate code, even the dog's name. You look sharp, and warranty parts never slip by again.</p>
+      </div>
+    </div>
+
+    <!-- F5 customer app + reviews + plans quick grid -->
+    <div class="grid g3" style="margin-top:44px">
+      <div class="card reveal"><div class="ic">📱</div><h3>Customers get an app</h3><p>They pay, add their gate code and address, approve work, and see what's coming — all from their phone. You see the moment they read it.</p></div>
+      <div class="card air reveal"><div class="ic">⭐</div><h3>5-star reviews, on their own</h3><p>An hour after each job, a nice note asks for a Google review. More reviews means more new calls — without you lifting a finger.</p></div>
+      <div class="card reveal"><div class="ic">🔁</div><h3>Steady money every year</h3><p>Service plans renew themselves. Just 30 plans at $250 a year is $7,500 you can count on — every single year, rain or shine.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- EXAMPLE STORY -->
+<section class="soft">
+  <div class="wrap">
+    <div class="head center reveal">
+      <div class="kicker">A day, before and after</div>
+      <h2>Same you. A lot less dropped.</h2>
+    </div>
+    <div class="grid g2">
+      <div class="card reveal" style="background:var(--bg-soft)">
+        <h3 style="color:#9aa7b4">Today</h3>
+        <p style="margin-top:10px">Three calls come in while you're under a house. Two hang up. You forget to send yesterday's invoice. A customer's furnace was still under warranty — but you didn't know, so you ate the part cost. You booked two jobs at 10 AM by accident.</p>
+      </div>
+      <div class="card air reveal">
+        <h3 style="color:var(--air-deep)">With Solstice HQ</h3>
+        <p style="margin-top:10px">All three calls get answered and booked. Yesterday's invoice already went out — and got paid. The warranty flag popped up before you ordered the part. Your schedule caught the double-booking before it happened. You just… did the work.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARE -->
+<section id="compare">
+  <div class="wrap">
+    <div class="head center reveal">
+      <div class="kicker">Why not the big software?</div>
+      <h2>The big guys aren't built for you.</h2>
+      <p class="big">The well-known programs cost a fortune and take months to set up. This is made for a shop like yours — simple, fast, and ready in days.</p>
+    </div>
+    <div class="compare reveal">
+      <div class="r">
+        <div class="h hide"></div>
+        <div class="h">The big software</div>
+        <div class="h">Solstice HQ<span class="sub">Built for you</span></div>
+      </div>
+      <div class="r">
+        <div class="lab">Cost</div>
+        <div class="them">$400–$600+ every month</div>
+        <div class="us">A fair price that pays for itself</div>
+      </div>
+      <div class="r">
+        <div class="lab">Time to set up</div>
+        <div class="them">2–4 months of training</div>
+        <div class="us">Up and running in about a week</div>
+      </div>
+      <div class="r">
+        <div class="lab">Answers your phone after hours</div>
+        <div class="them"><span class="no">✕</span> No</div>
+        <div class="us"><span class="yes">✓</span> Yes, every time</div>
+      </div>
+      <div class="r">
+        <div class="lab">Easy enough to just use</div>
+        <div class="them"><span class="no">✕</span> Steep learning curve</div>
+        <div class="us"><span class="yes">✓</span> Nothing to learn</div>
+      </div>
+      <div class="r">
+        <div class="lab">Made for a small crew</div>
+        <div class="them"><span class="no">✕</span> Built for big companies</div>
+        <div class="us"><span class="yes">✓</span> Built for Solstice</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- START / WEEK PLAN -->
+<section class="soft" id="start">
+  <div class="wrap">
+    <div class="head center reveal">
+      <div class="kicker">Getting started</div>
+      <h2>Live in about a week.</h2>
+      <p class="big">Here's the simple trade: a little info from you, a working system back from us — fast.</p>
+    </div>
+    <div class="split">
+      <div class="panel need reveal">
+        <h3>What we'd need from you</h3>
+        <div class="sub">A quick sit-down. No homework, no forms to fill out alone.</div>
+        <ul class="check">
+          <li>Your customer list — however you keep it (notebook, phone, spreadsheet, whatever)</li>
+          <li>How you take calls today, and your business number</li>
+          <li>How you bill and get paid now</li>
+          <li>Your crew and their usual hours</li>
+          <li>Your everyday prices for common jobs</li>
+        </ul>
+      </div>
+      <div class="panel get reveal">
+        <h3>What you'd get back — in a week</h3>
+        <div class="sub">A real, working system with your real jobs in it.</div>
+        <ul class="check">
+          <li>Your assistant answering and booking calls</li>
+          <li>Your customers and their units, all saved</li>
+          <li>One schedule your crew can see</li>
+          <li>Invoices that send and get paid on their own</li>
+          <li>Us in your corner, watching it every day</li>
+        </ul>
+      </div>
+    </div>
+    <div class="who reveal">
+      <div class="p"><span class="av">A</span><div><b>Andrew</b><span>Builds it &amp; runs the tech</span></div></div>
+      <div class="p"><span class="av">B</span><div><b>Bennett</b><span>Sets you up &amp; checks in daily</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final">
+  <div class="wrap">
+    <h2>Ready to stop losing jobs to a ringing phone?</h2>
+    <p>Let's grab 30 minutes. We'll show you the real thing, get what we need, and have Solstice HQ working within a week.</p>
+    <a href="tel:+19495733607" class="btn btn-primary">Let's set it up</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="brand"><span class="logo"></span> Solstice HQ</div>
+    <p>Made for John Downer &amp; Solstice Heating &amp; Air · San Clemente, CA</p>
+    <p style="margin-top:6px;opacity:.7">A private preview built by Andrew &amp; Bennett. Not for public sharing.</p>
+  </div>
+</footer>
+
+<script>
+  // gentle reveal on scroll
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.12, rootMargin:"0px 0px -40px 0px"});
+  document.querySelectorAll('.reveal').forEach((el,i)=>{
+    el.style.transitionDelay = (Math.min(i%4,3)*70)+'ms';
+    io.observe(el);
+  });
+</script>
+</body>
+</html>
